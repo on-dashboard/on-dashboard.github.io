@@ -1,5 +1,6 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"></head><body><title>ON DASHBOARD</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ON DASHBOARD</title>
+<style>:root{box-sizing:border-box}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
 <style>
 @font-face{font-family:"Spoqa Han Sans Neo";src:url("fonts/SpoqaHanSansNeo-Light.woff2") format("woff2");font-weight:300;font-display:swap}
 @font-face{font-family:"Spoqa Han Sans Neo";src:url("fonts/SpoqaHanSansNeo-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
@@ -266,6 +267,12 @@ details>.dbody{padding:2px 14px 14px; display:flex; flex-direction:column; gap:1
   .banner .dd{margin-left:0}
   .who{margin-left:0}
 }
+.ctl{display:flex; gap:8px 22px; flex-wrap:wrap; align-items:center}
+.ctl .lb{font-size:11.5px; color:var(--ink-3); font-weight:500; margin-right:8px}
+.ctl input[type=date]{font:inherit; font-size:12.5px; color:var(--ink); background:var(--panel); border:1px solid var(--rule); border-radius:2px; padding:4px 8px}
+.ctl input[type=date]:focus-visible{outline:2px solid var(--teal); outline-offset:2px}
+.calc{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; flex:1 1 360px}
+@media (max-width:560px){.calc{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
 /* ---------- editor ---------- */
 .edbtn[hidden]{display:none!important}
@@ -330,13 +337,13 @@ body.editing .app{margin-right:min(760px,100vw)}
     <span class="ttl">DC Cabinet 납기·PO 보드</span>
     <div class="who">
       <span>고객 <b>On Energy</b></span><span>공급사 <b>대홍전기</b></span><span>제품 <b>DC Cabinet</b></span>
-      <span class="asof">기준 <span id="today"></span> · <span id="asofTx">Rev.05(10/12) · 일보(10/20) · 인보이스(9/21)</span></span>
-      <button class="edbtn" id="edBtn" type="button" title="웹에서 자료 입력·수정">편집</button>
+      <span class="asof">기준 <span id="today"></span> · <span id="asofTx">Rev.05(10/12) · 일보(11/04) · 인보이스(9/21)</span></span>
+      <button class="edbtn" id="edBtn" type="button" title="웹에서 자료 입력·수정" hidden>편집</button>
     </div>
   </div>
   <div class="banner" role="status">
     <span class="lead">오늘 쟁점</span>
-    <span id="bnTx">10/20 UL 공장심사의 <b>24V MCB 스펙 불일치</b> 건은 고객 협의가 끝나 <b>4A 기준으로 UL 서류·Rev.20 도면을 갱신해 출하</b>하는 방향입니다. 재발방지 4가지가 요청됐습니다.</span>
+    <span id="bnTx"><b>2항차 외함조립 104/104면 완료</b>, 3항차 조립 2면. 11/04 2항차 샘플 합동 검사 실시(결과 ~11/06), <b>Prototype 4면은 Rev.22 적용 시 20가지 변경</b>. 1항차 FAT 60% 청구 기준을 정해야 합니다. <b>EPB 접점</b> 11/10 입고.</span>
     <span class="dd" id="bnDd"></span>
   </div>
   <div class="bar">
@@ -349,7 +356,7 @@ body.editing .app{margin-right:min(760px,100vw)}
   </div>
   <main id="main"></main>
   <div class="foot">
-    <span>출처: <span id="srcTx">Master Plan Rev.05 (10/12) · 생산품질일보 10/20 · Invoice Tracker (9/21 청구) · PO 원문</span></span>
+    <span>출처: <span id="srcTx">Master Plan Rev.05 (10/12) · 생산품질일보 11/04 · Invoice Tracker (9/21 청구) · PO 원문</span></span>
     <span>D-day와 경과일은 페이지를 열 때마다 오늘 기준으로 다시 계산됩니다.</span>
     <span id="updTx"></span>
   </div>
@@ -385,13 +392,13 @@ var AREA={sch:["일정",""],ms:["마일스톤","t-ms"],cost:["비용","t-cost"],
 
 var SH0=[
  {n:"1항차",q:100,prod:["2026-09-03","2026-10-09"],ship:"2026-10-30",win:"10/26~30",fatD:"2026-10-26",fat:"10/26~30",att:"On Energy · Crusoe",insp:["2026-10-12","2026-10-26"],fat60:2796000,cn:14,
-  st:["mid","전장 91% · MCB 건 4A 기준 진행"],
+  st:["good","출고 100/100면 완료 · FAT 후속 대응"],
   b:[["Abilene #9","B1",10,"2026-12-28","2027-01-03"],["Abilene #9","B2",40,"2026-12-28","2027-01-03"],["Abilene #10","B1",10,"2026-12-28","2027-01-03"],["Abilene #10","B2",40,"2026-12-28","2027-01-03"]]},
  {n:"2항차",q:104,prod:["2026-10-05","2026-11-09"],ship:"2026-11-27",win:"11/23~27",fatD:"2026-11-20",fat:"11/20 (금)",att:"On Energy · Client",insp:["2026-11-10","2026-11-23"],fat60:2907840,cn:14,
-  st:["bad","판금 12% · 13일 늦게 착수"],
+  st:["mid","외함조립 104면 완료 · 공정 실적 갱신 필요"],
   b:[["Abilene #10","B3",40,"2026-12-28","2027-01-31"],["Abilene #9","B3",40,"2026-12-28","2027-01-31"],["Childress #1","B1",17,"2027-01-25","2027-01-31"],["Coffee","B1",7,"2027-01-19","2027-02-12"]]},
  {n:"3항차",q:117,prod:["2026-11-04","2026-12-06"],ship:"2026-12-25",win:"12/17~24",fatD:"2026-12-14",fat:"12/14 (월)",att:"On Energy · Client",insp:["2026-12-07","2026-12-20"],fat60:3271320,cn:15,
-  st:["off","생산 착수 11/04"],
+  st:["off","조립 2면 착수 · 생산 착수 11/04"],
   b:[["Warrenton #1","B1",13,"2027-02-22","2027-03-28"],["Abilene #10","B4",40,"2027-02-22","2027-02-28"],["Abilene #9","B4",40,"2027-01-25","2027-02-28"],["Childress #1","B2",24,"2027-01-25","2027-02-28"]]},
  {n:"4항차",q:104,prod:["2026-12-03","2027-01-03"],ship:"2027-01-22",win:"1/18~22",fatD:"2027-01-15",fat:"1/15 (금)",att:"On Energy",insp:["2027-01-04","2027-01-18"],fat60:2907840,cn:13,
   st:["off","대기"],
@@ -416,7 +423,7 @@ var SHORT={A9:"A9",A10:"A10",C1:"C1",W1:"W1",CF:"CF"};
 
 var INV0=[
  {k:"A9",n:"Abilene 09",inv:"503-1912-10",po:"PO-000159",d:"2026-05-15",q:170,amt:7922000,dep:396100,sop:1980500,sum:2376600,paid:"2026-10-16"},
- {k:"A10",n:"Abilene 10",inv:"503-2032-10",po:"PO-000167",d:"2026-05-15",q:170,amt:7922000,dep:396100,sop:1980500,sum:2376600,paid:null,sched:"2026-10-22"},
+ {k:"A10",n:"Abilene 10",inv:"503-2032-10",po:"PO-000167",d:"2026-05-15",q:170,amt:7922000,dep:396100,sop:1980500,sum:2376600,paid:"2026-10-22"},
  {k:"C1",n:"Childress 1",inv:"503-2021-10",po:"PO-000175",d:"2026-05-15",q:113,amt:5265800,dep:263290,sop:1316450,sum:1579740,paid:"2026-10-16"},
  {k:"W1",n:"Warrenton 1",inv:"503-2033-10",po:"PO-000184",d:"2026-05-15",q:101,amt:4706600,dep:235330,sop:1176650,sum:1411980,paid:"2026-10-16"},
  {k:"CF",n:"Coffee",inv:"503-2113-10",po:"PO-000319",d:"2026-09-08",q:7,amt:326200,dep:16310,sop:81550,sum:97860,paid:"2026-10-16"},
@@ -435,11 +442,12 @@ var REM=[
 var A9_10=["A9","A10"];
 var ITEMS0=[
  /* 일정 */
- {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-10-21",x:"IP55 방진 시험 (KOMERI 울산) · 방수는 10/20",s:"prog",p:A9_10},
- {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-10-26",x:"1항차 출고 100면 (10/26~30, 일 16·24대)",s:"open",p:A9_10,k:1},
- {t:["sch","prod"],a:"sch",o:"On Energy",d:"2026-10-26",x:"1항차 FAT 10/26~30 · Crusoe 10/28 화상 입회",s:"open",p:A9_10,k:1},
- {t:["sch"],a:"sch",o:"On Energy",d:"2026-10-29",x:"Remain Audit (검사자 Eduardo Hisatugo)",s:"open"},
- {t:["sch"],a:"sch",o:"On Energy",d:"2026-11-20",x:"2항차 FAT (금) → 출고 11/23~27 · 104면",s:"open",p:["A9","A10","C1","CF"]},
+ {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-10-21",x:"IP55 방진 시험 입회 (KOMERI 울산) · 일보 품질란은 10/22로 표기, 확인 필요",s:"prog",p:A9_10},
+ {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-10-23",x:"IP55 방수 시험 입회 (KOMERI 울산)",s:"open",p:A9_10},
+ {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-10-26",x:"1항차 출고 100/100면 완료 (10/26~30, 10/30 20면) · 출하 레포트 제출",s:"done",p:A9_10,k:1},
+ {t:["sch","prod"],a:"sch",o:"On Energy",d:"2026-10-26",x:"1항차 FAT 10/26~30 (4면) 종료 · Crusoe 10/28 화상 참관 · FAT Comment 대응 중 (46주차 11/09~15까지)",s:"prog",p:A9_10,k:1},
+ {t:["sch"],a:"sch",o:"On Energy",d:"2026-10-29",x:"Remain Audit 실시 (검사자 Eduardo Hisatugo) · Audit Comment 대응 중",s:"prog"},
+ {t:["sch"],a:"sch",o:"On Energy",d:"2026-11-20",x:"2항차 FAT (금) → 출고 11/23~27 · 104면 · FAT 일정 확인 및 실시 (11/04 일보, 차주)",s:"open",p:["A9","A10","C1","CF"]},
  {t:["sch"],a:"sch",o:"On Energy",d:"2026-12-14",x:"3항차 FAT (월) → 출고 12/17~24 · 117면",s:"open",p:["A9","A10","C1","W1"]},
  {t:["sch"],a:"sch",o:"On Energy",d:"2027-01-15",x:"4항차 FAT (금) → 출고 1/18~22 · 104면",s:"open",p:["A9","A10","W1"]},
  {t:["sch"],a:"sch",o:"On Energy",d:"2027-02-12",x:"5항차 FAT (금) → 출고 2/15~19 · 96면",s:"open",p:["C1","W1"]},
@@ -447,16 +455,18 @@ var ITEMS0=[
  {t:["sch","logi"],a:"sch",o:"ACE",d:"2026-12-02",x:"1항차 도착 (실측 33일) · 기한 1/3까지 32일",s:"open",p:A9_10},
  {t:["sch","ms"],a:"sch",o:"대홍",d:"2026-11-04",x:"3항차 생산 착수 · SPD 428EA 결론 필요",s:"open",p:["A9","A10","C1","W1"]},
  {t:["sch","prod"],a:"sch",o:"ACE",d:"2026-10-20",x:"출고 서류 미팅 완료 (Shipping Mark·출고증·인수증)",s:"done"},
+ {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-11-06",x:"2항차 샘플 부품 합동 검사 실시(11/4) · BOM Sub assembly 정보 추가 기재 요청 · Indicating Light(Green) 미입고로 차주 검사 · 결과 Reporting ~11/06",s:"prog",p:["A9","A10","C1","CF"],k:1},
+ {t:["prod","cost"],a:"q",o:"ACE",d:"2026-11-05",x:"Prototype 4면 개보수 · 양산품 비교 완료(11/4) · 최종 도면 Rev.22 적용 시 20가지 변경, 대부분 신규제작·부품 교체 필요 · 비교 자료 Reporting ~11/05 → 고객 전달 · 요구 사양 확인 (11/04 일보)",s:"prog",p:A9_10,k:1},
  /* 마일스톤 */
- {t:["ms","cost"],a:"ms",o:"On Energy",d:"2026-10-16",x:"입금 5건 $5,598,990 (청구액의 70.2%)",s:"done"},
- {t:["ms","cost"],a:"ms",o:"On Energy",d:"2026-10-22",x:"Abilene 10 입금 예정 $2,376,600 (구매팀 10/14 회신) · 입금 증빙 수령 확인",s:"open",p:["A10"],k:1},
- {t:["ms","cost"],a:"ms",o:"ACE",d:"2026-10-26",x:"FAT 60% 청구 기준 합의 (PO별 vs 항차별)",s:"open",k:1},
+ {t:["ms","cost"],a:"ms",o:"On Energy",d:"2026-10-16",x:"입금 5건 $5,598,990 (청구액의 70.2%)",s:"done",p:["A9","C1","W1","CF","EG"]},
+ {t:["ms","cost"],a:"ms",o:"On Energy",d:"2026-10-22",x:"Abilene 10 입금 완료 $2,376,600 → 9/21 청구분 6건 $7,975,590 전액 입금",s:"done",p:["A10"]},
+ {t:["ms","cost"],a:"ms",o:"ACE",d:"2026-10-26",x:"1항차 FAT 종료(10/30) · FAT 60% $2,796,000 청구 기준 합의 (PO별 vs 항차별)",s:"open",k:1},
  {t:["ms"],a:"ms",o:"ACE",d:"2027-01-02",x:"GoldenEye SOP 30% $1,621,680 청구",s:"open",p:["GE"]},
  {t:["ms"],a:"ms",o:"ACE",d:"2027-06-05",x:"Eagle SOP 25% $664,050 청구",s:"open",p:["EG"]},
  {t:["ms"],a:"ms",o:"대홍",d:"2026-09-03",x:"1항차 생산 착수 (SOP 기준일)",s:"done",p:A9_10},
  {t:["ms","prod"],a:"ms",o:"대홍",d:"2026-10-10",x:"1항차 판금 완료 (계획 10/02, 8일 지연)",s:"done",p:A9_10},
- {t:["ms","prod"],a:"ms",o:"대홍",d:"2026-10-09",x:"1항차 완성품조립 종료 계획 · 전장 91%",s:"prog",p:A9_10},
- {t:["ms","prod"],a:"ms",o:"대홍",d:"2026-10-23",x:"2항차 판금 계획 종료 · 실적 12% (10/12)",s:"risk",p:["A9","A10","C1","CF"],k:1},
+ {t:["ms","prod"],a:"ms",o:"대홍",d:"2026-10-09",x:"1항차 완성품조립 종료 계획 · 전장조립 100% 완료 (10/30 일보)",s:"done",p:A9_10},
+ {t:["ms","prod"],a:"ms",o:"대홍",d:"2026-10-23",x:"2항차 판금 계획 종료일 · 2항차 외함조립 104/104면 완료 (11/04 일보) · 판금 실적(10/12 기준 12%) 갱신 필요",s:"prog",p:["A9","A10","C1","CF"],k:1},
  {t:["ms"],a:"ms",o:"대홍",d:"2026-12-03",x:"4·5·6항차 생산 착수 12/03 · 12/30 · 2/10",s:"open"},
  {t:["ms"],a:"ms",o:"On Energy",d:"2027-01-03",x:"1항차 납품 완료 기한 (대외 60일 기준 여유 5일)",s:"open",p:A9_10},
  {t:["ms","logi","risk"],a:"ms",o:"ACE",d:"2026-12-10",x:"GoldenEye 릴리스를 A-2 마일스톤에 편입 · deadline = 개시 −180일",s:"open",p:["GE"],k:1},
@@ -468,23 +478,29 @@ var ITEMS0=[
  {t:["cost","risk"],a:"cost",o:"ACE",d:"",x:"Mike 후속 메일에 정산 원칙 한 줄 포함",s:"open"},
  {t:["cost"],a:"cost",o:"ACE",d:"2026-11-04",x:"SPD 428EA(4·5·6항차) 재견적 포함 여부 결정",s:"open"},
  {t:["cost","prod"],a:"cost",o:"ACE",d:"",x:"설계 변경 3건 561면 적용 범위·비용",s:"open",k:1},
- {t:["cost","logi"],a:"cost",o:"ACE",d:"",x:"1항차 일부 항공 — 수량·운임 부담 (DDP, 면당 중량 미확인)",s:"risk",p:A9_10,k:1},
+ {t:["cost"],a:"cost",o:"ACE",d:"2026-11-05",x:"Prototype 4면 개보수 범위·비용 (Rev.22 20가지 변경, 대부분 신규제작) — 부담 주체 미정",s:"open",p:A9_10},
+ {t:["cost","logi"],a:"cost",o:"ACE",d:"",x:"1항차 항공운송 2면 (EPB 접점 교체 후 출고 완료) — 운임 부담 (DDP, 면당 중량 미확인)",s:"risk",p:A9_10,k:1},
  {t:["cost","prod"],a:"cost",o:"ACE",d:"",x:"도장 요구 ⑦ 연장 보증 범위 · 경영진 결정",s:"open"},
  {t:["cost"],a:"cost",o:"ACE",d:"",x:"MSA 16.5 취소수수료 요율 확인",s:"open",p:["GE","EG"]},
  {t:["cost","logi"],a:"cost",o:"ACE",d:"",x:"물류 견적 재산출 · 마진 상세 (물류팀 차주 공유)",s:"open"},
  {t:["cost","prod"],a:"cost",o:"ACE",d:"",x:"FUSE 추가 입고 96EA(보충 12 + Coffee 84) 차수 결정",s:"open",p:["CF"]},
  /* 생산·품질 */
  {t:["prod"],a:"q",o:"대홍",d:"2026-10-21",x:"24V MCB 스펙 불일치: 고객 협의 완료, 4A 기준으로 출하 진행",s:"prog",p:A9_10,k:1},
+ {t:["prod"],a:"q",o:"ACE",d:"2026-10-21",x:"MCB 오입고 재발방지 대책회의 실시 (ACE–대홍, 10/21 일보)",s:"done",p:A9_10},
  {t:["prod","risk"],a:"q",o:"ACE",d:"",x:"4A 기준 UL 인증서류 · Rev.20 도면 업데이트 (임준영 차장 요청)",s:"open",k:1},
  {t:["prod","risk"],a:"q",o:"대홍",d:"",x:"① 현재 생산·완성품 24V MCB 전수 확인 (C60BPR-D / 4A 기록)",s:"open",k:1},
  {t:["prod","risk"],a:"q",o:"대홍",d:"",x:"② 입고검사 강화: 발주서·BOM vs 입고품 Maker·Model·Rating",s:"open"},
  {t:["prod","risk"],a:"q",o:"대홍",d:"",x:"③ 생산·FAT Check Sheet에 Critical Component 대조 항목 추가",s:"open"},
  {t:["prod","risk"],a:"q",o:"대홍",d:"",x:"④ 변경관리: 최신 Revision 현장 적용 확인, 차이는 즉시 공유",s:"open"},
- {t:["prod"],a:"q",o:"대홍",d:"2026-10-20",x:"1항차 외함조립 100면 완료 · 전장조립 91%",s:"done",p:A9_10},
- {t:["prod"],a:"q",o:"대홍",d:"2026-10-21",x:"열차단판·케이블 타이 서포터 1항차 200개 설치",s:"prog",p:A9_10},
- {t:["prod"],a:"q",o:"대홍",d:"2026-10-21",x:"UL 스티커 입고 (공장심사 시점엔 미부착)",s:"open",p:A9_10},
- {t:["prod","logi"],a:"q",o:"대홍",d:"2026-10-23",x:"IR WINDOW 40면분 도착 (출고 3일 전)",s:"open",p:A9_10},
- {t:["prod"],a:"q",o:"ACE",d:"2026-10-28",x:"KTR 도장시험 종료 (720h·1440h 시편 추가)",s:"prog"},
+ {t:["prod"],a:"q",o:"대홍",d:"2026-10-20",x:"1항차 외함·전장조립 100% 완료 · 2항차 외함조립 104/104면 완료 · 3항차 조립 2면 (11/04 일보, 누계 206 · 계획 204)",s:"prog",p:A9_10},
+ {t:["prod","logi"],a:"q",o:"대홍",d:"2026-10-30",x:"SPD 690개 수출 포장 후 출고 완료 (미국 배송) · 수출 포장 절차서 보완 완료 · 제습제 TDS 제출",s:"done",p:A9_10},
+ {t:["prod","risk"],a:"q",o:"대홍",d:"2026-11-10",x:"UL 심사 후 EPB 부적합 조치 진행 (교체 매뉴얼·동영상 전달) · EPB 접점 11/10 입고 예정 (11/04 일보) · 24Vdc 차단기 스팩 미스매칭",s:"prog",p:A9_10,k:1},
+ {t:["prod","logi"],a:"q",o:"대홍",d:"2026-10-22",x:"케이블 타이 서포터 입고 예정",s:"open",p:A9_10},
+ {t:["prod","logi"],a:"q",o:"대홍",d:"2026-10-23",x:"UL 스티커 입고 예정 (오후) · 공장심사 시점엔 미부착",s:"open",p:A9_10},
+ {t:["prod","logi"],a:"q",o:"대홍",d:"2026-10-20",x:"IR WINDOW 40면분 입고 완료 (65면분은 10/08)",s:"done",p:A9_10},
+ {t:["prod"],a:"q",o:"ACE",d:"2026-11-28",x:"KTR 도장 내구성 시험: C3H 480h 종료(10/28) · 720h 종료 11/28 · 1440h 종료 12/28",s:"prog"},
+ {t:["prod","logi"],a:"q",o:"ACE",d:"2026-10-30",x:"Schneider DC Fuse 168개 첫 입고 · 수입검사 입회, 바코드 정보 확인 (10/30 일보)",s:"done"},
+ {t:["prod","risk"],a:"q",o:"대홍",d:"2026-11-06",x:"자재 오입고 방지: 전담 검사자 1명 · 라인검사 2명 추가 배치 현장 확인(11/4) · 입고검사성적서 전수 검사 ~11/06",s:"prog",p:A9_10,k:1},
  {t:["prod"],a:"q",o:"ACE",d:"",x:"도장 11개 요구 회신 (ISO 12944-5)",s:"risk",k:1},
  {t:["prod"],a:"q",o:"ACE",d:"",x:"⑪ 도장 수행 장소 사실 확인 (대홍 설비 또는 외주)",s:"open"},
  {t:["prod"],a:"q",o:"ACE",d:"",x:"AkzoNobel TDS/PDS 확보 (AL109K · MA10DK)",s:"open"},
@@ -522,52 +538,26 @@ var DAILY=[
  ["5항차","2027-02-15","Warrenton 1 16",16,16],["","2027-02-16","Warrenton 1 8 · Childress 1 16",24,40],["","2027-02-17","Childress 1 16",16,56],["","2027-02-18","Childress 1 24",24,80],["","2027-02-19","Childress 1 16",16,96],
  ["6항차","2027-03-18","Warrenton 1 16",16,16],["","2027-03-19","Warrenton 1 24",24,40]
 ];
-var state={tab:"ov",view:"area",proj:"all",tr:33};
+var state={tab:"ov",view:"area",proj:"all",tr:33,slip:0,cd:"2026-11-23"};
 
 /* ---------- editable data (defaults → data.json overrides) ---------- */
-var BN0={text:"10/20 UL 공장심사의 **24V MCB 스펙 불일치** 건은 고객 협의가 끝나 **4A 기준으로 UL 서류·Rev.20 도면을 갱신해 출하**하는 방향입니다. 재발방지 4가지가 요청됐습니다.",
-  asof:"Rev.05(10/12) · 일보(10/20) · 인보이스(9/21)",src:"Master Plan Rev.05 (10/12) · 생산품질일보 10/20 · Invoice Tracker (9/21 청구) · PO 원문"};
-var KPI0=[
- {l:"1항차 FAT 시작",auto:"fat",v:"",u:"",s:"10/26~30 · 100면 · Crusoe 10/28",bad:0},
- {l:"입금 확인 (10/16)",auto:"",v:"$5.60",u:"M",s:"9/21 청구 $7.98M 중 70.2% · A10 10/22 예정",bad:0},
- {l:"1항차 전장조립",auto:"",v:"91",u:"%",s:"외함조립 100면 완료 (10/20)",bad:0},
- {l:"2항차 판금",auto:"",v:"12",u:"%",s:"계획 10/23 종료 · 13일 늦게 착수",bad:1},
- {l:"확정 생산",auto:"",v:"561",u:"면",s:"+ GoldenEye 116 · Eagle 57",bad:0},
- {l:"1항차 도착 여유",auto:"margin",v:"",u:"일",s:"{tr}일 운송 기준 · 대외 60일이면 5일",bad:0}
-];
-var PR0=[
- ["1항차 판금","제관·도장·포밍",100,"~10-02","완료 10-10 · 8일 지연","bad"],
- ["1항차 BUS","제작 및 도금",100,"~09-18","완료 10-03","good"],
- ["1항차 핀배선","핀·압착",100,"~09-16","완료 09-10","good"],
- ["1항차 자재입고","",98,"~10-07","사실상 완료","good"],
- ["1항차 전장조립","10/20 일보",91,"~10-11","진행","mid"],
- ["1항차 검사 · FAT","",5,"10-12~10-26","착수","mid"],
- ["2항차 판금","제관·도장·포밍",12,"09-18~10-23","착수 10-01 · 13일 지연","bad"],
- ["2항차 BUS","",25,"09-18~10-16","착수 09-28","mid"],
- ["2항차 핀배선","",53,"09-17~10-21","진행","mid"],
- ["2항차 자재입고","",70,"09-21~11-15","진행","mid"],
- ["3항차 판금","",0,"10-16~11-27","착수 임박","off"]
-];
-var DLY0={progMeta:"Rev.05 (10/12) · 1항차 전장은 10/20 일보",title:"생산품질일보 10/20",meta:"43주차",
- stats:[["외함조립 누계","133","면","계획 142 · 96%"],["1항차 전장조립","91","%","외함 100면 완료"],["주간 달성","50","%","12 / 24면"]],
- mats:[["열차단판 · 케이블 타이","10-18 / 10-20","1항차 200개, 10/20~21 설치"],["IR WINDOW","10-08 / 10-23","65면분 도착, 40면분 10/23"],["UL 스티커","10-21","입고 예정"],["DC Fuse 볼트","진행 중","불량 볼트 재조립, 토크 검사"]]};
-var INS0=[
- ["UL 공장검사","10/20","mid","진행","24V MCB 스펙 불일치 · 4A 기준 UL 서류·도면 갱신"],
- ["IP55 방수","10/20→21","mid","진행","우천으로 순서 변경 · KOMERI 울산"],
- ["IP55 방진","10/21","mid","진행","오후 착수 · 사진 제출"],
- ["서류 미팅","10/20","good","완료","수출포장 · Shipping Mark · 출고증"],
- ["Remain Audit","10/29","off","대기","Eduardo Hisatugo · FAT 주간"],
- ["KTR 도장시험","~10/28","mid","진행","C3H 480h + 720h · 1440h 시편"]
-];
+var BN0={"text":"**2항차 외함조립 104/104면 완료**, 3항차 조립 2면. 11/04 2항차 샘플 합동 검사 실시(결과 ~11/06), **Prototype 4면은 Rev.22 적용 시 20가지 변경**. 1항차 FAT 60% 청구 기준을 정해야 합니다. **EPB 접점** 11/10 입고.","asof":"Rev.05(10/12) · 일보(11/04) · 인보이스(9/21)","src":"Master Plan Rev.05 (10/12) · 생산품질일보 11/04 · Invoice Tracker (9/21 청구) · PO 원문","dd":"샘플 검사 결과 {2026-11-06} · EPB 접점 입고 {2026-11-10}"};
+var KPI0=[{"l":"1항차 FAT","auto":"","v":"후속 대응","u":"","s":"10/26~30 · 4면 · Crusoe 10/28 화상 · Audit 10/29","bad":0},{"l":"입금 확인 (10/22)","auto":"","v":"$7.98","u":"M","s":"9/21 청구 6건 전액 · A10 10/22 입금","bad":0},{"l":"1항차 출고 완료","auto":"","v":"100","u":"면","s":"전량 (10/26~30) · 10/30 20면 · 출하 레포트 제출","bad":0},{"l":"2항차 외함조립","auto":"","v":"104","u":"면","s":"2항차 전체 완료 · 3항차 조립 2면 · 샘플 합동 검사 11/04 실시","bad":0},{"l":"확정 생산","auto":"","v":"561","u":"면","s":"+ GoldenEye 116 · Eagle 57","bad":0},{"l":"1항차 도착 여유","auto":"margin","v":"","u":"일","s":"{tr}일 운송 기준 · 대외 60일이면 5일","bad":0}];
+var PR0=[["1항차 판금","제관·도장·포밍",100,"~10-02","완료 10-10 · 8일 지연","bad"],["1항차 BUS","제작 및 도금",100,"~09-18","완료 10-03","good"],["2항차 외함조립","11/04 일보",100,"~11-09","완료 · 104/104면 · 샘플 검사 11/04","good"],["1항차 전장조립","10/30 일보",100,"~10-11","완료","good"],["1항차 출고","10/30 일보",100,"10-26~10-30","완료 10-30 · 100/100면","good"],["1항차 검사 · FAT","FAT 10/26~30",100,"10-12~10-30","FAT 종료 · Comment 대응 중","mid"],["2항차 판금","제관·도장·포밍",12,"09-18~10-23","착수 10-01 · 13일 지연","bad"],["2항차 BUS","",25,"09-18~10-16","착수 09-28","mid"],["2항차 핀배선","",53,"09-17~10-21","진행","mid"],["2항차 자재입고","",70,"09-21~11-15","진행","mid"]];
+var DLY0={"progMeta":"Rev.05 (10/12) · 1항차 전장·출고·2항차 외함은 11/04 일보 (2항차 이하는 10/12 기준)","title":"생산품질일보 11/04","meta":"45주차","matsHead":"이번 주 진행","stats":[["외함조립 누계","206","면","계획 204 · 101%"],["2항차 외함","104","면","전체 완료 · 3항차 2면"],["45주차 외함","12","면","계획 28면 · 43% (진행 중)"]],"mats":[["2항차 샘플 검사","11-04 실시","BOM Sub assembly 정보 추가 요청 · Indicating Light(Green) 미입고 → 차주 검사 · 결과 Reporting ~11/06"],["입고검사","~11-06","입고검사성적서 전수 검사 · 전담 1 · 라인검사 2 배치 현장 확인"],["Prototype 4면","11-04 완료","양산품 비교 완료 · Rev.22 적용 시 20가지 변경, 대부분 신규제작·부품 교체 · Reporting ~11/05"],["차주 (46주차)","11/09~15","FAT·Audit Comment 대응 · 2항차 FAT 일정 확인·실시 · EPB 접점 입고(11/10)"]]};
+var INS0=[["UL 공장검사","10/20","mid","진행","MCB 4A 기준 갱신 · EPB 접점 11/10 입고"],["IP55 방진","10/21","mid","입회","KOMERI 울산 · 일보 품질란은 10/22 표기"],["IP55 방수","10/23","off","대기","KOMERI 울산 · 일보 기준"],["서류 미팅","10/20","good","완료","수출포장 · Shipping Mark · 출고증"],["Remain Audit","10/29","good","실시","Eduardo Hisatugo · Audit Comment 대응 중"],["KTR 도장시험","10/08~12/28","mid","진행","C3H 480h 종료 · 720h 11/28 · 1440h 12/28"]];
 var DEF={v:1,updated:"",banner:BN0,kpis:KPI0,items:ITEMS0,ships:SH0,inv:INV0,prog:PR0,daily:DLY0,ins:INS0};
 var DATA, BN, KPI, ITEMS, SH, INV, PR, DLY, INS;
 function applyData(d){
   Object.keys(DEF).forEach(function(k){if(!(k in d)) d[k]=clone(DEF[k]);});
+  Object.keys(DEF.banner).forEach(function(k){if(!(k in d.banner)) d.banner[k]=DEF.banner[k];});
+  Object.keys(DEF.daily).forEach(function(k){if(!(k in d.daily)) d.daily[k]=clone(DEF.daily[k]);});
   DATA=d; BN=d.banner; KPI=d.kpis; ITEMS=d.items; INV=d.inv; PR=d.prog; DLY=d.daily; INS=d.ins;
   SH=d.ships.map(prepShip);
 }
 applyData(clone(DEF));
 function nextShip(){for(var i=0;i<SH.length;i++) if(D(SH[i].ship)>=T) return SH[i]; return SH[SH.length-1];}
+function ddLine(s){return String(s||"").replace(/\{(\d{4}-\d{2}-\d{2})\}/g,function(_,d){return ddTxt(d);});}
 
 /* ---------- small builders ---------- */
 function pv(it){return state.proj==="all"||!it.p||!it.p.length||it.p.indexOf(state.proj)>-1;}
@@ -683,7 +673,7 @@ function trSeg(){
 /* ---------- TAB: 개요 ---------- */
 function tabOv(){
   var kp='<div class="kpis">'+KPI.map(function(k){
-    var v=k.auto==="fat"?ddTxt(nextShip().fatD):(k.auto==="margin"?String(marginOf(nextShip())):k.v);
+    var v=k.auto==="fat"?ddTxt(nextShip().fatD):(k.auto==="margin"?String(marginOf(SH[0])):(k.auto==="margin_next"?String(marginOf(nextShip())):k.v));
     return '<div class="kpi'+(k.bad?" k-bad":"")+'"><span class="l">'+esc(k.l)+'</span><span class="v">'+esc(v)+(k.u?'<small>'+esc(k.u)+'</small>':"")+'</span><span class="s">'+esc(String(k.s||"").replace(/\{tr\}/g,state.tr))+'</span></div>';
   }).join("")+'</div>';
   var up=ITEMS.filter(function(i){return pv(i)&&i.d&&i.s!=="done"&&i.s!=="risk"&&dd(i.d)>=0&&(i.a==="sch"||i.a==="ms");}).sort(cmp).slice(0,6);
@@ -710,12 +700,12 @@ function tabSch(){
   if(rows.length>1) rows.push({cls:"tot",c:["합계",SH.filter(shHas).reduce(function(a,s){return a+shQ(s);},0),"","","","",""]});
   var MAJOR=[
    ["대홍","2026-10-08","Modbus 통신 테스트","대홍전기 · 완료","done"],
-   ["대홍","2026-10-20","UL 초도 생산 공장검사 (10:30)","24V MCB 불일치 지적 · 고객 협의 완료, 4A 기준","prog"],
-   ["대홍","2026-10-20","IP55 방수 테스트","KOMERI 울산 · 우천으로 10/21로 이동","prog"],
-   ["대홍","2026-10-21","IP55 방진 테스트","KOMERI 울산 · 확정","prog"],
-   ["On Energy","2026-10-26","1항차 FAT 10/26~30","대홍전기 · Crusoe 10/28 화상 Visual FAT","open"],
-   ["대홍","2026-10-26","1항차 출고 100면 10/26~30","대홍전기 · FAT 기간과 동일","open"],
-   ["On Energy","2026-10-29","On Energy Remain Audit","대홍전기 · FAT 주간 한가운데","open"]
+   ["대홍","2026-10-20","UL 초도 생산 공장검사 (10:30)","24V MCB 불일치 지적 · 고객 협의 완료, 4A 기준 · 전수조사에서 EPB 부적합 추가 발견","prog"],
+   ["대홍","2026-10-21","IP55 방진 테스트 입회","KOMERI 울산 · 일보 품질란은 10/22로 표기, 확인 필요","prog"],
+   ["대홍","2026-10-23","IP55 방수 테스트 입회","KOMERI 울산 · 일보 기준","open"],
+   ["On Energy","2026-10-26","1항차 FAT 10/26~30","4면 · Crusoe 10/28 화상 참관 · 차주 Comment 후속 대응","prog"],
+   ["대홍","2026-10-26","1항차 출고 100면 10/26~30","대홍전기 · 100/100면 출고 완료 (10/30)","done"],
+   ["On Energy","2026-10-29","On Energy Remain Audit","검사자 Eduardo Hisatugo · 실시 · Audit Comment 대응","prog"]
   ];
   var mj=MAJOR.map(function(m){var n=dd(m[1]),t=m[4]==="done"?"완료":(n<0?"+"+(-n)+"일 경과":ddTxt(m[1])),st=STAT[m[4]];
     return '<div class="it">'+chipO(m[0])+'<div class="tx">'+m[2]+'</div><div class="dd '+(n<0&&m[4]!=="done"?"late":(n<=5&&m[4]!=="done"?"now":""))+'">'+t+'</div><div class="mt"><span>'+md(m[1])+'</span><span>'+m[3]+'</span>'+stDot(st[0],st[1])+'</div></div>';}).join("");
@@ -735,7 +725,7 @@ function tabMs(){
   function sum(a,f){return a.reduce(function(t,r){return t+(+f(r)||0);},0);}
   var TOT=sum(INV,function(r){return r.amt;}), paid=sum(INV,function(r){return r.paid?r.sum:0;}), unpaid=sum(INV,function(r){return r.paid?0:r.sum;}), sopLater=sum(INV,function(r){return r.sopLater;}), fat=sum(REM,function(r){return r.fat;}), ddp=sum(REM,function(r){return r.ddp;});
   var DEPT=sum(INV,function(r){return r.dep;}), SOPB=sum(INV,function(r){return r.sop;}), npaid=INV.filter(function(r){return r.paid;}).length;
-  var seg=[[paid,"b1","입금 확인",paid],[unpaid,"b2","청구 · 미입금",unpaid],[sopLater,"b3","SOP 예정 (Eagle)",sopLater],[fat,"b4","Ready for Delivery 60%",fat],[ddp,"b5","Delivery Completion 10%",ddp]];
+  var seg=[[paid,"b1","입금 확인",paid],[unpaid,"b2","청구 · 미입금",unpaid],[sopLater,"b3","SOP 예정 (Eagle)",sopLater],[fat,"b4","Ready for Delivery 60%",fat],[ddp,"b5","Delivery Completion 10%",ddp]].filter(function(s){return s[0]>0;});
   var bar='<div class="stack" role="img" aria-label="'+INV.length+'개 PO 합계 '+usd(TOT)+' 결제 진행">'+seg.map(function(s){return '<i style="width:'+(s[0]/TOT*100).toFixed(2)+'%;background:var(--'+s[1]+')" title="'+s[2]+' '+usd(s[3])+'"></i>';}).join("")+'</div>'
     +'<div class="leg">'+seg.map(function(s){return '<span><em style="background:var(--'+s[1]+')"></em>'+s[2]+' <b>'+usd(s[3])+'</b> ('+(s[0]/TOT*100).toFixed(1)+'%)</span>';}).join("")+'</div>';
   var flow='<div class="flow" style="--n:4">'
@@ -783,7 +773,8 @@ function tabCost(){
   function s2(f){return INV.reduce(function(t,r){return t+(+f(r)||0);},0);}
   if(state.proj==="all") rows.push({cls:"tot",c:["합계",s2(function(r){return r.q;}),usd(s2(function(r){return r.amt;})),usd(s2(function(r){return r.dep;})),usd(s2(function(r){return r.sop;})),usd(s2(function(r){return r.sum;})),usd(s2(function(r){return r.paid?r.sum:0;}))+" 입금"]});
   var unp=INV.filter(function(r){return !r.paid;}).map(function(r){return r.n+(r.sched?"은 "+md(r.sched)+" 입금 예정":" 미입금");}).join(" · ");
-  var inv=panel("cost","청구 · 입금 (2026-09-21 청구)","지급기한 10/21 · "+(unp?esc(unp)+" · ":"전건 입금 · ")+"기존 단가 $46,600/면",rows.length?tbl(["프로젝트 · Invoice","면수","PO 금액","Deposit 5%","SOP 25%","청구 합계","입금"],rows,{num:[1,2,3,4,5]}):'<div class="empty">해당 프로젝트의 청구 내역이 없습니다.</div>',7);
+  var lastPaid=INV.filter(function(r){return r.paid;}).map(function(r){return r.paid;}).sort().pop();
+  var inv=panel("cost","청구 · 입금 (2026-09-21 청구)","지급기한 10/21 · "+(unp?esc(unp):INV.length+"건 모두 입금 완료"+(lastPaid?" (마지막 "+md(lastPaid)+")":""))+" · 기존 단가 $46,600/면",rows.length?tbl(["프로젝트 · Invoice","면수","PO 금액","Deposit 5%","SOP 25%","청구 합계","입금"],rows,{num:[1,2,3,4,5]}):'<div class="empty">해당 프로젝트의 청구 내역이 없습니다.</div>',7);
   var EXP=[
    ["사양변경 차액 (554면)",nw("ACE"),"재견적 제출 전","미산정"],
    ["설계 변경 3건 (561면)",nw("ACE"),"3항차 착수 전 11/04","범위·비용 미정"],
@@ -808,7 +799,7 @@ function tabProd(){
   var prog=panel("q","항차별 공정 진척",esc(DLY.progMeta),tbl(["항차 · 공정","진척","계획","상태"],PR.map(function(r){return [esc(r[0])+(r[1]?'<span class="sub">'+esc(r[1])+'</span>':""),pbar(Math.max(0,Math.min(100,+r[2]||0))),esc(r[3]),stDot(r[5]||"off",esc(r[4]))];}),{}),7,"rs2");
   var daily=panel("q",esc(DLY.title),esc(DLY.meta),
     '<div class="stats">'+DLY.stats.map(function(s){return '<div class="stat"><div class="l">'+esc(s[0])+'</div><div class="v">'+esc(s[1])+(s[2]?'<small>'+esc(s[2])+'</small>':"")+'</div><div class="s">'+esc(s[3])+'</div></div>';}).join("")+'</div>'
-    +tbl(["이번 주 자재","일정","내용"],DLY.mats.map(function(r){return [esc(r[0]),esc(r[1]),esc(r[2])];}),{}),5);
+    +tbl([esc(DLY.matsHead||"이번 주 자재"),"일정","내용"],DLY.mats.map(function(r){return [esc(r[0]),esc(r[1]),esc(r[2])];}),{}),5);
   var ins=panel("q","검사 · 서류","10월 말",tbl(["구분","일정","상태","비고"],INS.map(function(r){return [esc(r[0]),esc(r[1]),stDot(r[2]||"off",esc(r[3])),esc(r[4])];}),{}),5);
   var PAINT=[
    ["1","180 µm DFT 불가 사유","기술 설명","ACE · 대홍"],["2","벤더 자료 AL109K · MA10DK","문서","AkzoNobel"],["3","ISO 12944-5 Table B.2 미달","기술 근거","ACE · AkzoNobel"],
@@ -821,14 +812,14 @@ function tabProd(){
     ["09-17","FAN",stDot("off","확인 필요")],
     ["09-25","MCCB BJL26015LU · 100면분",stDot("off","확인 필요")],
     ["09-30","AIR FILTER 2종 (554면 전량)",stDot("off","확인 필요")],
-    ["10-07","IR WINDOW 2종",stDot("mid","65면 도착 · 40면 10/23")]],{}),6);
+    ["10-07","IR WINDOW 2종",stDot("good","65면 10/08 · 40면 10/20 입고")]],{}),6);
   var short=panel("q","자재 — 발주 수량 부족","4건",tbl(["품목","필요","주문","차이"],[
     ["SPD RAYCAP 35-G-HV-M","1,108","680",'<b class="c-bad">−428</b>'],
     ["6항차 자재 배정","40","35",'<b class="c-bad">−5</b>'],
     ["TCP/RTU 컨버터 (1항차)","100","42",'<b class="c-bad">−58</b>'],
     ["Coffee 7면분 자재","7","—","미반영"]],{num:[1,2,3]}),6);
   var mcb=panel("q","24V MCB 스펙 불일치 — 재발방지 요청 4가지","10/21 메일 (남종현) · 고객 협의 완료 → DC cabinet V2는 4A 기준으로 출하",
-    note("발주 사양과 실제 입고품이 달랐는데도 <b>입고검사 · 생산 조립 · 자체검사/FAT에서 사전에 발견하지 못한 점</b>이 핵심입니다. 출하가 다수 임박해 MCB 변경으로 끝내지 말고 생산·품질 관리체계를 점검해 달라는 요청입니다.")
+    note("일보(10/21)에서는 MCB 오입고로 분류하고 ACE–대홍 재발방지 대책회의를 실시했습니다. 발주 사양과 실제 입고품이 달랐는데도 <b>입고검사 · 생산 조립 · 자체검사/FAT에서 사전에 발견하지 못한 점</b>이 핵심입니다. 출하가 다수 임박해 MCB 변경으로 끝내지 말고 생산·품질 관리체계를 점검해 달라는 요청입니다.")
     +tbl(["#","조치","세부 내용","담당"],[
       ["①","현재 생산·완성품 전수 확인","설치된 24V MCB 모델명·정격을 실제 제품 기준으로 확인 · C60BPR-D / 4A 적용 여부 확인·기록",nw("대홍")],
       ["②","입고검사 강화","발주서·BOM과 입고품의 Maker / Model No. / Rating 개별 대조 · 외관·동일 계열이 아닌 정확한 P/N 기준",nw("대홍")],
@@ -861,7 +852,7 @@ function tabLogi(){
     ["Eagle","PO-000213","57 (11·23·23)","PO 접수","2027-11-12 ~ 2028-03-01","Lewisville 2","2027-03-26 (오기 가능성)","Deposit 청구 · SOP 25% 2027-06-05"],
     {cls:"tot",c:["합계","","180","","","","",""]}],{num:[2]}),12);
   var SEQ=[["2027-06-05","GoldenEye B1",29,"2027-06-09","2027-07-17"],["2027-09-04","GoldenEye B2",29,"2027-08-31","2027-10-16"],["2027-11-06","Eagle B1",11,"2027-11-12","2027-12-18"],["2027-12-05","GoldenEye B3",29,"2027-12-09","2028-01-16"],["2027-12-13","Eagle B2",23,"2027-12-19","2028-01-24"],["2028-01-19","Eagle B3",23,"2028-01-25","2028-03-01"],["2028-03-05","GoldenEye B4",29,"2028-03-08","2028-04-16"]];
-  var seq=panel("l","GoldenEye · Eagle 공장 출고 순서","출고 = Delivery Date − 6주 · 주말이면 직전 금요일",tbl(["공장 출고","배치","수량","납품 개시","Delivery Date"],SEQ.filter(function(r){return state.proj==="all"||(state.proj==="GE"&&r[1].indexOf("Golden")===0)||(state.proj==="EG"&&r[1].indexOf("Eagle")===0);}).concat(state.proj==="all"?[{cls:"tot",c:["합계","",173,"",""]}]:[]),{num:[2]}),7);
+  var seq=panel("l","GoldenEye · Eagle 대홍전기 출고 순서","출고 = Delivery Date − 6주 · 주말이면 직전 금요일 · 출항 = 출고 다음 주 수요일",tbl(["대홍전기 출고","배치","수량","납품 개시","Delivery Date","출항","도착 예상","여유"],SEQ.map(function(r){var f=sail(D(r[0])+state.slip*864e5),ea=eta(f);return r.concat([mdw(f),mdw(ea),marg(days(ea,D(r[4])))]);}).filter(function(r){return state.proj==="all"||(state.proj==="GE"&&r[1].indexOf("Golden")===0)||(state.proj==="EG"&&r[1].indexOf("Eagle")===0);}).concat(state.proj==="all"?[{cls:"tot",c:["합계","",173,"","","","",""]}]:[]),{num:[2]}),7);
   /* monthly load */
   var load={};
   SH.forEach(function(s){var a=D(s.prod[0]),b=D(s.prod[1]),n=days(a,b)+1,per=s.q/n;for(var k=0;k<n;k++){var d=new Date(a+k*864e5),key=d.getUTCFullYear()+"-"+((d.getUTCMonth()+1)<10?"0":"")+(d.getUTCMonth()+1);load[key]=(load[key]||0)+per;}});
@@ -869,7 +860,59 @@ function tabLogi(){
   var bars='<div class="cap" style="--n:'+keys.length+'">'+keys.map(function(k){var v=Math.round(load[k]);return '<div class="cb" title="'+k+' 제작 '+v+'면"><span>'+v+'</span><i style="height:'+(v/top*100*0.82).toFixed(1)+'%"></i></div>';}).join("")+'<div class="cl" style="bottom:'+(CAP/top*100*0.82).toFixed(1)+'%"><span>캐파 150</span></div></div>'
     +'<div class="capx" style="--n:'+keys.length+'">'+keys.map(function(k){var v=Math.round(load[k]);return '<div>'+k.replace("2026-","26.").replace("2027-","27.").replace(/\.0/,".")+'월<br>잔여 '+Math.max(0,CAP-v)+'</div>';}).join("")+'</div>';
   var cap=panel("l","월별 제작 물량과 캐파 150면","잔여 = 150 − 확정 부하",bars+note("26년 11~12월이 가장 빡빡합니다. 이 구간에 hold 물량을 얹으면 확정 수주의 버퍼가 줄어듭니다."),5);
-  return '<div class="grid">'+comp+lead+dst+addr+po+seq+cap+'</div>';
+  return '<div class="grid">'+etaPanel()+comp+lead+dst+addr+po+seq+cap+'</div>';
+}
+
+/* ---------- 대홍전기 출고 → 출항 → 도착 예상 ---------- */
+var WD=["일","월","화","수","목","금","토"], PRE=2;
+function mdw(ms){var d=new Date(ms);return (d.getUTCMonth()+1)+"/"+d.getUTCDate()+"("+WD[d.getUTCDay()]+")";}
+/* 출항 = 대홍전기 출고일이 속한 주의 다음 주 수요일 */
+function sail(t){var dow=new Date(t).getUTCDay(), mon=t-((dow+6)%7)*864e5; return mon+9*864e5;}
+function eta(sailMs){return sailMs+(state.tr-PRE)*864e5;}
+function span2(a,b){return a===b?mdw(a):mdw(a)+" ~ "+mdw(b);}
+function shipSpan(n){
+  var cur="",a=null,b=null;
+  DAILY.forEach(function(r){if(r[0])cur=r[0]; if(cur===n){var t=D(r[1]); if(a===null||t<a)a=t; if(b===null||t>b)b=t;}});
+  return [a,b];
+}
+function slipFor(a){return a>T?state.slip:0;}
+function calcRes(){
+  var v=state.cd; if(!v||!/^\d{4}-\d{2}-\d{2}$/.test(v)) return '<div class="stat" style="grid-column:1/-1"><div class="s">대홍전기 출고일을 선택하면 출항·도착 예상일이 계산됩니다.</div></div>';
+  var s0=D(v), sl=sail(s0);
+  return '<div class="stat"><div class="l">출항 (다음 주 수)</div><div class="v">'+mdw(sl)+'</div><div class="s">'+fmt(sl)+'</div></div>'
+   +[[30,"실측 30일"],[33,"실측 33일"],[60,"대외 60일"]].map(function(x){
+    var e=sl+(x[0]-PRE)*864e5;
+    return '<div class="stat"><div class="l">도착 · '+x[1]+'</div><div class="v">'+mdw(e)+'</div><div class="s">'+fmt(e)+'</div></div>';
+  }).join("");
+}
+function etaPanel(){
+  var rows=[];
+  SH.filter(shHas).forEach(function(s){
+    var sp=shipSpan(s.n), a=sp[0], b=sp[1]; if(a===null) return;
+    var sl=slipFor(a), as=a+sl*864e5, bs=b+sl*864e5, fa=sail(as), fb=sail(bs), ea=eta(fa), eb=eta(fb);
+    var mg=days(eb,s.deadline);
+    var stt=eb<=T?stDot("good","도착 완료"):(fa<=T?stDot("mid","운송 중"):(as<=T?stDot("mid","출항 대기"):stDot("off","출고 전")));
+    rows.push([s.n+'<span class="sub">'+codes(s)+'</span>',
+      span2(as,bs)+(sl?'<span class="sub c-bad">+'+sl+'일 지연</span>':""),
+      span2(fa,fb),
+      '<b>'+span2(ea,eb)+'</b>',
+      mdw(s.deadline),
+      marg(mg),
+      stt]);
+  });
+  var seg1=trSeg();
+  var seg2='<div class="seg" role="group" aria-label="출고 지연">'+[[0,"계획대로"],[3,"+3일"],[7,"+7일"],[14,"+14일"],[30,"+30일"]].map(function(v){return '<button data-slip="'+v[0]+'" aria-pressed="'+(state.slip===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
+  var ctl='<div class="ctl"><div><span class="lb">운송 기준</span>'+seg1+'</div><div><span class="lb">출고 지연 시뮬레이션</span>'+seg2+'</div></div>';
+  var tb=rows.length?tbl(["항차 · 프로젝트","대홍전기 출고","출항 (다음 주 수)","도착 예상","인도 기한","여유","상태"],rows,{ctr:[6]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다. GoldenEye · Eagle은 아래 순서표에서 확인하세요.</div>';
+  var calc='<div class="ctl" style="align-items:flex-start;margin-top:2px"><div><label class="lb" for="cdate">대홍전기 출고일을 직접 입력</label><br><input type="date" id="cdate" value="'+state.cd+'"></div><div class="calc" id="cres">'+calcRes()+'</div></div>';
+  var dl=SH.filter(shHas).length?'<details style="margin-top:2px"><summary>일자별 대홍전기 출고 → 출항 → 도착 예상 <small>하루 단위 · 위에서 고른 운송 기준·지연 반영</small></summary><div class="dbody">'
+    +tbl(["항차","대홍전기 출고","프로젝트 · 수량","항차 누계","출항","도착 예상"],DAILY.map(function(r,i){
+      var cur="";for(var k=i;k>=0;k--){if(DAILY[k][0]){cur=DAILY[k][0];break;}}
+      var sh=SH.filter(function(x){return x.n===cur;})[0]; if(sh&&!shHas(sh)) return null;
+      var t=D(r[1])+slipFor(shipSpan(cur)[0])*864e5, f=sail(t);
+      return [r[0]||'&nbsp;',mdw(t),r[2],r[4],mdw(f),'<b>'+mdw(eta(f))+'</b>'];
+    }).filter(Boolean),{num:[3]})+'</div></details>':"";
+  return panel("l","대홍전기 출고 · 출항 · 도착 예상","출항 = 출고 다음 주 수요일 · 도착 = 출항 + (운송일 − 2일)",ctl+tb+calc+dl+note("운송 기준일(30·33·60일)은 대홍전기 출고부터 MPS 도착까지입니다. 이 중 출고→CFS→부산 적입 2일은 출항 대기 안에 포함된 것으로 보고, 출항일에 (운송일 − 2일)을 더했습니다. 1항차는 이미 전량 출고돼 지연 시뮬레이션이 적용되지 않습니다. 여유는 항차 마지막 출고분 도착 기준으로 가장 이른 인도 기한과 비교합니다."),12);
 }
 
 /* ---------- TAB: 이슈 ---------- */
@@ -894,7 +937,7 @@ function tabRisk(){
     +'<ol class="steps"><li><div><b>월 제작 캐파 150면을 문서에 명시</b><span>예약 한도 협의의 기준선</span></div></li><li><div><b>hold 물량의 월별 예약 한도</b><span>해당 월 잔여 캐파의 일정 비율(예: 50%)까지</span></div></li><li><div><b>예약 유효기간 = release deadline</b><span>미이행 시 자동 해제, 재예약은 그 시점 잔여 캐파 기준</span></div></li><li><div><b>표준 리드타임 내 납기 요청은 case-by-case</b><span>자재 발주 승인서 또는 부분 선수금을 조건으로</span></div></li></ol>'
     +tbl(["월","26-09","26-10","26-11","26-12","27-01","27-02","27-03","27-04~"],[["확정 부하",76,97,120,122,99,36,4,0],["잔여 (150 기준)",74,53,30,28,51,114,146,150]],{num:[1,2,3,4,5,6,7,8]})+'</div></details>';
   var ref='<details style="margin-top:10px"><summary>참고 자료 <small>FUSE · 사내 일보 교차 확인 · 계산 기준</small></summary><div class="dbody">'
-    +note("<b>FUSE (ACE 사급)</b> 실보유 404EA (08-14 입고 16 → 08-20 불출 12 → 08-27 입고 400). 추가 입고 필요 96EA = 단락시험 보충 12 + Coffee 84. Eaton 5,436 + Schneider 1,212 소요에 더해지며 Eaton은 5항차 누적 여유 0입니다.")
+    +note("<b>FUSE (ACE 사급)</b> 실보유 404EA (08-14 입고 16 → 08-20 불출 12 → 08-27 입고 400). 추가 입고 필요 96EA = 단락시험 보충 12 + Coffee 84. Eaton 5,436 + Schneider 1,212 소요에 더해지며 Eaton은 5항차 누적 여유 0입니다. 10/30 Schneider DC Fuse 168개가 첫 입고됐습니다 (수입검사 입회).")
     +note("<b>사내 생산일보 교차 확인 (9/08)</b> DC Cabinet은 대홍 외주 생산이라 ACE 함안·칠서 일보에는 없습니다. 환경안전팀 ‘페인트 이슈사항 보고서’(9/09)는 도장 요구 ①·⑩ 회신 자료의 출발점일 수 있고, ABB Audit 결과는 ABB 480V 차단기 공급 조건과 연결될 수 있습니다.")
     +note("<b>계산 기준</b> 도착일 = 출고일 + 운송일. 여유 = 해당 항차 배치 중 가장 이른 Delivery Date − 도착일. 월별 생산은 대홍 생산일정을 일할 배분했습니다.")+'</div></details>';
   return '<div class="grid">'+pri+mis+cl+'</div>'+par+ref;
@@ -915,8 +958,7 @@ function render(){
   m.innerHTML=h;
   $("today").textContent=fmt(T);
   $("bnTx").innerHTML=rich(BN.text); $("asofTx").textContent=BN.asof||""; $("srcTx").textContent=BN.src||"";
-  var ns=nextShip(), n=dd(ns.fatD);
-  $("bnDd").textContent=ns.n+" FAT "+(n>0?"D-"+n:(n===0?"D-DAY":"진행 중"))+" · 출고 "+ns.win;
+  if(BN.dd){$("bnDd").textContent=ddLine(BN.dd);} else {var ns=nextShip(), n=dd(ns.fatD); $("bnDd").textContent=ns.n+" FAT "+(n>0?"D-"+n:(n===0?"D-DAY":"진행 중"))+" · 출고 "+ns.win;}
   $("updTx").textContent=DATA.updated?("마지막 수정 "+fmtLocal(DATA.updated)+(DATA.by?" · "+DATA.by:"")):"";
   $("edBtn").hidden=!canEdit();
   $("edBtn").textContent=ED.dirty?"편집 ●":"편집";
@@ -981,9 +1023,9 @@ function chip(i,k,val,label,on){return '<button type="button" class="chip" data-
 
 function secBn(){
   return '<h4>오늘 쟁점 (상단 배너)</h4><p class="hint">**이렇게** 별표 두 개로 감싸면 굵은 글씨가 됩니다. 배너 오른쪽의 FAT D-day는 항차 일정에서 자동으로 계산됩니다.</p>'
-   +fld("banner","text","문구","area")+fld("banner","asof","기준 문서 (상단 오른쪽)")+fld("banner","src","출처 (하단)")
+   +fld("banner","text","문구","area")+fld("banner","dd","배너 오른쪽 D-day (날짜를 {2026-11-10}처럼 쓰면 D-day로 바뀜 · 비우면 다음 항차 FAT 자동)")+fld("banner","asof","기준 문서 (상단 오른쪽)")+fld("banner","src","출처 (하단)")
    +'<h4>KPI 카드 (개요 탭 상단)</h4><p class="hint">값을 ‘자동’으로 두면 날짜가 지나면서 저절로 바뀝니다. 설명에 {tr}을 쓰면 선택한 운송일수로 바뀝니다.</p>'
-   +grid("kpis",[{k:"l",h:"제목"},{k:"auto",h:"값",t:"sel",o:[["","직접 입력"],["fat","자동 · 다음 FAT D-day"],["margin","자동 · 도착 여유일"]],w:"150px"},{k:"v",h:"직접 입력 값",w:"80px"},{k:"u",h:"단위",w:"48px"},{k:"s",h:"설명"},{k:"bad",h:"빨강",t:"chk",w:"36px"}],{l:"새 KPI",auto:"",v:"",u:"",s:"",bad:0},640);
+   +grid("kpis",[{k:"l",h:"제목"},{k:"auto",h:"값",t:"sel",o:[["","직접 입력"],["fat","자동 · 다음 FAT D-day"],["margin","자동 · 1항차 도착 여유일"],["margin_next","자동 · 다음 항차 도착 여유일"]],w:"150px"},{k:"v",h:"직접 입력 값",w:"80px"},{k:"u",h:"단위",w:"48px"},{k:"s",h:"설명"},{k:"bad",h:"빨강",t:"chk",w:"36px"}],{l:"새 KPI",auto:"",v:"",u:"",s:"",bad:0},640);
 }
 function itemCard(it,i){
   var P="items";
@@ -1039,7 +1081,7 @@ function secPr(){
    +grid("prog",[{k:"0",h:"공정"},{k:"1",h:"세부"},{k:"2",h:"진척 %",t:"num",w:"64px"},{k:"3",h:"계획"},{k:"4",h:"상태 문구"},{k:"5",h:"색",t:"sel",o:KIND,w:"110px"}],["새 공정","",0,"","대기","off"],620)
    +'<h4>생산품질일보</h4><div class="ed-f4"><div style="grid-column:span 3">'+fld("daily","title","제목 (예: 생산품질일보 10/21)")+'</div>'+fld("daily","meta","주차")+'</div>'
    +'<p class="hint">숫자 카드</p>'+grid("daily.stats",[{k:"0",h:"제목"},{k:"1",h:"값",w:"70px"},{k:"2",h:"단위",w:"48px"},{k:"3",h:"설명"}],["","","",""])
-   +'<p class="hint">이번 주 자재</p>'+grid("daily.mats",[{k:"0",h:"품목"},{k:"1",h:"일정"},{k:"2",h:"내용"}],["","",""])
+   +'<p class="hint">아래 표</p>'+fld("daily","matsHead","표 첫 열 제목")+grid("daily.mats",[{k:"0",h:"품목"},{k:"1",h:"일정"},{k:"2",h:"내용"}],["","",""])
    +'<h4>검사 · 서류</h4>'+grid("ins",[{k:"0",h:"구분"},{k:"1",h:"일정",w:"90px"},{k:"2",h:"색",t:"sel",o:KIND,w:"110px"},{k:"3",h:"상태",w:"70px"},{k:"4",h:"비고"}],["","","off","대기",""],600);
 }
 function adminLinks(){try{return JSON.parse(ls(LK)||"{}");}catch(_){return {};}}
@@ -1241,6 +1283,10 @@ document.addEventListener("click",function(e){
   else if(b.dataset.view){state.view=b.dataset.view; render();}
   else if(b.dataset.pj){state.proj=b.dataset.pj; render();}
   else if(b.dataset.tr){state.tr=+b.dataset.tr; render();}
+  else if(b.dataset.slip){state.slip=+b.dataset.slip; render();}
+});
+document.addEventListener("input",function(e){
+  if(e.target&&e.target.id==="cdate"){state.cd=e.target.value; var r=$("cres"); if(r) r.innerHTML=calcRes();}
 });
 (function init(){
   var hm=(location.hash||"").match(/(?:^#|&)edit=([^&]+)/);
@@ -1257,4 +1303,5 @@ document.addEventListener("click",function(e){
 })();
 })();
 </script>
+
 </body></html>
