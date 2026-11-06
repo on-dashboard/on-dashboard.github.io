@@ -284,12 +284,12 @@ details>.dbody{padding:2px 14px 14px; display:flex; flex-direction:column; gap:1
     <span class="ttl">DC Cabinet 납기·PO 보드</span>
     <div class="who">
       <span>고객 <b>On Energy</b></span><span>공급사 <b>대홍전기</b></span><span>제품 <b>DC Cabinet</b></span>
-      <span class="asof">기준 <span id="today"></span> · Rev.05(10/12) · 일보(11/04) · 인보이스(9/21)</span>
+      <span class="asof">기준 <span id="today"></span> · Rev.05(10/12) · 일보(11/05) · 인보이스(9/21)</span>
     </div>
   </div>
   <div class="banner" role="status">
     <span class="lead">오늘 쟁점</span>
-    <span><b>2항차 외함조립 104/104면 완료</b>, 3항차 조립 2면. 11/04 2항차 샘플 합동 검사 실시(결과 ~11/06), <b>Prototype 4면은 Rev.22 적용 시 20가지 변경</b>. 1항차 FAT 60% 청구 기준을 정해야 합니다. <b>EPB 접점</b> 11/10 입고.</span>
+    <span><b>고객 클레임 접수</b>(외함 내부 용접 결함·녹 발생) — 원인 파악·시정조치 48시간 내 제출. 2항차 외함조립 104/104면 완료, 샘플 검사 결과 ~11/06. <b>EPB 접점</b> 11/10 입고 후 Abilene 9·10 구분 배송.</span>
     <span class="dd" id="bnDd"></span>
   </div>
   <div class="bar">
@@ -302,7 +302,7 @@ details>.dbody{padding:2px 14px 14px; display:flex; flex-direction:column; gap:1
   </div>
   <main id="main"></main>
   <div class="foot">
-    <span>출처: Master Plan Rev.05 (10/12) · 생산품질일보 11/04 · Invoice Tracker (9/21 청구) · PO 원문</span>
+    <span>출처: Master Plan Rev.05 (10/12) · 생산품질일보 11/05 · Invoice Tracker (9/21 청구) · PO 원문</span>
     <span>D-day와 경과일은 페이지를 열 때마다 오늘 기준으로 다시 계산됩니다.</span>
   </div>
 </div>
@@ -326,7 +326,8 @@ function $(id){return document.getElementById(id);}
 var PN={A9:"Abilene 9",A10:"Abilene 10",C1:"Childress 1",W1:"Warrenton 1",CF:"Coffee",GE:"GoldenEye",EG:"Eagle"};
 var PJ=[["all","전체"],["A9","Abilene 9"],["A10","Abilene 10"],["C1","Childress 1"],["W1","Warrenton 1"],["CF","Coffee"],["GE","GoldenEye"],["EG","Eagle"]];
 var ABBR={"Abilene #9":"A9","Abilene #10":"A10","Childress #1":"C1","Warrenton #1":"W1","Coffee":"CF"};
-var TABS=[["ov","개요"],["sch","일정"],["ms","마일스톤"],["cost","비용"],["prod","생산·품질"],["logi","물류·PO"],["risk","이슈"]];
+var TABS=[["rev","매출"],["ov","개요"],["sch","일정"],["ms","마일스톤"],["cost","비용"],["prod","생산·품질"],["logi","물류·PO"],["risk","이슈"]];
+var REVV=[["ship","대홍전기 출고 기준"],["arr","도착 시점 기준"]];
 var VIEWS=[["area","영역별"],["own","담당별"],["date","일정별"]];
 var OWN=["ACE","대홍","On Energy"], OK={"ACE":"a","대홍":"d","On Energy":"c"};
 var AREA={sch:["일정",""],ms:["마일스톤","t-ms"],cost:["비용","t-cost"],q:["품질","t-q"],l:["물류","t-l"],risk:["계약·기타","t-l"]};
@@ -382,6 +383,7 @@ var ITEMS=[
  {t:["sch","prod"],a:"sch",o:"ACE",d:"2026-10-20",x:"출고 서류 미팅 완료 (Shipping Mark·출고증·인수증)",s:"done"},
  {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-11-06",x:"2항차 샘플 부품 합동 검사 실시(11/4) · BOM Sub assembly 정보 추가 기재 요청 · Indicating Light(Green) 미입고로 차주 검사 · 결과 Reporting ~11/06",s:"prog",p:["A9","A10","C1","CF"],k:1},
  {t:["prod","cost"],a:"q",o:"ACE",d:"2026-11-05",x:"Prototype 4면 개보수 · 양산품 비교 완료(11/4) · 최종 도면 Rev.22 적용 시 20가지 변경, 대부분 신규제작·부품 교체 필요 · 비교 자료 Reporting ~11/05 → 고객 전달 · 요구 사양 확인 (11/04 일보)",s:"prog",p:["A9","A10"],k:1},
+ {t:["prod","risk"],a:"q",o:"대홍",d:"2026-11-05",x:"고객 클레임 접수: 외함 내부 용접 결함 · 녹 발생 등 → 원인 파악 · 시정조치서 48시간 내 제출 (11/05 일보, 대상 PJT·면수·접수 일시 확인 필요)",s:"risk",k:1},
  {t:["ms","cost"],a:"ms",o:"On Energy",d:"2026-10-16",x:"입금 5건 $5,598,990 (청구액의 70.2%)",s:"done",p:["A9","C1","W1","CF","EG"]},
  {t:["ms","cost"],a:"ms",o:"On Energy",d:"2026-10-22",x:"Abilene 10 입금 완료 $2,376,600 → 9/21 청구분 6건 $7,975,590 전액 입금",s:"done",p:["A10"]},
  {t:["ms","cost"],a:"ms",o:"ACE",d:"2026-10-26",x:"1항차 FAT 종료(10/30) · FAT 60% $2,796,000 청구 기준 합의 (PO별 vs 항차별)",s:"open",k:1},
@@ -416,7 +418,7 @@ var ITEMS=[
  {t:["prod","risk"],a:"q",o:"대홍",d:"",x:"④ 변경관리: 최신 Revision 현장 적용 확인, 차이는 즉시 공유",s:"open"},
  {t:["prod"],a:"q",o:"대홍",d:"2026-10-20",x:"1항차 외함·전장조립 100% 완료 · 2항차 외함조립 104/104면 완료 · 3항차 조립 2면 (11/04 일보, 누계 206 · 계획 204)",s:"prog",p:["A9","A10"]},
  {t:["prod","logi"],a:"q",o:"대홍",d:"2026-10-30",x:"SPD 690개 수출 포장 후 출고 완료 (미국 배송) · 수출 포장 절차서 보완 완료 · 제습제 TDS 제출",s:"done",p:["A9","A10"]},
- {t:["prod","risk"],a:"q",o:"대홍",d:"2026-11-10",x:"UL 심사 후 EPB 부적합 조치 진행 (교체 매뉴얼·동영상 전달) · EPB 접점 11/10 입고 예정 (11/04 일보) · 24Vdc 차단기 스팩 미스매칭",s:"prog",p:["A9","A10"],k:1},
+ {t:["prod","risk","logi"],a:"q",o:"대홍",d:"2026-11-10",x:"UL 심사 후 EPB 부적합 조치 진행 (교체 매뉴얼·동영상 전달) · EPB 금도금 접점 11/10 입고 → 입고검사 후 미국 Abilene 9 · Abilene 10 PJT 구분 배송 (11/05 일보) · 24Vdc 차단기 스팩 미스매칭",s:"prog",p:["A9","A10"],k:1},
  {t:["prod","logi"],a:"q",o:"대홍",d:"2026-10-22",x:"열차단판 조립 진행 · 케이블 타이 서포터 10/22 입고·조립 착수",s:"prog",p:["A9","A10"]},
  {t:["prod","risk"],a:"q",o:"ACE",d:"2026-10-22",x:"대홍전기 개선 요청 회의 (ACE 생산본부장 주관): 생산·품질 개선, 인원 충원 계획, 신규 사외 조립장 환경·전담 관리자, MCB 오입고 개선방안",s:"done",k:1},
  {t:["prod","logi"],a:"q",o:"대홍",d:"2026-10-23",x:"UL 스티커 입고 예정 (오후) · 공장심사 시점엔 미부착",s:"open",p:["A9","A10"]},
@@ -459,7 +461,7 @@ var DAILY=[
  ["5항차","2027-02-15","Warrenton 1 16",16,16],["","2027-02-16","Warrenton 1 8 · Childress 1 16",24,40],["","2027-02-17","Childress 1 16",16,56],["","2027-02-18","Childress 1 24",24,80],["","2027-02-19","Childress 1 16",16,96],
  ["6항차","2027-03-18","Warrenton 1 16",16,16],["","2027-03-19","Warrenton 1 24",24,40]
 ];
-var state={tab:"ov",view:"area",proj:"all",tr:33,slip:0,cd:"2026-11-23"};
+var state={tab:"rev",ru:"qty",rt:60,rv:"arr",view:"area",proj:"all",tr:33,slip:0,cd:"2026-11-23"};
 
 /* ---------- small builders ---------- */
 function pv(it){return state.proj==="all"||!it.p||!it.p.length||it.p.indexOf(state.proj)>-1;}
@@ -709,15 +711,16 @@ function tabProd(){
  ["2항차 자재입고","",70,"09-21~11-15","진행","mid"]
 ];
   var prog=panel("q","항차별 공정 진척","Rev.05 (10/12) · 1항차 전장·출고·2항차 외함은 11/04 일보 (2항차 이하는 10/12 기준)",tbl(["항차 · 공정","진척","계획","상태"],PR.map(function(r){return [r[0]+(r[1]?'<span class="sub">'+r[1]+'</span>':""),pbar(r[2]),r[3],stDot(r[5],r[4])];}),{}),7,"rs2");
-  var daily=panel("q","생산품질일보 11/04","45주차",
+  var daily=panel("q","생산품질일보 11/05","45주차",
     '<div class="stats"><div class="stat"><div class="l">외함조립 누계</div><div class="v">206<small>면</small></div><div class="s">계획 204 · 101%</div></div><div class="stat"><div class="l">2항차 외함</div><div class="v">104<small>면</small></div><div class="s">전체 완료 · 3항차 2면</div></div><div class="stat"><div class="l">45주차 외함</div><div class="v">12<small>면</small></div><div class="s">계획 28면 · 43% (진행 중)</div></div></div>'
     +tbl(["이번 주 진행","일정","내용"],[
-      ["2항차 샘플 검사","11-04 실시","BOM Sub assembly 정보 추가 요청 · Indicating Light(Green) 미입고 → 차주 검사 · 결과 Reporting ~11/06"],
-      ["입고검사","~11-06","입고검사성적서 전수 검사 · 전담 1 · 라인검사 2 배치 현장 확인"],
+      ["고객 클레임",'<b class="c-bad">신규</b>',"외함 내부 용접 결함 · 녹 발생 등 접수 → 원인 파악·시정조치서 48시간 내 제출"],
+      ["2항차 샘플 검사","11-04 실시","BOM Sub assembly 정보 추가 요청 · Indicating Light(Green) 미입고 → 차주 검사 · 결과·입고검사성적서 전수 검사 ~11/06"],
       ["Prototype 4면","11-04 완료","양산품 비교 완료 · Rev.22 적용 시 20가지 변경, 대부분 신규제작·부품 교체 · Reporting ~11/05"],
-      ["차주 (46주차)","11/09~15","FAT·Audit Comment 대응 · 2항차 FAT 일정 확인·실시 · EPB 접점 입고(11/10)"]],{}),5);
+      ["EPB 접점","11-10","금도금 접점 입고 → 입고검사 후 미국 Abilene 9·10 PJT 구분 배송"],
+      ["차주 (46주차)","11/09~15","FAT·Audit Comment 대응 · 2항차 FAT 일정 확인·실시 · 클레임 대응"]],{}),5);
   var ins=panel("q","검사 · 서류","10월 말",tbl(["구분","일정","상태","비고"],[
-    ["UL 공장검사","10/20",stDot("mid","진행"),"MCB 4A 기준 갱신 · EPB 접점 11/10 입고"],
+    ["UL 공장검사","10/20",stDot("mid","진행"),"MCB 4A 기준 갱신 · EPB 접점 11/10 입고 후 Abilene 9·10 구분 배송"],
     ["IP55 방진","10/21",stDot("mid","입회"),"KOMERI 울산 · 일보 품질란은 10/22 표기"],
     ["IP55 방수","10/23",stDot("off","대기"),"KOMERI 울산 · 일보 기준"],
     ["서류 미팅","10/20",stDot("good","완료"),"수출포장 · Shipping Mark · 출고증"],
@@ -866,16 +869,124 @@ function tabRisk(){
 }
 
 /* ---------- shell ---------- */
-var BODY={ov:tabOv,sch:tabSch,ms:tabMs,cost:tabCost,prod:tabProd,logi:tabLogi,risk:tabRisk};
+/* ---------- TAB: 매출 (최종 인도월 = 매출 인식 시점, 대시보드 데이터 기준) ---------- */
+var UNITP=46600, FXR=1250;
+var MK=["2611","2612","2701","2702","2703","2704","2705","2706","2707","2708","2709","2710","2711","2712","281Q","282Q"];
+var MKL={"2611":"26.11","2612":"26.12","281Q":"28.1Q","282Q":"28.2Q"};
+MK.forEach(function(k){if(!MKL[k]) MKL[k]="27."+(+k.slice(2));});
+/* 프로젝트 · PO · 수량 · 단계 — 모두 이 보드의 인보이스 · PO 데이터 */
+var REVROWS=[
+ ["A9","Abilene 9","PO-000159",170,"확정"],["A10","Abilene 10","PO-000167",170,"확정"],["C1","Childress 1","PO-000175",113,"확정"],
+ ["W1","Warrenton 1","PO-000184",101,"확정"],["CF","Coffee","PO-000319",7,"확정"],
+ ["EG","Eagle","PO-000213",57,"PO 접수 · 마스터플랜 미반영"],["GE","Golden Eye","PO-000327",116,"릴리스 대기 12/15"]
+];
+var GESEQ=[["2027-06-05","GE","GoldenEye B1",29],["2027-09-04","GE","GoldenEye B2",29],["2027-12-05","GE","GoldenEye B3",29],["2028-03-05","GE","GoldenEye B4",29],["2027-11-06","EG","Eagle B1",11],["2027-12-13","EG","Eagle B2",23],["2028-01-19","EG","Eagle B3",23]];
+function mkOf(ms){var d=new Date(ms),y=d.getUTCFullYear(),m=d.getUTCMonth()+1; if(y<=2026) return m>=12?"2612":"2611"; if(y===2027) return "27"+(m<10?"0":"")+m; return (y===2028&&m<=3)?"281Q":"282Q";}
+/* 인식월(도착 시점) = 항차(배치)의 마지막 대홍전기 출고일 + 운송일 / 출고월 = 마지막 대홍전기 출고일이 속한 달 */
+function skOf(ms){var d=new Date(ms),m=d.getUTCMonth()+1; return String(d.getUTCFullYear()).slice(2)+(m<10?"0":"")+m;}
+function skLabel(k){return k.slice(0,2)+"."+(+k.slice(2));}
+function revPlan(){
+  var P=[], A={}, S={}; REVROWS.forEach(function(r){A[r[0]]={};S[r[0]]={};});
+  function add(q,k,m,ship,ar,qty){q[k][m]=(q[k][m]||0)+qty;}
+  SH.forEach(function(sh){
+    var sp=shipSpan(sh.n); if(sp[0]===null) return;
+    var e=sp[1]+state.rt*864e5, mk=mkOf(e), sk=skOf(sp[1]);
+    sh.order.forEach(function(k){add(A,k,mk,0,0,sh.m[k]); add(S,k,sk,0,0,sh.m[k]);});
+    P.push({n:sh.n,sub:codes(sh),ship:sp[1],arr:e,mk:mk,sk:sk,q:sh.q});
+  });
+  GESEQ.forEach(function(g){var sh=D(g[0]), e=sh+state.rt*864e5, mk=mkOf(e), sk=skOf(sh); add(A,g[1],mk,0,0,g[3]); add(S,g[1],sk,0,0,g[3]); P.push({n:g[2],sub:"",ship:sh,arr:e,mk:mk,sk:sk,q:g[3]});});
+  P.sort(function(x,y){return x.arr-y.arr;});
+  return {A:A,S:S,P:P};
+}
+function revVal(q,u){
+  if(!q) return '<span class="mut">–</span>';
+  if(u==="usd") return (q*UNITP/1e6).toFixed(2);
+  if(u==="krw") return (q*UNITP*FXR/1e8).toFixed(1);
+  return fm(q);
+}
+function tabRev(){
+  var u=state.ru, view=state.rv, PL=revPlan(), R=view==="ship"?PL.S:PL.A;
+  var rows=REVROWS.filter(function(r){return state.proj==="all"||r[0]===state.proj;});
+  /* 열 구성: 도착 기준은 26.12~28.2Q, 출고 기준은 첫 출고월~마지막 출고월을 월 단위로 */
+  var cols,lab;
+  if(view==="ship"){
+    var ks=PL.P.map(function(p){return p.sk;}).sort(), c0=ks[0], c1=ks[ks.length-1]; cols=[]; lab=skLabel;
+    var y=+c0.slice(0,2), m=+c0.slice(2);
+    while(true){var k=(y<10?"0":"")+y+(m<10?"0":"")+m; cols.push(k); if(k===c1||cols.length>40) break; m++; if(m>12){m=1;y++;}}
+  } else { cols=null; lab=function(k){return MKL[k];}; }
+  var tot={},tq=0;
+  rows.forEach(function(r){tq+=r[3]; Object.keys(R[r[0]]).forEach(function(k){tot[k]=(tot[k]||0)+R[r[0]][k];});});
+  if(!cols) cols=MK.filter(function(k){return k!=="2611"||tot[k]>0;});
+  function ysum(p){var a=0; Object.keys(tot).forEach(function(k){if(k.slice(0,2)===p) a+=tot[k];}); return a;}
+  var y26=ysum("26"), y27=ysum("27"), y28=ysum("28");
+  /* KPI는 항상 도착 시점(매출 인식) 기준 */
+  var totA={}; rows.forEach(function(r){Object.keys(PL.A[r[0]]).forEach(function(k){totA[k]=(totA[k]||0)+PL.A[r[0]][k];});});
+  function ysumA(p){var a=0; Object.keys(totA).forEach(function(k){if(k.slice(0,2)===p) a+=totA[k];}); return a;}
+  var a26=ysumA("26"), a27=ysumA("27"), a28=ysumA("28");
+  var conf=rows.filter(function(r){return r[4]==="확정";}).reduce(function(a,r){return a+r[3];},0), hold=tq-conf;
+  var usdM=function(q){return "$"+(q*UNITP/1e6).toFixed(2)+"M";}, krw=function(q){return (q*UNITP*FXR/1e8).toFixed(1)+"억원";};
+  var p1=PL.P.filter(function(p){return p.n==="1항차";})[0];
+  var kp='<div class="kpis">'
+   +'<div class="kpi"><span class="l">총 수량</span><span class="v">'+fm(tq)+'<small>면</small></span><span class="s">확정 '+fm(conf)+' + 마스터플랜 미반영 '+fm(hold)+'</span></div>'
+   +'<div class="kpi"><span class="l">매출 규모 (단가 $46,600)</span><span class="v">'+usdM(tq).replace("M","")+'<small>M</small></span><span class="s">'+krw(tq)+' @1,250원 · 재견적 미반영</span></div>'
+   +'<div class="kpi"><span class="l">2026년 인식 (도착 기준)</span><span class="v">'+fm(a26)+'<small>면</small></span><span class="s">'+usdM(a26)+(p1?' · 1항차 도착 '+mdw(p1.arr):"")+'</span></div>'
+   +'<div class="kpi"><span class="l">2027년 인식</span><span class="v">'+fm(a27)+'<small>면</small></span><span class="s">'+usdM(a27)+'</span></div>'
+   +'<div class="kpi"><span class="l">2028년 이후</span><span class="v">'+fm(a28)+'<small>면</small></span><span class="s">'+usdM(a28)+' · Eagle · GoldenEye</span></div>'
+   +'<div class="kpi"><span class="l">현재 인식 완료</span><span class="v">0<small>면</small></span><span class="s">1항차 100면 출고 완료 · 도착 대기</span></div>'
+   +'</div>';
+  var segU='<div class="seg" role="group" aria-label="단위">'+[["qty","수량 (면)"],["usd","매출 USD (백만)"],["krw","매출 억원 @1,250"]].map(function(v){return '<button data-ru="'+v[0]+'" aria-pressed="'+(u===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
+  var segR='<div class="seg" role="group" aria-label="운송 기준">'+[[60,"출고일 + 60일"],[33,"+ 33일"],[30,"+ 30일"]].map(function(v){return '<button data-rt="'+v[0]+'" aria-pressed="'+(state.rt===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
+  var ctl='<div class="ctl"><div><span class="lb">단위</span>'+segU+'</div>'+(view==="ship"?"":'<div><span class="lb">운송 기준 (대홍전기 출고 → 도착)</span>'+segR+'</div>')+'</div>';
+  var head=["PJT","PO","수량"].concat(cols.map(lab));
+  var body=rows.map(function(r){
+    return [r[1]+(r[4]==="확정"?"":'<span class="sub">'+r[4]+'</span>'),r[2],fm(r[3])].concat(cols.map(function(k){return revVal(R[r[0]][k]||0,u);}));
+  });
+  var cum=0, cumRow=["누계 "+(u==="qty"?"(면)":(u==="usd"?"(USD 백만)":"(억원)")),"",""], cumPct=["누계 (%)","",""];
+  var sumf=function(q){return q?revVal(q,u):'<span class="mut">–</span>';};
+  cols.forEach(function(k){cum+=(tot[k]||0); cumRow.push(sumf(cum)); cumPct.push(tq?(cum/tq*100).toFixed(0)+"%":"–");});
+  body.push({cls:"tot",c:["합계","",fm(tq)].concat(cols.map(function(k){return sumf(tot[k]||0);}))});
+  body.push({cls:"emph",c:cumRow}); body.push({cls:"emph",c:cumPct});
+  var ttl=view==="ship"?"대홍전기 출고월별 물량":"최종 인도월별 매출 인식 계획";
+  var sub=view==="ship"?"대홍전기 출고 기준 · 항차 마지막 출고일이 속한 달":"도착 시점(매출 인식) 기준 · 단가 $46,600/면 · 환율 1,250원";
+  var nt=view==="ship"
+    ?"출고월 = 항차(배치) 마지막 <b>대홍전기 출고일</b>이 속한 달입니다. 출고 계획은 이 보드의 항차 일정(1항차 실적, 2~6항차 계획)과 GoldenEye · Eagle 출고 순서표(Delivery Date − 6주)를 그대로 씁니다. 금액은 같은 단가(수량 × $46,600)로 환산한 참고값이며 매출 인식은 ‘도착 시점 기준’ 보기에서 확인하세요."
+    :"인식월 = 항차 마지막 <b>대홍전기 출고일 + "+state.rt+"일</b>이 속한 달입니다. 금액은 수량 × $46,600(기존 청구 단가)이며 재견적 차액은 반영하지 않았습니다.";
+  var main=panel(null,ttl,sub,ctl+tbl(head,body,{num:[2].concat(cols.map(function(_,i){return i+3;}))})+note(nt),12);
+  var mx=Math.max.apply(null,cols.map(function(k){return tot[k]||0;}).concat([1])), top=mx*1.18;
+  var cf={},hd={}; cols.forEach(function(k){cf[k]=0;hd[k]=0;});
+  rows.forEach(function(r){cols.forEach(function(k){var q=R[r[0]][k]||0; if(r[4]==="확정") cf[k]+=q; else hd[k]+=q;});});
+  var bars='<div class="cap" style="--n:'+cols.length+';height:170px">'+cols.map(function(k){
+    var t=cf[k]+hd[k];
+    return '<div class="cb" title="'+lab(k)+' 확정 '+cf[k]+' · 미반영 '+hd[k]+'">'+(t?'<span>'+t+'</span>':"")
+      +(hd[k]?'<i style="height:'+(hd[k]/top*100*0.82).toFixed(1)+'%;background:var(--b4)"></i>':"")
+      +(cf[k]?'<i style="height:'+(cf[k]/top*100*0.82).toFixed(1)+'%"></i>':"")+'</div>';}).join("")+'</div>'
+    +'<div class="capx" style="--n:'+cols.length+'">'+cols.map(function(k){return '<div>'+lab(k)+'</div>';}).join("")+'</div>'
+    +'<div class="leg" style="margin-top:6px"><span><em style="background:var(--teal)"></em>확정 (1~6항차)</span><span><em style="background:var(--b4)"></em>마스터플랜 미반영 (GoldenEye · Eagle)</span></div>';
+  var chart=panel(null,view==="ship"?"월별 출고 물량":"월별 인식 물량","면 · 막대 위 숫자는 합계",bars,7);
+  var YR=[["2026",y26],["2027",y27],["2028 이후",y28]];
+  var ys=panel(null,view==="ship"?"연도별 출고":"연도별 인식","합계 "+fm(tq)+"면",tbl(["연도","면수","USD (백만)","억원","비중"],YR.map(function(y){return [y[0],fm(y[1]),(y[1]*UNITP/1e6).toFixed(2),(y[1]*UNITP*FXR/1e8).toFixed(1),tq?(y[1]/tq*100).toFixed(0)+"%":"–"];}).concat([{cls:"tot",c:["합계",fm(tq),(tq*UNITP/1e6).toFixed(2),(tq*UNITP*FXR/1e8).toFixed(1),"100%"]}]),{num:[1,2,3,4]}),5);
+  var plRows=PL.P.filter(function(p){return state.proj==="all"||(p.sub?p.sub.indexOf(state.proj+" ")>-1:(state.proj==="GE"?p.n.indexOf("Golden")===0:(state.proj==="EG"&&p.n.indexOf("Eagle")===0)));}).map(function(p){
+    return [p.n+(p.sub?'<span class="sub">'+p.sub+'</span>':""),mdw(p.ship),'<b>'+skLabel(p.sk)+'</b>',mdw(p.arr),'<b>'+MKL[p.mk]+'</b>',fm(p.q),(p.q*UNITP/1e6).toFixed(2)];});
+  var sch=panel(null,"항차별 출고 · 인식 일정","도착 = 마지막 출고일 + "+state.rt+"일",tbl(["항차 · 배치","대홍전기 출고","출고월","도착 예상","인식월","면수","USD (백만)"],plRows,{num:[5,6]}),7);
+  var lastY=p1?days(p1.ship,D("2026-12-31")):0, slack=p1?days(p1.arr,D("2026-12-31")):0;
+  var chk=panel(null,"확인 필요","초안 가정",'<ol class="steps">'
+    +'<li><div><b>2026년 연말 컷오프</b><span>1항차 마지막 출고 '+(p1?mdw(p1.ship):"")+' + '+state.rt+'일 = '+(p1?mdw(p1.arr):"")+(slack>=0?' · 12/31까지 '+slack+'일 여유':' · 연도 경과')+' (운송이 '+lastY+'일을 넘으면 2026년 인식 0면)</span></div></li>'
+    +'<li><div><b>인식 시점의 정의</b><span>최종 인도월 = MPS 도착 기준인지, 고객 인수·검수 기준인지 확인</span></div></li>'
+    +'<li><div><b>단가</b><span>$46,600/면은 기존 청구 단가이며 재견적·설계 변경 차액은 미반영</span></div></li>'
+    +'<li><div><b>미반영 173면</b><span>GoldenEye 116(릴리스 대기, 12/15 전까지 취소 가능) · Eagle 57은 대홍 마스터플랜에 없음</span></div></li></ol>',5);
+  return kp+'<div class="grid">'+main+chart+ys+sch+chk+'</div>';
+}
+
+var BODY={rev:tabRev,ov:tabOv,sch:tabSch,ms:tabMs,cost:tabCost,prod:tabProd,logi:tabLogi,risk:tabRisk};
 function chrome(){
   var cnt=ITEMS.filter(function(i){return pv(i)&&i.s==="risk";}).length;
   $("tabs").innerHTML=TABS.map(function(t){return '<button class="tab" role="tab" id="tab-'+t[0]+'" data-tab="'+t[0]+'" aria-selected="'+(state.tab===t[0])+'">'+t[1]+(t[0]==="risk"&&cnt?'<span class="cnt" title="위험 상태 항목">'+cnt+'</span>':"")+'</button>';}).join("");
-  $("views").innerHTML=VIEWS.map(function(v){return '<button data-view="'+v[0]+'" aria-pressed="'+(state.view===v[0])+'">'+v[1]+'</button>';}).join("");
+  $("views").innerHTML=state.tab==="rev"?REVV.map(function(v){return '<button data-rv="'+v[0]+'" aria-pressed="'+(state.rv===v[0])+'">'+v[1]+'</button>';}).join(""):VIEWS.map(function(v){return '<button data-view="'+v[0]+'" aria-pressed="'+(state.view===v[0])+'">'+v[1]+'</button>';}).join("");
   $("pjs").innerHTML=PJ.map(function(p){return '<button class="pj" data-pj="'+p[0]+'" aria-pressed="'+(state.proj===p[0])+'">'+p[1]+'</button>';}).join("");
 }
 function render(){
   chrome();
-  var h=state.view==="own"?ownerView(state.tab):(state.view==="date"?dateView(state.tab):BODY[state.tab]());
+  var h=(state.tab==="rev"||state.view==="area")?BODY[state.tab]():(state.view==="own"?ownerView(state.tab):dateView(state.tab));
   var m=$("main"); m.setAttribute("role","tabpanel"); m.setAttribute("aria-labelledby","tab-"+state.tab);
   m.innerHTML=h;
   $("today").textContent=fmt(T);
@@ -886,6 +997,9 @@ document.addEventListener("click",function(e){
   var b=e.target.closest("button"); if(!b) return;
   if(b.dataset.tab){state.tab=b.dataset.tab; try{history.replaceState(null,"","#"+state.tab);}catch(_){} render(); window.scrollTo({top:0});}
   else if(b.dataset.view){state.view=b.dataset.view; render();}
+  else if(b.dataset.ru){state.ru=b.dataset.ru; render();}
+  else if(b.dataset.rv){state.rv=b.dataset.rv; render();}
+  else if(b.dataset.rt){state.rt=+b.dataset.rt; render();}
   else if(b.dataset.pj){state.proj=b.dataset.pj; render();}
   else if(b.dataset.tr){state.tr=+b.dataset.tr; render();}
   else if(b.dataset.slip){state.slip=+b.dataset.slip; render();}
