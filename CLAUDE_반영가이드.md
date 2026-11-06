@@ -1,82 +1,45 @@
 # ON DASHBOARD 자료 반영 가이드 (Claude용)
 
-이 저장소(`on-dashboard/on-dashboard.github.io`, 브랜치 `main`)는 https://on-dashboard.github.io/ 로 공개되는 DC Cabinet 납기·PO 대시보드입니다.
-사용자가 일보, 인보이스, 메일, 회의록 등 자료를 올리면 **아래 규칙대로 `data.json`만 고쳐서 커밋**하세요. 커밋 후 1~2분 안에 웹에 반영됩니다.
+https://on-dashboard.github.io/ 는 이 저장소(`on-dashboard/on-dashboard.github.io`, 브랜치 `main`)로 공개되는 DC Cabinet 납기·PO 대시보드입니다.
+
+## 파일 구조 (2026-11 개편)
+
+| 파일 | 역할 | Claude가 수정? |
+|---|---|---|
+| `dashboard.html` | **대시보드 본체.** Claude가 만드는 단일 HTML 그대로입니다. | **예 — 이 파일만** |
+| `index.html` | 웹 편집 껍데기. `dashboard.html`을 불러와 보여 주고, 편집 버튼·편집자 관리·저장을 담당합니다. | 아니요 |
+| `editors.json`, `fonts/` | 편집 권한, 글꼴 | 아니요 |
+
+사용자의 PC에는 자동 업로드가 설치돼 있어, Claude가 만든 대시보드 HTML을 **다운로드하면 그대로 `dashboard.html`로 올라갑니다.** 따라서 평소처럼 완성된 단일 HTML 파일을 만들어 주면 됩니다.
 
 ## 꼭 지킬 것
 
-0. **사용자가 HTML 파일 전체를 새로 만들어 달라고 하지 않는 한, HTML을 새로 출력하지 마세요.** 일보·메일 등 자료 반영은 항상 data.json 수정으로 끝냅니다. 표·패널 구조(물류·PO 탭, 도장 사양, 출고·출항 계산 등 data.json에 없는 부분)를 바꿔야 할 때만 index.html을 부분 수정합니다.
+1. **작업을 시작하기 전에 최신본을 기준으로 삼으세요.** 웹에서 다른 사람이 고친 내용이 들어 있을 수 있습니다.
+   최신본: https://raw.githubusercontent.com/on-dashboard/on-dashboard.github.io/main/dashboard.html
+   (가져올 수 없으면 사용자에게 이 파일을 달라고 하세요. 예전 대화의 버전을 그대로 고치면 웹 수정이 사라집니다.)
+2. 결과물은 **완성된 단일 HTML 파일 하나**입니다 (`fonts/` 상대 경로 유지, 외부 라이브러리 없이).
+3. 아래 "웹 편집 호환 규칙"을 지켜야 웹에서 계속 고칠 수 있습니다. 규칙을 벗어난 부분은 웹 편집 패널에서 "찾지 못함"으로 빠질 뿐 화면은 정상입니다.
+4. GitHub 도구(커넥터, Claude Code)로 직접 올릴 수 있으면 `dashboard.html`에 커밋하고, 커밋 메시지는 `클로드 버전 · <반영 자료> · Claude`로 하세요. `index.html`은 절대 덮어쓰지 마세요.
+5. 끝나면 바뀐 내용을 한국어로 짧게 정리해 주세요 (항목별 이전 → 새 값).
 
-1. **수정 대상은 `data.json` 하나입니다.** `index.html`은 디자인·기능 코드이고, 화면에 보이는 값은 `data.json`이 덮어씁니다. `index.html`에 숫자나 문구를 고쳐도 화면에 반영되지 않습니다.
-2. **`index.html`을 새 파일로 통째로 바꾸지 마세요.** 웹 편집 기능(편집 버튼, 편집자 관리, 저장)이 사라집니다. 디자인 변경을 요청받으면 기존 `index.html`을 읽어 필요한 부분만 고치고, `<script>` 안의 editor 관련 코드(`/* ---------- editor ---------- */` 이후, `editors.json`, `data.json` 로딩)는 그대로 두세요. 확신이 없으면 사용자에게 먼저 물어보세요.
-3. **`editors.json`, `fonts/`는 건드리지 마세요.**
-4. 커밋 전에 항상 최신 `data.json`을 읽으세요 (웹에서 다른 사람이 고쳤을 수 있음). 받은 자료와 관련된 부분만 바꾸고 나머지는 그대로 둡니다.
-5. 커밋할 때 `updated`를 현재 시각(ISO, 예: `2026-10-23T09:30:00+09:00`)으로, `by`를 `"Claude"`로 바꾸세요. 커밋 메시지는 `자료 반영 · <자료 이름> · Claude` 형식.
-6. 저장 후 무엇을 바꿨는지 사용자에게 한국어로 짧게 정리해 주세요 (항목별 이전 값 → 새 값).
-7. JSON 문법이 깨지면 화면이 기본값으로 돌아갑니다. 커밋 전에 유효한 JSON인지 확인하세요. `v`는 반드시 `1`.
+## 웹 편집 호환 규칙 (형식만 유지, 내용은 자유)
 
-## data.json 구조
+- 데이터 배열은 `<script>` 안에서 **리터럴 배열**로 둡니다:
+  `var ITEMS=[…];` (일정·이슈), `var SH=[…];` (항차), `var INV=[…];` (청구·입금), 생산·품질 탭의 `var PR=[…];` (공정 진척).
+  배열 안에서 쓰는 상수는 `var A9_10=["A9","A10"];`처럼 문자열 배열로만 정의하세요.
+- ITEMS 항목 형식: `{t:[표시탭…],a:"영역",o:"담당",d:"YYYY-MM-DD 또는 \"\"",x:"내용",s:"open|prog|risk|done",p:[프로젝트…],k:1(핵심일 때)}`
+  - t: sch 일정, ms 마일스톤, cost 비용, prod 생산·품질, logi 물류·PO, risk 이슈 / a: sch, ms, cost, q(품질), l(물류), risk / o: "ACE" | "대홍" | "On Energy" / p: A9 A10 C1 W1 CF GE EG
+- 상단 배너: `<span class="lead">오늘 쟁점</span>` 바로 다음 `<span>…</span>`에 문구 (굵게는 `<b>`만), 그 뒤 `<span class="dd" id="bnDd">`.
+- 기준 문서: `<span class="asof">기준 <span id="today"></span> · …</span>` / 출처: `<span>출처: …</span>`
+- KPI: `var kp='<div class="kpis">'` 아래 한 줄에 카드 하나씩
+  `+'<div class="kpi"><span class="l">제목</span><span class="v">값<small>단위</small></span><span class="s">설명</span></div>'` (빨간 카드는 `class="kpi k-bad"`). 계산식(`'+ddTxt(…)+'`)이 든 칸은 웹에서 잠깁니다.
+- 생산품질일보: `var daily=panel("q","생산품질일보 MM/DD","NN주차",'<div class="stats"><div class="stat"><div class="l">…</div><div class="v">값<small>단위</small></div><div class="s">…</div></div>…</div>'+tbl(["첫 열 제목","일정","내용"],[[…],[…]],{}),5);`
+- 검사·서류: `var ins=panel(…,tbl([헤더],[["구분","일정",stDot("good|mid|bad|off","상태"),"비고"],…],{}),…);`
+- 공정 진척 표 설명: `var prog=panel("q","항차별 공정 진척","설명",…)`
 
-```
-{
- "v": 1,                      // 고정
- "updated": "ISO 시각",        // 마지막 수정 시각
- "by": "이름",                 // 마지막 수정자
- "banner": {                  // 상단 '오늘 쟁점'
-   "text": "문구 (**굵게**)",
-   "asof": "Rev.05(10/12) · 일보(10/20) · 인보이스(9/21)",   // 상단 오른쪽 기준 문서
-   "src": "출처 (하단)",
-   "dd": "샘플 검사 결과 {2026-11-06} · EPB 접점 입고 {2026-11-10}"   // 배너 오른쪽. {YYYY-MM-DD}는 D-day로 자동 변환, 비우면 다음 항차 FAT D-day
- },
- "kpis": [                    // 개요 탭 KPI 카드
-   {"l":"제목","auto":"","v":"91","u":"%","s":"설명","bad":0}
-   // auto: "" 직접 입력 | "fat" 다음 FAT D-day | "margin" 1항차 도착 여유일 | "margin_next" 다음 항차 도착 여유일
-   // s 안의 {tr}는 운송일수로 치환, bad:1이면 빨간 카드
- ],
- "items": [                   // 일정·이슈 항목 (개요/일정/마일스톤/비용/생산·품질/물류/이슈 탭 + 담당별·일정별 보기)
-   {"t":["sch","prod"],       // 표시 탭: sch 일정, ms 마일스톤, cost 비용, prod 생산·품질, logi 물류·PO, risk 이슈
-    "a":"sch",                // 영역: sch 일정, ms 마일스톤, cost 비용, q 품질, l 물류, risk 계약·기타
-    "o":"대홍",               // 담당: "ACE" | "대홍" | "On Energy"
-    "d":"2026-10-26",         // 날짜 YYYY-MM-DD, 미정이면 ""
-    "x":"내용",
-    "s":"open",               // 상태: open 대기 | prog 진행 | risk 위험 | done 완료
-    "p":["A9","A10"],         // 프로젝트: A9 A10 C1 W1 CF GE EG (없으면 생략 또는 [])
-    "k":1}                    // 1이면 핵심(개요·이슈 탭 상단), 아니면 생략/0
- ],
- "ships": [                   // 항차
-   {"n":"1항차","q":100,"prod":["착수","종료"],"ship":"출고 마지막날","win":"10/26~30",
-    "fatD":"FAT 날짜","fat":"10/26~30 (표시용)","att":"입회","insp":["검사시작","검사종료"],
-    "fat60":2796000,"cn":14,"st":["mid","상태 문구"],   // st[0]: good 초록 | mid 청록 | bad 빨강 | off 회색
-    "b":[["Abilene #9","B1",10,"납품개시","Delivery Date"], ...]}  // 프로젝트명: Abilene #9, Abilene #10, Childress #1, Warrenton #1, Coffee
- ],
- "inv": [                     // 청구·입금 (9/21 청구분)
-   {"k":"A10","n":"Abilene 10","inv":"503-2032-10","po":"PO-000167","d":"2026-05-15","q":170,
-    "amt":7922000,"dep":396100,"sop":1980500,"sum":2376600,
-    "paid":null,              // 입금일 "YYYY-MM-DD", 미입금이면 null
-    "sched":"2026-10-22",     // 입금 예정일 (미입금일 때 표시)
-    "sopLater":664050}        // (Eagle만) 이후 SOP 예정액
- ],
- "prog": [["공정","세부",진척%,"계획","상태 문구","색(good/mid/bad/off)"]],   // 항차별 공정 진척
- "daily": {                   // 생산품질일보
-   "progMeta":"공정 진척 표 설명",
-   "title":"생산품질일보 11/04","meta":"45주차",
-   "matsHead":"이번 주 진행",          // 아래 표 첫 열 제목
-   "stats":[["제목","값","단위","설명"]],
-   "mats":[["품목","일정","내용"]]
- },
- "ins": [["구분","일정","색","상태","비고"]]   // 검사·서류
-}
-```
+## 자주 하는 반영
 
-## 자주 하는 반영 예시
-
-- **새 일보**: `daily`(제목·주차·숫자 카드·자재), `prog` 진척 %, 관련 `kpis`(예: 1항차 전장조립 %), 완료된 `items`의 `s`를 `done`으로, `banner.asof`의 일보 날짜.
-- **입금 확인**: 해당 `inv[].paid`에 날짜, `sched`는 그대로 둬도 됨. 개요 KPI '입금 확인' 카드(`kpis`)의 금액·설명도 함께 갱신. 관련 `items`(입금 예정) `s`를 `done`.
-- **일정 변경**: `ships[]`의 날짜와 표시용 문자열(`win`, `fat`)을 함께 수정. 관련 `items`의 `d`·`x`도 맞춰 주세요.
-- **새 이슈**: `items`에 추가. 중요하면 `k:1`, 위험이면 `s:"risk"`.
-
-## 저장 방법 (GitHub 도구)
-
-1. `get_file_contents`로 `owner=on-dashboard`, `repo=on-dashboard.github.io`, `path=data.json`을 읽습니다.
-2. 수정한 전체 JSON을 `create_or_update_file`로 같은 경로에 씁니다 (`branch=main`, 읽을 때 받은 `sha` 포함).
-3. 1~2분 뒤 https://on-dashboard.github.io/ 에 반영됩니다.
+- **새 일보**: 일보 패널(제목·주차·숫자 카드·표), PR 진척 %, 관련 KPI, 완료된 ITEMS의 `s`를 `done`, 배너, `asof`의 일보 날짜.
+- **입금 확인**: `INV[].paid`에 날짜, 입금 KPI 카드, 관련 ITEMS를 `done`.
+- **일정 변경**: `SH[]`의 날짜와 표시용 문자열(`win`, `fat`), 관련 ITEMS.
+- **새 이슈**: ITEMS에 추가 (중요하면 `k:1`, 위험이면 `s:"risk"`).

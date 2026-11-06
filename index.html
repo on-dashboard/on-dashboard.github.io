@@ -1,15 +1,12 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ON DASHBOARD</title>
-<style>:root{box-sizing:border-box}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ON DASHBOARD</title>
 <style>
 @font-face{font-family:"Spoqa Han Sans Neo";src:url("fonts/SpoqaHanSansNeo-Light.woff2") format("woff2");font-weight:300;font-display:swap}
 @font-face{font-family:"Spoqa Han Sans Neo";src:url("fonts/SpoqaHanSansNeo-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:"Spoqa Han Sans Neo";src:url("fonts/SpoqaHanSansNeo-Medium.woff2") format("woff2");font-weight:500;font-display:swap}
 @font-face{font-family:"Spoqa Han Sans Neo";src:url("fonts/SpoqaHanSansNeo-Bold.woff2") format("woff2");font-weight:700;font-display:swap}
-</style>
-<style>
-/* Layout: sticky tab bar (주제) + view switch (영역/담당/일정) + project filter; 12-col panel grid, each tab fits two screens.
-   Palette: ACE teal + gray only. Tables follow the ACE Excel spec (teal header, zebra, horizontal rules). */
+
 :root{
   color-scheme:light;
   --bg:#f1f4f4; --panel:#ffffff; --panel-line:#dfe5e5;
@@ -41,239 +38,22 @@
     --own-a:#3db2af; --own-a-ink:#0f1313; --own-d:#cfd6d6; --own-d-ink:#161a1a; --own-c:#3a4343; --own-c-ink:#e6ebeb;
   }
 }
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --bg:#0f1313; --panel:#171c1c; --panel-line:#2a3232;
-  --ink:#e6ebeb; --ink-2:#b3bdbd; --ink-3:#8a9696;
-  --teal:#3db2af; --teal-d:#5fd0cd; --teal-text:#5fd0cd; --teal-soft:#2c6563; --teal-tint:#1a2a2a;
-  --blk:#cfd6d6; --blk-ink:#161a1a; --ban:#263030; --ban-ink:#e6ebeb;
-  --th:#2b8b88; --th-ink:#ffffff;
-  --row-a:#171c1c; --row-b:#1e2424; --rule:#313939; --tot:#2a3232;
-  --emph-bg:#1a2a2a; --emph-ink:#5fd0cd;
-  --good:#36b0ad; --mid:#a1e3e1; --bad:#f26b6b; --off:#7d8888;
-  --bar-dark:#cfd6d6; --track:#2a3232;
-  --b1:#5fd0cd; --b2:#3db2af; --b3:#2c6563; --b4:#7d8888; --b5:#3a4343;
-  --own-a:#3db2af; --own-a-ink:#0f1313; --own-d:#cfd6d6; --own-d-ink:#161a1a; --own-c:#3a4343; --own-c-ink:#e6ebeb;
-}
-*{box-sizing:border-box}
-body{background:var(--bg); color:var(--ink); font-family:var(--font); font-size:13px; line-height:1.5; -webkit-font-smoothing:antialiased}
-body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); background:var(--bg); z-index:30}
-button{font:inherit; color:inherit}
-.app{max-width:1360px; margin:0 auto; padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px)); padding-block:16px 40px}
-.num,.n{font-variant-numeric:tabular-nums}
 
-/* ---- header ---- */
-.top{display:flex; align-items:center; gap:12px 20px; flex-wrap:wrap; padding-bottom:12px}
-.brand{display:flex; align-items:center; gap:10px}
-.brand-mark{height:13px; width:auto; color:var(--ink)}
-.ttl{font-size:17px; font-weight:700; letter-spacing:-.01em}
-.who{display:flex; gap:6px; flex-wrap:wrap; margin-left:auto; align-items:center}
-.who>span{font-size:12px; color:var(--ink-2); border:1px solid var(--panel-line); background:var(--panel); padding:2px 9px; border-radius:2px; white-space:nowrap}
-.who>span b{font-weight:700; color:var(--ink)}
-.who>.asof{border:0; background:none; color:var(--ink-3); white-space:normal; padding-left:0}
-.banner{display:flex; gap:10px 16px; align-items:center; flex-wrap:wrap; background:var(--ban); color:var(--ban-ink); padding:9px 14px; border-radius:2px; font-size:13px}
-.banner b{font-weight:700}
-.banner .lead{font-weight:700; border-right:1px solid color-mix(in srgb,var(--ban-ink) 35%,transparent); padding-right:14px}
-.banner .dd{margin-left:auto; font-variant-numeric:tabular-nums; font-weight:700; white-space:nowrap}
-
-/* ---- sticky nav ---- */
-.bar{position:sticky; top:env(safe-area-inset-top,0px); z-index:20; background:var(--bg); padding-top:10px; margin-top:6px}
-.tabs{display:flex; gap:2px; overflow-x:auto; box-shadow:inset 0 -2px 0 var(--rule); scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{appearance:none; background:none; border:0; border-bottom:3px solid transparent; padding:9px 16px 8px; font-size:14px; font-weight:500; color:var(--ink-2); cursor:pointer; white-space:nowrap; display:flex; gap:7px; align-items:center}
-.tab:hover{color:var(--ink)}
-.tab[aria-selected="true"]{color:var(--ink); font-weight:700; border-bottom-color:var(--teal)}
-.tab .cnt{font-size:11px; font-weight:700; background:var(--blk); color:var(--blk-ink); border-radius:2px; padding:0 6px; line-height:17px}
-.tab:focus-visible,.seg button:focus-visible,.pj:focus-visible,summary:focus-visible{outline:2px solid var(--teal); outline-offset:2px}
-.tools{display:flex; gap:10px 22px; flex-wrap:wrap; align-items:center; padding:9px 0 10px}
-.tools .lb{font-size:11.5px; color:var(--ink-3); font-weight:500; margin-right:8px}
-.seg{display:inline-flex; border:1px solid var(--rule); border-radius:2px; overflow:hidden; background:var(--panel)}
-.seg button{appearance:none; background:none; border:0; border-right:1px solid var(--rule); padding:5px 13px; font-size:12.5px; cursor:pointer; color:var(--ink-2)}
-.seg button:last-child{border-right:0}
-.seg button[aria-pressed="true"]{background:var(--blk); color:var(--blk-ink); font-weight:700}
-.pjs{display:flex; gap:5px; flex-wrap:wrap}
-.pj{appearance:none; border:1px solid var(--rule); background:var(--panel); border-radius:2px; padding:3px 10px; font-size:12px; color:var(--ink-2); cursor:pointer}
-.pj[aria-pressed="true"]{background:var(--teal); border-color:var(--teal); color:#fff; font-weight:700}
-.tools .grow{margin-left:auto}
-
-/* ---- panels ---- */
-.grid{display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:14px}
-.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}
-.rs2{grid-row:span 2}
-.panel{background:var(--panel); border:1px solid var(--panel-line); border-radius:3px; padding:12px 14px 12px; min-width:0; display:flex; flex-direction:column; gap:10px}
-.ph{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
-.ph h3{margin:0; font-size:14px; font-weight:700; letter-spacing:-.01em}
-.ph .meta{margin-left:auto; font-size:12px; color:var(--ink-3); display:flex; gap:8px; align-items:center}
-.tag{font-size:11px; font-weight:700; line-height:18px; padding:0 7px; border-radius:2px; color:#fff; background:var(--teal); white-space:nowrap}
-.tag.t-ms{background:var(--teal-d)} .tag.t-cost{background:#404040} .tag.t-q{background:#595959} .tag.t-l{background:#7d8585} .tag.t-risk{background:var(--bad)}
-:root[data-theme="dark"] .tag.t-ms{background:#2b8b88}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag.t-ms{background:#2b8b88}}
-.note{font-size:12px; color:var(--ink-2); line-height:1.55; margin:0}
-.note b{color:var(--ink); font-weight:700}
-.empty{padding:22px 10px; text-align:center; color:var(--ink-3); font-size:12.5px}
-
-/* ---- excel-style tables ---- */
-.scroll{overflow-x:auto}
-table{border-collapse:separate; border-spacing:0; width:100%; font-size:12.5px; color:var(--ink)}
-th,td{padding:7px 10px; text-align:left; vertical-align:middle; border-bottom:1px solid var(--rule); border-right:1px solid var(--panel); line-height:1.4}
-thead th.n{text-align:center}
-thead th{background:var(--th); color:var(--th-ink); font-weight:700; text-align:center; white-space:nowrap; border-bottom:0; font-size:12px}
-tbody td{background:var(--row-a)}
-tbody tr:nth-child(even) td{background:var(--row-b)}
-td:first-child,th:first-child{background:var(--th)!important; color:var(--th-ink)!important; font-weight:700; white-space:nowrap}
-tbody td:first-child{border-bottom-color:rgba(255,255,255,.35)}
-tr.tot td:first-child,tr.emph td:first-child{background:var(--th)!important; color:var(--th-ink)!important}
-th.n,td.n{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
-td.c{text-align:center}
-tr.emph td{background:var(--emph-bg)!important; color:var(--emph-ink); font-weight:700}
-tr.tot td{background:var(--tot)!important; font-weight:700; color:var(--ink)}
-td .sub{display:block; font-size:11px; color:var(--ink-3); font-weight:400}
-td:first-child .sub{color:rgba(255,255,255,.82)}
-tr.emph td .sub{color:var(--emph-ink); opacity:.8}
-.mut{color:var(--ink-3)}
-.wrap{white-space:normal!important}
-
-/* conditional (text colour only) */
-.st{white-space:nowrap}
-.st i{font-style:normal; margin-right:4px}
-.st-good i{color:var(--good)} .st-mid i{color:var(--mid)} .st-bad i{color:var(--bad)} .st-off i{color:var(--off)}
-.c-good{color:var(--good)} .c-bad{color:var(--bad)} .c-mid{color:var(--mid)}
-.bold{font-weight:700}
-
-/* owner chips */
-.own{display:inline-block; font-size:11px; font-weight:700; line-height:17px; padding:0 6px; border-radius:2px; white-space:nowrap}
-.own.o-a{background:var(--own-a); color:var(--own-a-ink)}
-.own.o-d{background:var(--own-d); color:var(--own-d-ink)}
-.own.o-c{background:var(--own-c); color:var(--own-c-ink)}
-
-/* KPI */
-.kpis{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:14px; margin-bottom:14px}
-.kpi{background:var(--panel); border:1px solid var(--panel-line); border-top:3px solid var(--teal); border-radius:3px; padding:10px 14px 11px; display:flex; flex-direction:column; gap:1px; min-width:0}
-.kpi.k-bad{border-top-color:var(--bad)}
-.kpi .l{font-size:11.5px; color:var(--ink-3); font-weight:500}
-.kpi .v{font-size:25px; font-weight:700; letter-spacing:-.02em; line-height:1.25; font-variant-numeric:tabular-nums}
-.kpi .v small{font-size:13px; font-weight:500; margin-left:2px; color:var(--ink-2)}
-.kpi.k-bad .v{color:var(--bad)}
-.kpi .s{font-size:11.5px; color:var(--ink-2)}
-
-/* item lists (upcoming / issues / owner / date views) */
-.rows{display:flex; flex-direction:column}
-.it{display:grid; grid-template-columns:auto 1fr auto; gap:3px 10px; align-items:start; padding:7px 0; border-bottom:1px solid var(--rule); min-width:0}
-.it:last-child{border-bottom:0}
-.it.no-o{grid-template-columns:1fr auto}
-.it.no-o .mt{grid-column:1/3}
-.it .tx{font-size:12.5px; line-height:1.45; min-width:0}
-.it .mt{grid-column:2/4; display:flex; gap:4px 10px; flex-wrap:wrap; font-size:11.5px; color:var(--ink-3); align-items:center}
-.it .dd{font-size:11.5px; font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; text-align:right; min-width:52px}
-.it .dd.late{color:var(--bad)}
-.it .dd.now{color:var(--teal-text)}
-.it.k .tx{font-weight:700}
-.cols3{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px}
-.col-h{display:flex; align-items:center; gap:8px; padding-bottom:7px; border-bottom:2px solid var(--blk)}
-.col-h b{font-size:14px}
-.col-h .c{margin-left:auto; font-size:12px; color:var(--ink-3)}
-.bk{display:grid; grid-template-columns:130px minmax(0,1fr); gap:0 14px; border-top:1px solid var(--rule)}
-.bk:first-child{border-top:0}
-.bk .bl{background:var(--th); color:var(--th-ink); font-weight:700; padding:9px 12px; font-size:12.5px}
-.bk .bl small{display:block; font-weight:400; opacity:.85; font-size:11px}
-.bk .bi{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0 20px; padding:2px 0}
-.bk .bi .it:nth-last-child(-n+3){border-bottom:0}
-
-/* stat strip (inside panels) */
-.stats{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px}
-.stat{background:var(--row-b); padding:8px 10px; border-radius:2px; min-width:0}
-.stat .l{font-size:11px; color:var(--ink-3)}
-.stat .v{font-size:19px; font-weight:700; line-height:1.3; font-variant-numeric:tabular-nums}
-.stat .s{font-size:11px; color:var(--ink-2)}
-.steps{display:flex; flex-direction:column; gap:0; margin:0; padding:0; list-style:none; counter-reset:st}
-.steps li{counter-increment:st; display:grid; grid-template-columns:22px 1fr; gap:9px; padding:7px 0; border-bottom:1px solid var(--rule); font-size:12.5px}
-.steps li:last-child{border-bottom:0}
-.steps li::before{content:counter(st); width:20px; height:20px; background:var(--blk); color:var(--blk-ink); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; border-radius:2px}
-.steps li b{font-weight:700}
-.steps li span{display:block; color:var(--ink-2); font-size:12px}
-
-/* stacked bar + flow */
-.stack{display:flex; height:26px; border-radius:2px; overflow:hidden; background:var(--track)}
-.stack i{display:block; height:100%}
-.leg{display:flex; flex-wrap:wrap; gap:4px 16px; font-size:11.5px; color:var(--ink-2)}
-.leg span{display:inline-flex; gap:6px; align-items:center; font-variant-numeric:tabular-nums}
-.leg em{width:11px; height:11px; border-radius:2px; display:inline-block; font-style:normal}
-.flow{display:grid; grid-template-columns:repeat(var(--n,5),minmax(0,1fr)); gap:0}
-.fl{padding:9px 12px; background:var(--row-b); border-right:2px solid var(--panel); min-width:0}
-.fl:first-child{border-radius:2px 0 0 2px}.fl:last-child{border-radius:0 2px 2px 0;border-right:0}
-.fl .a{font-size:11px; color:var(--ink-3)}
-.fl .b{font-size:13px; font-weight:700}
-.fl .c{font-size:12px; color:var(--ink-2); font-variant-numeric:tabular-nums}
-.fl.h{background:var(--th); color:#fff}
-.fl.h .a,.fl.h .c{color:rgba(255,255,255,.88)}
-
-/* progress */
-.pb{display:inline-block; vertical-align:middle; width:84px; height:8px; background:var(--track); border-radius:1px; overflow:hidden}
-.pb i{display:block; height:100%; background:var(--teal)}
-
-/* gantt */
-.gt{position:relative; min-width:760px}
-.gt-row{display:grid; grid-template-columns:150px minmax(0,1fr) 74px; align-items:center; border-bottom:1px solid var(--rule); min-height:38px}
-.gt-row.hd{min-height:24px; border-bottom:1px solid var(--rule)}
-.gt-l{font-weight:700; font-size:12.5px; line-height:1.25}
-.gt-l small{display:block; font-weight:400; font-size:11px; color:var(--ink-3)}
-.gt-t{position:relative; height:38px}
-.gt-row.hd .gt-t{height:24px}
-.gt-tk,.gt-b,.gt-today{font-style:normal}
-.gt-tk{position:absolute; top:0; bottom:0; border-left:1px solid var(--rule)}
-.gt-tk span{position:absolute; top:4px; left:4px; font-size:10.5px; color:var(--ink-3); white-space:nowrap}
-.gt-m{text-align:right; font-weight:700; font-size:12.5px; font-variant-numeric:tabular-nums}
-.gt-b{position:absolute; min-width:2px}
-.gt-b.p{top:13px; height:12px; background:var(--bar-dark); border-radius:1px}
-.gt-b.tr{top:16px; height:6px; background:var(--teal); border-radius:1px}
-.gt-b.w{top:8px; height:22px; border:1px dashed var(--ink-3); background:color-mix(in srgb,var(--teal) 9%,transparent); border-radius:2px}
-.gt-b.ar{top:9px; height:20px; width:3px; background:var(--teal-d)}
-.gt-b.dl{top:6px; height:26px; width:2px; background:var(--bad)}
-.gt-today{position:absolute; top:0; bottom:0; width:0; border-left:2px dashed var(--ink); opacity:.55; z-index:2}
-.gt-row.hd .gt-today::after{content:"오늘"; position:absolute; top:3px; left:4px; font-size:10.5px; font-weight:700; background:var(--panel); padding:0 3px; white-space:nowrap}
-
-/* capacity */
-.cap{display:grid; grid-template-columns:repeat(var(--n,7),minmax(0,1fr)); gap:10px; align-items:end; height:150px; border-bottom:1px solid var(--rule); position:relative}
-.cap .cb{display:flex; flex-direction:column; justify-content:flex-end; height:100%; align-items:center; font-size:11.5px; font-weight:700; font-variant-numeric:tabular-nums}
-.cap .cb i{display:block; width:62%; background:var(--teal); border-radius:1px 1px 0 0; margin-top:3px}
-.cap .cl{position:absolute; left:0; right:0; border-top:1px dashed var(--ink); opacity:.7}
-.cap .cl span{position:absolute; right:0; top:-17px; font-size:10.5px; background:var(--panel); padding:0 4px; font-weight:700}
-.capx{display:grid; grid-template-columns:repeat(var(--n,7),minmax(0,1fr)); gap:10px; font-size:11px; color:var(--ink-3); text-align:center}
-
-details{border:1px solid var(--panel-line); background:var(--panel); border-radius:3px}
-details>summary{cursor:pointer; padding:10px 14px; font-weight:700; font-size:13px; list-style:none; display:flex; gap:10px; align-items:center}
-details>summary::-webkit-details-marker{display:none}
-details>summary::before{content:"+"; display:inline-flex; width:18px; height:18px; align-items:center; justify-content:center; background:var(--blk); color:var(--blk-ink); border-radius:2px; font-size:13px; line-height:1}
-details[open]>summary::before{content:"–"}
-details>summary small{font-weight:400; color:var(--ink-3); font-size:12px}
-details>.dbody{padding:2px 14px 14px; display:flex; flex-direction:column; gap:10px}
-.foot{margin-top:14px; font-size:11.5px; color:var(--ink-3); display:flex; gap:4px 18px; flex-wrap:wrap}
-
-@media (max-width:1080px){
-  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .s3,.s4,.s5,.s6,.s7,.s8{grid-column:span 12}
-  .cols3{grid-template-columns:minmax(0,1fr)}
-  .bk{grid-template-columns:minmax(0,1fr)}
-  .bk .bi{grid-template-columns:minmax(0,1fr)}
-  .bk .bi .it:nth-last-child(-n+3){border-bottom:1px solid var(--rule)}
-  .bk .bi .it:last-child{border-bottom:0}
-}
-@media (max-width:560px){
-  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .stats{grid-template-columns:minmax(0,1fr)}
-  .flow{grid-template-columns:minmax(0,1fr)}
-  .fl{border-right:0; border-bottom:2px solid var(--panel)}
-  .banner .lead{border-right:0; padding-right:0}
-  .banner .dd{margin-left:0}
-  .who{margin-left:0}
-}
-.ctl{display:flex; gap:8px 22px; flex-wrap:wrap; align-items:center}
-.ctl .lb{font-size:11.5px; color:var(--ink-3); font-weight:500; margin-right:8px}
-.ctl input[type=date]{font:inherit; font-size:12.5px; color:var(--ink); background:var(--panel); border:1px solid var(--rule); border-radius:2px; padding:4px 8px}
-.ctl input[type=date]:focus-visible{outline:2px solid var(--teal); outline-offset:2px}
-.calc{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; flex:1 1 360px}
-@media (max-width:560px){.calc{grid-template-columns:minmax(0,1fr)}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:13px}
+#dash{position:fixed;inset:0;width:100%;height:100%;border:0;display:block;background:var(--bg)}
+body.editing #dash{width:calc(100% - min(760px,100vw))}
+#msg{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:13px;pointer-events:none}
+#fab{position:fixed;right:18px;bottom:18px;z-index:40;box-shadow:0 4px 14px rgba(0,0,0,.25);padding:7px 16px!important;font-size:13px!important}
+body.editing #fab{display:none}
+.empty{color:var(--ink-3);font-size:12px;padding:14px 4px;text-align:center}
+.own{display:inline-block;font-size:11px;font-weight:700;padding:1px 6px;border-radius:2px}
+.own.o-a{background:var(--own-a);color:var(--own-a-ink)}
+.ed-b .na{color:var(--ink-3);font-size:11.5px;border:1px dashed var(--panel-line);padding:6px 8px;margin:4px 0 10px}
+.drop{border:2px dashed var(--panel-line);border-radius:3px;padding:18px;text-align:center;color:var(--ink-2);margin:6px 0 12px;cursor:pointer}
+.drop.on{border-color:var(--teal);background:var(--teal-tint)}
+.hist{width:100%;border-collapse:collapse;font-size:12px}
+.hist td{padding:4px 4px;border-bottom:1px solid var(--panel-line);vertical-align:top}
+.hist td.t{white-space:nowrap;color:var(--ink-3)}
 /* ---------- editor ---------- */
 .edbtn[hidden]{display:none!important}
 .edbtn{font:inherit; font-size:12px; font-weight:700; border:1px solid var(--teal); background:var(--teal); color:#fff; padding:3px 12px; border-radius:2px; cursor:pointer}
@@ -327,981 +107,344 @@ body.editing .app{margin-right:min(760px,100vw)}
 .ed-f .sp{margin-left:auto}
 @media (max-width:1100px){body.editing .app{margin-right:0}}
 @media (max-width:640px){.ed-row{grid-template-columns:auto 1fr 1fr; } .ed-f4{grid-template-columns:repeat(2,minmax(0,1fr))}}
-</style>
 
-<div class="app">
-  <div class="top">
-    <div class="brand">
-<svg class="brand-mark" role="img" aria-label="ACE ENGINEERING" focusable="false" viewBox="0 0 128.32 8.93" xmlns="http://www.w3.org/2000/svg" overflow="hidden"><g><path d="M18.92 0.2 20.84 0.2 24.03 8.72 22.08 8.72 21.44 6.82 18.25 6.82 17.58 8.72 15.68 8.72 18.92 0.2ZM18.74 5.43 20.95 5.43 19.88 2.3 19.86 2.3 18.75 5.43Z" fill="currentColor"/><path d="M30.57 3.07C30.45 2.22 29.64 1.58 28.71 1.58 27.03 1.58 26.39 3.01 26.39 4.5 26.39 5.99 27.02 7.35 28.71 7.35 29.86 7.35 30.5 6.56 30.64 5.44L32.45 5.44C32.26 7.56 30.79 8.92 28.7 8.92 26.06 8.92 24.51 6.95 24.51 4.49 24.51 2.03 26.06-0.01 28.7-0.01 30.57-0.01 32.15 1.09 32.38 3.06L30.57 3.06Z" fill="currentColor"/><path d="M33.85 0.2 40.22 0.2 40.22 1.78 35.72 1.78 35.72 3.61 39.85 3.61 39.85 5.07 35.72 5.07 35.72 7.16 40.31 7.16 40.31 8.74 33.84 8.74 33.84 0.2Z" fill="currentColor"/><path d="M45.14 0.2 51.51 0.2 51.51 1.78 47.01 1.78 47.01 3.61 51.14 3.61 51.14 5.07 47.01 5.07 47.01 7.16 51.6 7.16 51.6 8.74 45.13 8.74 45.13 0.2Z" fill="currentColor"/><path d="M52.99 0.2 54.85 0.2 58.41 5.92 58.43 5.92 58.43 0.2 60.18 0.2 60.18 8.72 58.31 8.72 54.77 3.02 54.75 3.02 54.75 8.72 53 8.72 53 0.2Z" fill="currentColor"/><path d="M68.11 7.76C67.45 8.61 66.59 8.93 65.77 8.93 63.13 8.93 61.58 6.96 61.58 4.5 61.58 2.04 63.13 0 65.77 0 67.51 0 69.16 1.07 69.36 3.01L67.57 3.01C67.36 2.07 66.65 1.58 65.77 1.58 64.09 1.58 63.46 3.01 63.46 4.5 63.46 5.99 64.09 7.35 65.77 7.35 66.99 7.35 67.69 6.69 67.8 5.51L65.91 5.51 65.91 4.11 69.49 4.11 69.49 8.72 68.3 8.72 68.11 7.75Z" fill="currentColor"/><path d="M71.13 0.2 73 0.2 73 8.72 71.13 8.72 71.13 0.2Z" fill="currentColor"/><path d="M74.77 0.2 76.63 0.2 80.19 5.92 80.21 5.92 80.21 0.2 81.96 0.2 81.96 8.72 80.09 8.72 76.55 3.02 76.53 3.02 76.53 8.72 74.78 8.72 74.78 0.2Z" fill="currentColor"/><path d="M83.74 0.2 90.11 0.2 90.11 1.78 85.61 1.78 85.61 3.61 89.74 3.61 89.74 5.07 85.61 5.07 85.61 7.16 90.2 7.16 90.2 8.74 83.73 8.74 83.73 0.2Z" fill="currentColor"/><path d="M91.59 0.2 97.96 0.2 97.96 1.78 93.46 1.78 93.46 3.61 97.59 3.61 97.59 5.07 93.46 5.07 93.46 7.16 98.05 7.16 98.05 8.74 91.58 8.74 91.58 0.2Z" fill="currentColor"/><path d="M99.44 0.2 104.03 0.2C105.56 0.2 106.52 1.26 106.52 2.55 106.52 3.55 106.11 4.3 105.17 4.69L105.17 4.71C106.09 4.95 106.35 5.84 106.41 6.7 106.45 7.24 106.43 8.24 106.77 8.72L104.9 8.72C104.67 8.18 104.7 7.36 104.6 6.68 104.47 5.79 104.12 5.39 103.18 5.39L101.31 5.39 101.31 8.72 99.44 8.72 99.44 0.2ZM101.32 4.06 103.37 4.06C104.21 4.06 104.66 3.7 104.66 2.84 104.66 1.98 104.21 1.66 103.37 1.66L101.32 1.66 101.32 4.06Z" fill="currentColor"/><path d="M108.18 0.2 110.05 0.2 110.05 8.72 108.18 8.72 108.18 0.2Z" fill="currentColor"/><path d="M111.82 0.2 113.68 0.2 117.24 5.92 117.26 5.92 117.26 0.2 119.01 0.2 119.01 8.72 117.14 8.72 113.6 3.02 113.58 3.02 113.58 8.72 111.83 8.72 111.83 0.2Z" fill="currentColor"/><path d="M126.94 7.76C126.28 8.61 125.42 8.93 124.6 8.93 121.96 8.93 120.41 6.96 120.41 4.5 120.41 2.04 121.96 0 124.6 0 126.34 0 127.99 1.07 128.19 3.01L126.4 3.01C126.19 2.07 125.48 1.58 124.6 1.58 122.92 1.58 122.29 3.01 122.29 4.5 122.29 5.99 122.92 7.35 124.6 7.35 125.82 7.35 126.52 6.69 126.63 5.51L124.74 5.51 124.74 4.11 128.32 4.11 128.32 8.72 127.13 8.72 126.94 7.75Z" fill="currentColor"/></g><g><path d="M10.65 2.86 2.6 2.86C3.65 1.31 5 0.06 6.63 0.06 8.26 0.06 9.61 1.31 10.65 2.86Z" fill="#DC3832"/><path d="M12.15 5.66 1.1 5.66C1.14 5.58 1.17 5.49 1.21 5.4 1.44 4.88 1.71 4.33 2.01 3.8L2.12 3.62 11.11 3.62 11.22 3.8C11.52 4.33 11.79 4.88 12.02 5.4 12.06 5.49 12.1 5.57 12.13 5.66Z" fill="#009560"/><path d="M13.25 8.72 10.35 8.72C10.1 8.39 9.7 8.18 9.26 8.18L3.99 8.18C3.61 8.18 3.27 8.33 3.02 8.58 2.98 8.62 2.94 8.67 2.9 8.72L0 8.72C0 8.72 0.25 7.8 0.72 6.57L0.78 6.42 12.47 6.42 12.53 6.57C13.01 7.8 13.25 8.72 13.25 8.72Z" fill="#3F3F40"/></g></svg>
-    </div>
-    <span class="ttl">DC Cabinet 납기·PO 보드</span>
-    <div class="who">
-      <span>고객 <b>On Energy</b></span><span>공급사 <b>대홍전기</b></span><span>제품 <b>DC Cabinet</b></span>
-      <span class="asof">기준 <span id="today"></span> · <span id="asofTx">Rev.05(10/12) · 일보(11/04) · 인보이스(9/21)</span></span>
-      <button class="edbtn" id="edBtn" type="button" title="웹에서 자료 입력·수정" hidden>편집</button>
-    </div>
-  </div>
-  <div class="banner" role="status">
-    <span class="lead">오늘 쟁점</span>
-    <span id="bnTx"><b>2항차 외함조립 104/104면 완료</b>, 3항차 조립 2면. 11/04 2항차 샘플 합동 검사 실시(결과 ~11/06), <b>Prototype 4면은 Rev.22 적용 시 20가지 변경</b>. 1항차 FAT 60% 청구 기준을 정해야 합니다. <b>EPB 접점</b> 11/10 입고.</span>
-    <span class="dd" id="bnDd"></span>
-  </div>
-  <div class="bar">
-    <div class="tabs" role="tablist" aria-label="주제" id="tabs"></div>
-    <div class="tools">
-      <div><span class="lb">보기</span><div class="seg" id="views" role="group" aria-label="보기 방식"></div></div>
-      <div class="pjs-w"><span class="lb">프로젝트</span></div>
-      <div class="pjs" id="pjs" role="group" aria-label="프로젝트 필터"></div>
-    </div>
-  </div>
-  <main id="main"></main>
-  <div class="foot">
-    <span>출처: <span id="srcTx">Master Plan Rev.05 (10/12) · 생산품질일보 11/04 · Invoice Tracker (9/21 청구) · PO 원문</span></span>
-    <span>D-day와 경과일은 페이지를 열 때마다 오늘 기준으로 다시 계산됩니다.</span>
-    <span id="updTx"></span>
-  </div>
-</div>
+</style></head><body>
+<iframe id="dash" title="DC Cabinet 대시보드"></iframe>
+<div id="msg">불러오는 중…</div>
+<button class="edbtn" id="fab" type="button" hidden>편집</button>
 <aside id="ed" hidden aria-label="자료 편집"></aside>
 <script>
 (function(){
 'use strict';
-/* ---------- helpers ---------- */
-function D(s){var p=s.split("-");return Date.UTC(+p[0],+p[1]-1,+p[2]);}
-function fmt(ms){var d=new Date(ms),p=function(n){return(n<10?"0":"")+n;};return d.getUTCFullYear()+"-"+p(d.getUTCMonth()+1)+"-"+p(d.getUTCDate());}
-function days(a,b){return Math.round((b-a)/864e5);}
-var _n=new Date(), T=Date.UTC(_n.getFullYear(),_n.getMonth(),_n.getDate());
-function dd(s){return Math.round((D(s)-T)/864e5);}
-function md(s){var p=s.split("-");return (+p[1])+"/"+(p[2]);}
-function mdp(s){var p=s.split("-");return p[1]+"-"+p[2];}
-function ddTxt(s){var n=dd(s);return n>0?("D-"+n):(n===0?"D-DAY":("+"+(-n)+"일"));}
-function fm(n){return Number(n).toLocaleString("en-US");}
-function usd(n){return "$"+fm(n);}
+var REPO="on-dashboard/on-dashboard.github.io", FILE="dashboard.html";
+var API="https://api.github.com/repos/"+REPO+"/contents/", EAPI=API+"editors.json";
+var TK="ondash_gh_token", KK="ondash_edit_key", NK="ondash_name", LK="ondash_admin_links", SC="ondash_src_cache";
 function $(id){return document.getElementById(id);}
-function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
-function rich(s){return esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");}
-function clone(o){return JSON.parse(JSON.stringify(o));}
-
-/* ---------- master data ---------- */
-var PN={A9:"Abilene 9",A10:"Abilene 10",C1:"Childress 1",W1:"Warrenton 1",CF:"Coffee",GE:"GoldenEye",EG:"Eagle"};
-var PJ=[["all","전체"],["A9","Abilene 9"],["A10","Abilene 10"],["C1","Childress 1"],["W1","Warrenton 1"],["CF","Coffee"],["GE","GoldenEye"],["EG","Eagle"]];
-var ABBR={"Abilene #9":"A9","Abilene #10":"A10","Childress #1":"C1","Warrenton #1":"W1","Coffee":"CF"};
-var TABS=[["ov","개요"],["sch","일정"],["ms","마일스톤"],["cost","비용"],["prod","생산·품질"],["logi","물류·PO"],["risk","이슈"]];
-var VIEWS=[["area","영역별"],["own","담당별"],["date","일정별"]];
-var OWN=["ACE","대홍","On Energy"], OK={"ACE":"a","대홍":"d","On Energy":"c"};
-var AREA={sch:["일정",""],ms:["마일스톤","t-ms"],cost:["비용","t-cost"],q:["품질","t-q"],l:["물류","t-l"],risk:["계약·기타","t-l"]};
-
-var SH0=[
- {n:"1항차",q:100,prod:["2026-09-03","2026-10-09"],ship:"2026-10-30",win:"10/26~30",fatD:"2026-10-26",fat:"10/26~30",att:"On Energy · Crusoe",insp:["2026-10-12","2026-10-26"],fat60:2796000,cn:14,
-  st:["good","출고 100/100면 완료 · FAT 후속 대응"],
-  b:[["Abilene #9","B1",10,"2026-12-28","2027-01-03"],["Abilene #9","B2",40,"2026-12-28","2027-01-03"],["Abilene #10","B1",10,"2026-12-28","2027-01-03"],["Abilene #10","B2",40,"2026-12-28","2027-01-03"]]},
- {n:"2항차",q:104,prod:["2026-10-05","2026-11-09"],ship:"2026-11-27",win:"11/23~27",fatD:"2026-11-20",fat:"11/20 (금)",att:"On Energy · Client",insp:["2026-11-10","2026-11-23"],fat60:2907840,cn:14,
-  st:["mid","외함조립 104면 완료 · 공정 실적 갱신 필요"],
-  b:[["Abilene #10","B3",40,"2026-12-28","2027-01-31"],["Abilene #9","B3",40,"2026-12-28","2027-01-31"],["Childress #1","B1",17,"2027-01-25","2027-01-31"],["Coffee","B1",7,"2027-01-19","2027-02-12"]]},
- {n:"3항차",q:117,prod:["2026-11-04","2026-12-06"],ship:"2026-12-25",win:"12/17~24",fatD:"2026-12-14",fat:"12/14 (월)",att:"On Energy · Client",insp:["2026-12-07","2026-12-20"],fat60:3271320,cn:15,
-  st:["off","조립 2면 착수 · 생산 착수 11/04"],
-  b:[["Warrenton #1","B1",13,"2027-02-22","2027-03-28"],["Abilene #10","B4",40,"2027-02-22","2027-02-28"],["Abilene #9","B4",40,"2027-01-25","2027-02-28"],["Childress #1","B2",24,"2027-01-25","2027-02-28"]]},
- {n:"4항차",q:104,prod:["2026-12-03","2027-01-03"],ship:"2027-01-22",win:"1/18~22",fatD:"2027-01-15",fat:"1/15 (금)",att:"On Energy",insp:["2027-01-04","2027-01-18"],fat60:2907840,cn:13,
-  st:["off","대기"],
-  b:[["Warrenton #1","B2",24,"2027-03-22","2027-04-25"],["Abilene #10","B5",40,"2027-03-22","2027-03-28"],["Abilene #9","B5",40,"2027-02-22","2027-03-28"]]},
- {n:"5항차",q:96,prod:["2026-12-30","2027-01-26"],ship:"2027-02-19",win:"2/15~19",fatD:"2027-02-12",fat:"2/12 (금)",att:"On Energy",insp:["2027-01-27","2027-02-16"],fat60:2684160,cn:12,
-  st:["off","대기"],
-  b:[["Warrenton #1","B3",24,"2027-04-19","2027-04-25"],["Childress #1","B3",24,"2027-03-22","2027-04-25"],["Childress #1","B4",24,"2027-04-19","2027-04-25"],["Childress #1","B5",24,"2027-04-19","2027-04-25"]]},
- {n:"6항차",q:40,prod:["2027-02-10","2027-03-02"],ship:"2027-03-19",win:"3/18~19",fatD:"2027-03-15",fat:"3/15 (월)",att:"On Energy",insp:["2027-03-03","2027-03-15"],fat60:1118400,cn:5,
-  st:["off","대기"],
-  b:[["Warrenton #1","B4",24,"2027-04-19","2027-05-23"],["Warrenton #1","B5",16,"2027-05-17","2027-05-23"]]}
-];
-function prepShip(raw){
-  var s=clone(raw); s.m={}; s.order=[]; s.b=s.b||[];
-  s.b.forEach(function(x){var k=ABBR[x[0]]||x[0]; if(!(k in s.m)){s.m[k]=0; s.order.push(k);} s.m[k]+=(+x[2]||0);});
-  var dl=s.b.filter(function(x){return x[4];}), ws=s.b.filter(function(x){return x[3];});
-  s.deadline=dl.length?Math.min.apply(null,dl.map(function(x){return D(x[4]);})):D(s.ship);
-  s.winStart=ws.length?Math.min.apply(null,ws.map(function(x){return D(x[3]);})):D(s.ship);
-  s.st=s.st||["off",""]; s.prod=s.prod||[s.ship,s.ship]; s.insp=s.insp||[s.ship,s.ship];
-  return s;
-}
-var SHORT={A9:"A9",A10:"A10",C1:"C1",W1:"W1",CF:"CF"};
-
-var INV0=[
- {k:"A9",n:"Abilene 09",inv:"503-1912-10",po:"PO-000159",d:"2026-05-15",q:170,amt:7922000,dep:396100,sop:1980500,sum:2376600,paid:"2026-10-16"},
- {k:"A10",n:"Abilene 10",inv:"503-2032-10",po:"PO-000167",d:"2026-05-15",q:170,amt:7922000,dep:396100,sop:1980500,sum:2376600,paid:"2026-10-22"},
- {k:"C1",n:"Childress 1",inv:"503-2021-10",po:"PO-000175",d:"2026-05-15",q:113,amt:5265800,dep:263290,sop:1316450,sum:1579740,paid:"2026-10-16"},
- {k:"W1",n:"Warrenton 1",inv:"503-2033-10",po:"PO-000184",d:"2026-05-15",q:101,amt:4706600,dep:235330,sop:1176650,sum:1411980,paid:"2026-10-16"},
- {k:"CF",n:"Coffee",inv:"503-2113-10",po:"PO-000319",d:"2026-09-08",q:7,amt:326200,dep:16310,sop:81550,sum:97860,paid:"2026-10-16"},
- {k:"EG",n:"Eagle",inv:"503-2114-10",po:"PO-000213",d:"2026-09-08",q:57,amt:2656200,dep:132810,sop:0,sum:132810,paid:"2026-10-16",sopLater:664050}
-];
-var REM=[
- {k:"A9",n:"Abilene 09",fat:4753200,ddp:792200},
- {k:"A10",n:"Abilene 10",fat:4753200,ddp:792200},
- {k:"C1",n:"Childress 1",fat:3159480,ddp:526580},
- {k:"W1",n:"Warrenton 1",fat:2823960,ddp:470660},
- {k:"CF",n:"Coffee",fat:195720,ddp:32620},
- {k:"EG",n:"Eagle",fat:1593720,ddp:265620}
-];
-
-/* ---------- action / issue items (drive 담당별 · 일정별 views) ---------- */
-var A9_10=["A9","A10"];
-var ITEMS0=[
- /* 일정 */
- {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-10-21",x:"IP55 방진 시험 입회 (KOMERI 울산) · 일보 품질란은 10/22로 표기, 확인 필요",s:"prog",p:A9_10},
- {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-10-23",x:"IP55 방수 시험 입회 (KOMERI 울산)",s:"open",p:A9_10},
- {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-10-26",x:"1항차 출고 100/100면 완료 (10/26~30, 10/30 20면) · 출하 레포트 제출",s:"done",p:A9_10,k:1},
- {t:["sch","prod"],a:"sch",o:"On Energy",d:"2026-10-26",x:"1항차 FAT 10/26~30 (4면) 종료 · Crusoe 10/28 화상 참관 · FAT Comment 대응 중 (46주차 11/09~15까지)",s:"prog",p:A9_10,k:1},
- {t:["sch"],a:"sch",o:"On Energy",d:"2026-10-29",x:"Remain Audit 실시 (검사자 Eduardo Hisatugo) · Audit Comment 대응 중",s:"prog"},
- {t:["sch"],a:"sch",o:"On Energy",d:"2026-11-20",x:"2항차 FAT (금) → 출고 11/23~27 · 104면 · FAT 일정 확인 및 실시 (11/04 일보, 차주)",s:"open",p:["A9","A10","C1","CF"]},
- {t:["sch"],a:"sch",o:"On Energy",d:"2026-12-14",x:"3항차 FAT (월) → 출고 12/17~24 · 117면",s:"open",p:["A9","A10","C1","W1"]},
- {t:["sch"],a:"sch",o:"On Energy",d:"2027-01-15",x:"4항차 FAT (금) → 출고 1/18~22 · 104면",s:"open",p:["A9","A10","W1"]},
- {t:["sch"],a:"sch",o:"On Energy",d:"2027-02-12",x:"5항차 FAT (금) → 출고 2/15~19 · 96면",s:"open",p:["C1","W1"]},
- {t:["sch"],a:"sch",o:"On Energy",d:"2027-03-15",x:"6항차 FAT (월) → 출고 3/18~19 · 40면",s:"open",p:["W1"]},
- {t:["sch","logi"],a:"sch",o:"ACE",d:"2026-12-02",x:"1항차 도착 (실측 33일) · 기한 1/3까지 32일",s:"open",p:A9_10},
- {t:["sch","ms"],a:"sch",o:"대홍",d:"2026-11-04",x:"3항차 생산 착수 · SPD 428EA 결론 필요",s:"open",p:["A9","A10","C1","W1"]},
- {t:["sch","prod"],a:"sch",o:"ACE",d:"2026-10-20",x:"출고 서류 미팅 완료 (Shipping Mark·출고증·인수증)",s:"done"},
- {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-11-06",x:"2항차 샘플 부품 합동 검사 실시(11/4) · BOM Sub assembly 정보 추가 기재 요청 · Indicating Light(Green) 미입고로 차주 검사 · 결과 Reporting ~11/06",s:"prog",p:["A9","A10","C1","CF"],k:1},
- {t:["prod","cost"],a:"q",o:"ACE",d:"2026-11-05",x:"Prototype 4면 개보수 · 양산품 비교 완료(11/4) · 최종 도면 Rev.22 적용 시 20가지 변경, 대부분 신규제작·부품 교체 필요 · 비교 자료 Reporting ~11/05 → 고객 전달 · 요구 사양 확인 (11/04 일보)",s:"prog",p:A9_10,k:1},
- /* 마일스톤 */
- {t:["ms","cost"],a:"ms",o:"On Energy",d:"2026-10-16",x:"입금 5건 $5,598,990 (청구액의 70.2%)",s:"done",p:["A9","C1","W1","CF","EG"]},
- {t:["ms","cost"],a:"ms",o:"On Energy",d:"2026-10-22",x:"Abilene 10 입금 완료 $2,376,600 → 9/21 청구분 6건 $7,975,590 전액 입금",s:"done",p:["A10"]},
- {t:["ms","cost"],a:"ms",o:"ACE",d:"2026-10-26",x:"1항차 FAT 종료(10/30) · FAT 60% $2,796,000 청구 기준 합의 (PO별 vs 항차별)",s:"open",k:1},
- {t:["ms"],a:"ms",o:"ACE",d:"2027-01-02",x:"GoldenEye SOP 30% $1,621,680 청구",s:"open",p:["GE"]},
- {t:["ms"],a:"ms",o:"ACE",d:"2027-06-05",x:"Eagle SOP 25% $664,050 청구",s:"open",p:["EG"]},
- {t:["ms"],a:"ms",o:"대홍",d:"2026-09-03",x:"1항차 생산 착수 (SOP 기준일)",s:"done",p:A9_10},
- {t:["ms","prod"],a:"ms",o:"대홍",d:"2026-10-10",x:"1항차 판금 완료 (계획 10/02, 8일 지연)",s:"done",p:A9_10},
- {t:["ms","prod"],a:"ms",o:"대홍",d:"2026-10-09",x:"1항차 완성품조립 종료 계획 · 전장조립 100% 완료 (10/30 일보)",s:"done",p:A9_10},
- {t:["ms","prod"],a:"ms",o:"대홍",d:"2026-10-23",x:"2항차 판금 계획 종료일 · 2항차 외함조립 104/104면 완료 (11/04 일보) · 판금 실적(10/12 기준 12%) 갱신 필요",s:"prog",p:["A9","A10","C1","CF"],k:1},
- {t:["ms"],a:"ms",o:"대홍",d:"2026-12-03",x:"4·5·6항차 생산 착수 12/03 · 12/30 · 2/10",s:"open"},
- {t:["ms"],a:"ms",o:"On Energy",d:"2027-01-03",x:"1항차 납품 완료 기한 (대외 60일 기준 여유 5일)",s:"open",p:A9_10},
- {t:["ms","logi","risk"],a:"ms",o:"ACE",d:"2026-12-10",x:"GoldenEye 릴리스를 A-2 마일스톤에 편입 · deadline = 개시 −180일",s:"open",p:["GE"],k:1},
- {t:["sch","ms"],a:"sch",o:"On Energy",d:"2026-12-15",x:"GoldenEye 릴리스 기한 · 취소수수료 면제 종료",s:"open",p:["GE"],k:1},
- {t:["ms"],a:"ms",o:"On Energy",d:"2027-03-26",x:"GoldenEye FAT (Eagle PO 동일 날짜는 오기 가능성)",s:"open",p:["GE","EG"]},
- /* 비용 */
- {t:["cost"],a:"cost",o:"ACE",d:"2026-11-04",x:"차액 정산 원칙 문서화 (FAT 60% 또는 Change Order)",s:"risk",k:1},
- {t:["cost"],a:"cost",o:"ACE",d:"",x:"재견적: 변경 전후 차액 × 554면 구조로 제출",s:"open"},
- {t:["cost","risk"],a:"cost",o:"ACE",d:"",x:"Mike 후속 메일에 정산 원칙 한 줄 포함",s:"open"},
- {t:["cost"],a:"cost",o:"ACE",d:"2026-11-04",x:"SPD 428EA(4·5·6항차) 재견적 포함 여부 결정",s:"open"},
- {t:["cost","prod"],a:"cost",o:"ACE",d:"",x:"설계 변경 3건 561면 적용 범위·비용",s:"open",k:1},
- {t:["cost"],a:"cost",o:"ACE",d:"2026-11-05",x:"Prototype 4면 개보수 범위·비용 (Rev.22 20가지 변경, 대부분 신규제작) — 부담 주체 미정",s:"open",p:A9_10},
- {t:["cost","logi"],a:"cost",o:"ACE",d:"",x:"1항차 항공운송 2면 (EPB 접점 교체 후 출고 완료) — 운임 부담 (DDP, 면당 중량 미확인)",s:"risk",p:A9_10,k:1},
- {t:["cost","prod"],a:"cost",o:"ACE",d:"",x:"도장 요구 ⑦ 연장 보증 범위 · 경영진 결정",s:"open"},
- {t:["cost"],a:"cost",o:"ACE",d:"",x:"MSA 16.5 취소수수료 요율 확인",s:"open",p:["GE","EG"]},
- {t:["cost","logi"],a:"cost",o:"ACE",d:"",x:"물류 견적 재산출 · 마진 상세 (물류팀 차주 공유)",s:"open"},
- {t:["cost","prod"],a:"cost",o:"ACE",d:"",x:"FUSE 추가 입고 96EA(보충 12 + Coffee 84) 차수 결정",s:"open",p:["CF"]},
- /* 생산·품질 */
- {t:["prod"],a:"q",o:"대홍",d:"2026-10-21",x:"24V MCB 스펙 불일치: 고객 협의 완료, 4A 기준으로 출하 진행",s:"prog",p:A9_10,k:1},
- {t:["prod"],a:"q",o:"ACE",d:"2026-10-21",x:"MCB 오입고 재발방지 대책회의 실시 (ACE–대홍, 10/21 일보)",s:"done",p:A9_10},
- {t:["prod","risk"],a:"q",o:"ACE",d:"",x:"4A 기준 UL 인증서류 · Rev.20 도면 업데이트 (임준영 차장 요청)",s:"open",k:1},
- {t:["prod","risk"],a:"q",o:"대홍",d:"",x:"① 현재 생산·완성품 24V MCB 전수 확인 (C60BPR-D / 4A 기록)",s:"open",k:1},
- {t:["prod","risk"],a:"q",o:"대홍",d:"",x:"② 입고검사 강화: 발주서·BOM vs 입고품 Maker·Model·Rating",s:"open"},
- {t:["prod","risk"],a:"q",o:"대홍",d:"",x:"③ 생산·FAT Check Sheet에 Critical Component 대조 항목 추가",s:"open"},
- {t:["prod","risk"],a:"q",o:"대홍",d:"",x:"④ 변경관리: 최신 Revision 현장 적용 확인, 차이는 즉시 공유",s:"open"},
- {t:["prod"],a:"q",o:"대홍",d:"2026-10-20",x:"1항차 외함·전장조립 100% 완료 · 2항차 외함조립 104/104면 완료 · 3항차 조립 2면 (11/04 일보, 누계 206 · 계획 204)",s:"prog",p:A9_10},
- {t:["prod","logi"],a:"q",o:"대홍",d:"2026-10-30",x:"SPD 690개 수출 포장 후 출고 완료 (미국 배송) · 수출 포장 절차서 보완 완료 · 제습제 TDS 제출",s:"done",p:A9_10},
- {t:["prod","risk"],a:"q",o:"대홍",d:"2026-11-10",x:"UL 심사 후 EPB 부적합 조치 진행 (교체 매뉴얼·동영상 전달) · EPB 접점 11/10 입고 예정 (11/04 일보) · 24Vdc 차단기 스팩 미스매칭",s:"prog",p:A9_10,k:1},
- {t:["prod","logi"],a:"q",o:"대홍",d:"2026-10-22",x:"케이블 타이 서포터 입고 예정",s:"open",p:A9_10},
- {t:["prod","logi"],a:"q",o:"대홍",d:"2026-10-23",x:"UL 스티커 입고 예정 (오후) · 공장심사 시점엔 미부착",s:"open",p:A9_10},
- {t:["prod","logi"],a:"q",o:"대홍",d:"2026-10-20",x:"IR WINDOW 40면분 입고 완료 (65면분은 10/08)",s:"done",p:A9_10},
- {t:["prod"],a:"q",o:"ACE",d:"2026-11-28",x:"KTR 도장 내구성 시험: C3H 480h 종료(10/28) · 720h 종료 11/28 · 1440h 종료 12/28",s:"prog"},
- {t:["prod","logi"],a:"q",o:"ACE",d:"2026-10-30",x:"Schneider DC Fuse 168개 첫 입고 · 수입검사 입회, 바코드 정보 확인 (10/30 일보)",s:"done"},
- {t:["prod","risk"],a:"q",o:"대홍",d:"2026-11-06",x:"자재 오입고 방지: 전담 검사자 1명 · 라인검사 2명 추가 배치 현장 확인(11/4) · 입고검사성적서 전수 검사 ~11/06",s:"prog",p:A9_10,k:1},
- {t:["prod"],a:"q",o:"ACE",d:"",x:"도장 11개 요구 회신 (ISO 12944-5)",s:"risk",k:1},
- {t:["prod"],a:"q",o:"ACE",d:"",x:"⑪ 도장 수행 장소 사실 확인 (대홍 설비 또는 외주)",s:"open"},
- {t:["prod"],a:"q",o:"ACE",d:"",x:"AkzoNobel TDS/PDS 확보 (AL109K · MA10DK)",s:"open"},
- {t:["prod"],a:"q",o:"ACE",d:"",x:"FAT 비대상 96면 검사 기준 · Check Sheet 사전 승인",s:"open"},
- {t:["prod"],a:"q",o:"ACE",d:"",x:"승인된 ABB 480V 차단기가 지연 MCCB 대체인지 확인",s:"open"},
- {t:["prod"],a:"q",o:"대홍",d:"",x:"MCCB·SPD·FAN 입고 확인 (품목표는 9/14 기준)",s:"open",p:A9_10},
- {t:["prod"],a:"q",o:"대홍",d:"",x:"설계 생산배포 0% 표기 확인 (기입 누락 추정)",s:"open"},
- /* 물류·PO */
- {t:["logi"],a:"l",o:"ACE",d:"",x:"변경 주소 기준 리드타임 재산출 (30~33일 유지 여부)",s:"open"},
- {t:["logi"],a:"l",o:"ACE",d:"2026-12-02",x:"제품 손상 대응 절차 확정 (통보 시한·검수·사진)",s:"open"},
- {t:["logi"],a:"l",o:"ACE",d:"",x:"DC Cabinet 면당 중량 (53′ 밴 상한 5,500 lb/면)",s:"open"},
- {t:["logi"],a:"l",o:"대홍",d:"2026-10-26",x:"출고 차량 배차 Scope (DDP 공장 구간 부담 주체)",s:"open"},
- {t:["logi"],a:"l",o:"ACE",d:"",x:"Coffee 인도지 Douglas, GA — 별건 견적 · 컨테이너 분리",s:"open",p:["CF"]},
- {t:["logi"],a:"l",o:"On Energy",d:"",x:"Coffee 7면 조기 도착(약 3개월) MPS 보관 수용",s:"open",p:["CF"]},
- {t:["logi"],a:"l",o:"On Energy",d:"",x:"GoldenEye SHIP TO ‘TBD-Texas’ 확정",s:"open",p:["GE"]},
- {t:["logi"],a:"l",o:"대홍",d:"2027-06-04",x:"GoldenEye B1 출고 (6/5 토 → 직전 금요일)",s:"open",p:["GE"]},
- {t:["logi"],a:"l",o:"대홍",d:"2027-11-05",x:"Eagle B1 출고 (11/6 토 → 직전 금요일)",s:"open",p:["EG"]},
- {t:["logi"],a:"l",o:"대홍",d:"",x:"컨테이너 71 → 73대 (목적지 분리 시 +2)",s:"open"},
- {t:["logi","risk"],a:"l",o:"ACE",d:"",x:"Kati #2 신규 건 수량·납기·사양 수령",s:"open"},
- /* 이슈 */
- {t:["risk"],a:"risk",o:"ACE",d:"",x:"배치 수량 기준 통일 (납기표 vs 대홍 생산계획)",s:"open",p:["C1","W1"]},
- {t:["risk"],a:"risk",o:"ACE",d:"",x:"Coffee 납기: PO(1/19~2/12) vs 출고일정표(1/31) 분리",s:"open",p:["CF"]},
- {t:["risk"],a:"risk",o:"대홍",d:"",x:"Warrenton 선행분 Delivery on Site 2026-02-22 → 2027 정정",s:"open",p:["W1"]},
- {t:["risk"],a:"risk",o:"On Energy",d:"",x:"Mike 리드타임·캐파 예약 파라미터 회신 대기",s:"open"},
- {t:["risk"],a:"risk",o:"ACE",d:"",x:"회신 문구 ‘transit: up to 60 days’ 로 표기",s:"open"},
- {t:["risk"],a:"risk",o:"On Energy",d:"",x:"Start Delivery Date 를 관리 대상으로 보는지 (232면)",s:"open"},
- {t:["risk"],a:"risk",o:"ACE",d:"",x:"Eagle PO FAT 날짜 2027-03-26 복사 오기 확인",s:"open",p:["EG"]}
-];
-var STAT={done:["good","완료"],prog:["mid","진행"],risk:["bad","위험"],open:["off","대기"]};
-var DAILY=[
- ["1항차","2026-10-26","Abilene 9 16",16,16],["","2026-10-27","Abilene 9 24",24,40],["","2026-10-28","Abilene 9 10 · Abilene 10 6",16,56],["","2026-10-29","Abilene 10 24",24,80],["","2026-10-30","Abilene 10 20",20,100],
- ["2항차","2026-11-23","Abilene 9 16",16,16],["","2026-11-24","Abilene 9 24",24,40],["","2026-11-25","Abilene 10 16",16,56],["","2026-11-26","Abilene 10 24",24,80],["","2026-11-27","Childress 1 17 · Coffee 7",24,104],
- ["3항차","2026-12-17","Warrenton 1 13 · Abilene 9 3",16,16],["","2026-12-18","Abilene 9 24",24,40],["","2026-12-21","Abilene 9 13 · Abilene 10 3",16,56],["","2026-12-22","Abilene 10 24",24,80],["","2026-12-23","Abilene 10 13 · Childress 1 3",16,96],["","2026-12-24","Childress 1 21",21,117],
- ["4항차","2027-01-18","Warrenton 1 16",16,16],["","2027-01-19","Warrenton 1 8 · Abilene 9 16",24,40],["","2027-01-20","Abilene 9 16",16,56],["","2027-01-21","Abilene 9 8 · Abilene 10 16",24,80],["","2027-01-22","Abilene 10 24",24,104],
- ["5항차","2027-02-15","Warrenton 1 16",16,16],["","2027-02-16","Warrenton 1 8 · Childress 1 16",24,40],["","2027-02-17","Childress 1 16",16,56],["","2027-02-18","Childress 1 24",24,80],["","2027-02-19","Childress 1 16",16,96],
- ["6항차","2027-03-18","Warrenton 1 16",16,16],["","2027-03-19","Warrenton 1 24",24,40]
-];
-var state={tab:"ov",view:"area",proj:"all",tr:33,slip:0,cd:"2026-11-23"};
-
-/* ---------- editable data (defaults → data.json overrides) ---------- */
-var BN0={"text":"**2항차 외함조립 104/104면 완료**, 3항차 조립 2면. 11/04 2항차 샘플 합동 검사 실시(결과 ~11/06), **Prototype 4면은 Rev.22 적용 시 20가지 변경**. 1항차 FAT 60% 청구 기준을 정해야 합니다. **EPB 접점** 11/10 입고.","asof":"Rev.05(10/12) · 일보(11/04) · 인보이스(9/21)","src":"Master Plan Rev.05 (10/12) · 생산품질일보 11/04 · Invoice Tracker (9/21 청구) · PO 원문","dd":"샘플 검사 결과 {2026-11-06} · EPB 접점 입고 {2026-11-10}"};
-var KPI0=[{"l":"1항차 FAT","auto":"","v":"후속 대응","u":"","s":"10/26~30 · 4면 · Crusoe 10/28 화상 · Audit 10/29","bad":0},{"l":"입금 확인 (10/22)","auto":"","v":"$7.98","u":"M","s":"9/21 청구 6건 전액 · A10 10/22 입금","bad":0},{"l":"1항차 출고 완료","auto":"","v":"100","u":"면","s":"전량 (10/26~30) · 10/30 20면 · 출하 레포트 제출","bad":0},{"l":"2항차 외함조립","auto":"","v":"104","u":"면","s":"2항차 전체 완료 · 3항차 조립 2면 · 샘플 합동 검사 11/04 실시","bad":0},{"l":"확정 생산","auto":"","v":"561","u":"면","s":"+ GoldenEye 116 · Eagle 57","bad":0},{"l":"1항차 도착 여유","auto":"margin","v":"","u":"일","s":"{tr}일 운송 기준 · 대외 60일이면 5일","bad":0}];
-var PR0=[["1항차 판금","제관·도장·포밍",100,"~10-02","완료 10-10 · 8일 지연","bad"],["1항차 BUS","제작 및 도금",100,"~09-18","완료 10-03","good"],["2항차 외함조립","11/04 일보",100,"~11-09","완료 · 104/104면 · 샘플 검사 11/04","good"],["1항차 전장조립","10/30 일보",100,"~10-11","완료","good"],["1항차 출고","10/30 일보",100,"10-26~10-30","완료 10-30 · 100/100면","good"],["1항차 검사 · FAT","FAT 10/26~30",100,"10-12~10-30","FAT 종료 · Comment 대응 중","mid"],["2항차 판금","제관·도장·포밍",12,"09-18~10-23","착수 10-01 · 13일 지연","bad"],["2항차 BUS","",25,"09-18~10-16","착수 09-28","mid"],["2항차 핀배선","",53,"09-17~10-21","진행","mid"],["2항차 자재입고","",70,"09-21~11-15","진행","mid"]];
-var DLY0={"progMeta":"Rev.05 (10/12) · 1항차 전장·출고·2항차 외함은 11/04 일보 (2항차 이하는 10/12 기준)","title":"생산품질일보 11/04","meta":"45주차","matsHead":"이번 주 진행","stats":[["외함조립 누계","206","면","계획 204 · 101%"],["2항차 외함","104","면","전체 완료 · 3항차 2면"],["45주차 외함","12","면","계획 28면 · 43% (진행 중)"]],"mats":[["2항차 샘플 검사","11-04 실시","BOM Sub assembly 정보 추가 요청 · Indicating Light(Green) 미입고 → 차주 검사 · 결과 Reporting ~11/06"],["입고검사","~11-06","입고검사성적서 전수 검사 · 전담 1 · 라인검사 2 배치 현장 확인"],["Prototype 4면","11-04 완료","양산품 비교 완료 · Rev.22 적용 시 20가지 변경, 대부분 신규제작·부품 교체 · Reporting ~11/05"],["차주 (46주차)","11/09~15","FAT·Audit Comment 대응 · 2항차 FAT 일정 확인·실시 · EPB 접점 입고(11/10)"]]};
-var INS0=[["UL 공장검사","10/20","mid","진행","MCB 4A 기준 갱신 · EPB 접점 11/10 입고"],["IP55 방진","10/21","mid","입회","KOMERI 울산 · 일보 품질란은 10/22 표기"],["IP55 방수","10/23","off","대기","KOMERI 울산 · 일보 기준"],["서류 미팅","10/20","good","완료","수출포장 · Shipping Mark · 출고증"],["Remain Audit","10/29","good","실시","Eduardo Hisatugo · Audit Comment 대응 중"],["KTR 도장시험","10/08~12/28","mid","진행","C3H 480h 종료 · 720h 11/28 · 1440h 12/28"]];
-var DEF={v:1,updated:"",banner:BN0,kpis:KPI0,items:ITEMS0,ships:SH0,inv:INV0,prog:PR0,daily:DLY0,ins:INS0};
-var DATA, BN, KPI, ITEMS, SH, INV, PR, DLY, INS;
-function applyData(d){
-  Object.keys(DEF).forEach(function(k){if(!(k in d)) d[k]=clone(DEF[k]);});
-  Object.keys(DEF.banner).forEach(function(k){if(!(k in d.banner)) d.banner[k]=DEF.banner[k];});
-  Object.keys(DEF.daily).forEach(function(k){if(!(k in d.daily)) d.daily[k]=clone(DEF.daily[k]);});
-  DATA=d; BN=d.banner; KPI=d.kpis; ITEMS=d.items; INV=d.inv; PR=d.prog; DLY=d.daily; INS=d.ins;
-  SH=d.ships.map(prepShip);
-}
-applyData(clone(DEF));
-function nextShip(){for(var i=0;i<SH.length;i++) if(D(SH[i].ship)>=T) return SH[i]; return SH[SH.length-1];}
-function ddLine(s){return String(s||"").replace(/\{(\d{4}-\d{2}-\d{2})\}/g,function(_,d){return ddTxt(d);});}
-
-/* ---------- small builders ---------- */
-function pv(it){return state.proj==="all"||!it.p||!it.p.length||it.p.indexOf(state.proj)>-1;}
-function shHas(s){return state.proj==="all"||s.m[state.proj]>0;}
-function shQ(s){return state.proj==="all"?s.q:(s.m[state.proj]||0);}
-function arrive(s){return D(s.ship)+state.tr*864e5;}
-function marginOf(s){return days(arrive(s),s.deadline);}
-function lateOf(s){return days(s.winStart,arrive(s));}
-function chipO(o){return '<span class="own o-'+OK[o]+'">'+o+'</span>';}
-function stDot(kind,label){return '<span class="st st-'+kind+'"><i>'+(kind==="off"?"○":"●")+'</i>'+label+'</span>';}
-function tag(a){var x=AREA[a];return '<span class="tag '+x[1]+'">'+x[0]+'</span>';}
-function panel(a,title,meta,body,span,cls){
-  return '<section class="panel s'+(span||12)+(cls?" "+cls:"")+'"><div class="ph">'+(a?tag(a):"")+'<h3>'+title+'</h3>'+(meta?'<div class="meta">'+meta+'</div>':"")+'</div>'+body+'</section>';
-}
-function tbl(head,rows,o){
-  o=o||{}; var num=o.num||[], ctr=o.ctr||[];
-  function k(i){return num.indexOf(i)>-1?"n":(ctr.indexOf(i)>-1?"c":"");}
-  var h='<thead><tr>'+head.map(function(x,i){return '<th'+(num.indexOf(i)>-1?' class="n"':"")+'>'+x+'</th>';}).join("")+'</tr></thead>';
-  var b='<tbody>'+rows.map(function(r){
-    var c=r.c||r, cls=r.cls||"";
-    return '<tr'+(cls?' class="'+cls+'"':"")+'>'+c.map(function(v,i){var kk=k(i);return '<td'+(kk?' class="'+kk+'"':"")+'>'+v+'</td>';}).join("")+'</tr>';
-  }).join("")+'</tbody>';
-  return '<div class="scroll"><table>'+h+b+'</table></div>';
-}
-function nw(t){return '<span style="white-space:nowrap">'+t+'</span>';}
-function note(t){return '<p class="note">'+t+'</p>';}
-function marg(n){return '<b class="'+(n<=7?"c-bad":"c-good")+'">'+n+'일</b>';}
-function codes(s){return s.order.map(function(k){return k+" "+s.m[k];}).join(" · ");}
-function pjText(p){
-  if(!p||!p.length) return "";
-  return p.length>2?p.join("·"):p.map(function(k){return PN[k];}).join(" · ");
-}
-
-/* ---------- item rows & alternative views ---------- */
-function itemEl(it,noOwner){
-  var d=it.d, n=d?dd(d):null, ddt="", ddc="";
-  if(d){
-    if(it.s==="done"){ddt="완료";}
-    else if(n<0){ddt="+"+(-n)+"일 경과"; ddc="late";}
-    else{ddt=ddTxt(d); if(n<=5) ddc="now";}
-  }
-  var st=STAT[it.s]||STAT.open, pt=pjText(it.p);
-  var mt='<span><b>'+(AREA[it.a]||AREA.risk)[0]+'</b></span><span>'+(d?md(d):"일자 미정")+'</span>'+(pt?'<span>'+pt+'</span>':"")+stDot(st[0],st[1]);
-  return '<div class="it'+(it.k?" k":"")+(noOwner?" no-o":"")+'">'+(noOwner?"":chipO(it.o))+'<div class="tx">'+esc(it.x)+'</div><div class="dd '+ddc+'">'+ddt+'</div><div class="mt">'+mt+'</div></div>';
-}
-function cmp(a,b){
-  var da=(a.s==="done"?"z":"a")+(a.d||"9999"), db=(b.s==="done"?"z":"a")+(b.d||"9999");
-  if(da!==db) return da<db?-1:1;
-  return (b.k||0)-(a.k||0);
-}
-function itemsFor(tab){
-  return ITEMS.filter(function(i){return tab==="ov"?i.k:(tab==="risk"?(i.k||i.s==="risk"||i.t.indexOf("risk")>-1):i.t.indexOf(tab)>-1);}).filter(pv);
-}
-function tabName(t){for(var i=0;i<TABS.length;i++) if(TABS[i][0]===t) return TABS[i][1]; return "";}
-function ownerView(tab){
-  var items=itemsFor(tab);
-  if(!items.length) return panel(null,tabName(tab)+" · 담당별","",'<div class="empty">선택한 프로젝트에 해당하는 항목이 없습니다.</div>',12);
-  var cols=OWN.map(function(o){
-    var L=items.filter(function(i){return i.o===o;}).sort(cmp);
-    var open=L.filter(function(i){return i.s!=="done";}).length, rk=L.filter(function(i){return i.s==="risk";}).length;
-    return '<div><div class="col-h">'+chipO(o)+'<span class="c">'+open+'건 진행·대기'+(rk?' · <b class="c-bad">위험 '+rk+'</b>':"")+'</span></div><div class="rows">'+(L.length?L.map(function(i){return itemEl(i,true);}).join(""):'<div class="empty">해당 없음</div>')+'</div></div>';
-  }).join("");
-  return panel(null,tabName(tab)+" · 담당별 해야 할 일","총 "+items.length+"건",'<div class="cols3">'+cols+'</div>',12);
-}
-var BK=[
-  ["이번 주","~ 10/25",function(d){return d<="2026-10-25";}],
-  ["FAT·출고 주","10/26 ~ 10/31",function(d){return d>"2026-10-25"&&d<="2026-10-31";}],
-  ["11월","",function(d){return d>"2026-10-31"&&d<="2026-11-30";}],
-  ["12월","",function(d){return d>"2026-11-30"&&d<="2026-12-31";}],
-  ["2027년 이후","",function(d){return d>"2026-12-31";}]
-];
-function dateView(tab){
-  var items=itemsFor(tab).slice().sort(cmp), html="";
-  if(!items.length) return panel(null,tabName(tab)+" · 일정별","",'<div class="empty">선택한 프로젝트에 해당하는 항목이 없습니다.</div>',12);
-  BK.forEach(function(b){
-    var L=items.filter(function(i){return i.d&&b[2](i.d);});
-    if(L.length) html+='<div class="bk"><div class="bl">'+b[0]+(b[1]?'<small>'+b[1]+'</small>':"")+'</div><div class="bi">'+L.map(function(i){return itemEl(i);}).join("")+'</div></div>';
-  });
-  var U=items.filter(function(i){return !i.d;});
-  if(U.length) html+='<div class="bk"><div class="bl">일자 미정<small>기한 확정 필요</small></div><div class="bi">'+U.map(function(i){return itemEl(i);}).join("")+'</div></div>';
-  return panel(null,tabName(tab)+" · 일정 순서로 보기","총 "+items.length+"건",html,12);
-}
-
-/* ---------- gantt ---------- */
-function gantt(){
-  var rows=SH.filter(shHas);
-  if(!rows.length) return '<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다. 출고 계획은 물류·PO 탭에 있습니다.</div>';
-  var A=D("2026-09-01"), B=D("2027-06-01"), W=B-A;
-  function x(ms){return Math.max(0,Math.min(100,(ms-A)/W*100));}
-  var ticks="", head="", mm=[];
-  for(var i=0;i<9;i++){var y=2026+Math.floor((8+i)/12), m=(8+i)%12; mm.push([Date.UTC(y,m,1),y,m+1]);}
-  mm.forEach(function(t){ticks+='<i class="gt-tk" style="left:'+x(t[0]).toFixed(2)+'%"></i>';
-    head+='<i class="gt-tk" style="left:'+x(t[0]).toFixed(2)+'%"><span>'+(t[2]===9||t[2]===1?String(t[1]).slice(2)+".":"")+t[2]+'월</span></i>';});
-  var tdy=(T>=A&&T<=B)?'<i class="gt-today" style="left:'+x(T).toFixed(2)+'%"></i>':"";
-  var h='<div class="gt-row hd"><div></div><div class="gt-t">'+head+tdy+'</div><div class="gt-m mut" style="font-weight:500;font-size:11px">여유</div></div>';
-  rows.forEach(function(s){
-    var ar=arrive(s), lt=lateOf(s), mg=marginOf(s);
-    h+='<div class="gt-row"><div class="gt-l">'+s.n+'<small>'+shQ(s)+'면 · '+codes(s)+'</small></div><div class="gt-t">'+ticks+tdy
-      +'<i class="gt-b w" style="left:'+x(s.winStart).toFixed(2)+'%;width:'+(x(s.deadline)-x(s.winStart)).toFixed(2)+'%" title="요구 납품 창 '+fmt(s.winStart)+' ~ '+fmt(s.deadline)+'"></i>'
-      +'<i class="gt-b p" style="left:'+x(D(s.prod[0])).toFixed(2)+'%;width:'+(x(D(s.prod[1])+864e5)-x(D(s.prod[0]))).toFixed(2)+'%" title="생산 '+s.prod[0]+' ~ '+s.prod[1]+'"></i>'
-      +'<i class="gt-b tr" style="left:'+x(D(s.ship)).toFixed(2)+'%;width:'+(x(ar)-x(D(s.ship))).toFixed(2)+'%" title="출고 '+s.ship+' → 도착 '+fmt(ar)+'"></i>'
-      +'<i class="gt-b ar" style="left:'+x(ar).toFixed(2)+'%" title="도착 '+fmt(ar)+'"></i>'
-      +'<i class="gt-b dl" style="left:'+x(s.deadline).toFixed(2)+'%" title="납품 기한 '+fmt(s.deadline)+'"></i></div>'
-      +'<div class="gt-m">'+marg(mg)+(lt>1?'<small class="c-bad" style="display:block;font-size:10.5px">개시 +'+lt+'일</small>':"")+'</div></div>';
-  });
-  var leg='<div class="leg" style="margin-top:8px"><span><em style="background:var(--bar-dark)"></em>생산</span><span><em style="background:var(--teal)"></em>해상 운송</span><span><em style="background:var(--teal-d)"></em>도착일</span><span><em style="border:1px dashed var(--ink-3)"></em>요구 납품 창</span><span><em style="background:var(--bad)"></em>납품 기한</span></div>';
-  return '<div class="scroll"><div class="gt">'+h+'</div></div>'+leg;
-}
-function trSeg(){
-  return '<div class="seg" role="group" aria-label="운송 기준">'+[[60,"대외 60일"],[33,"실측 33일"],[30,"실측 30일"]].map(function(v){return '<button data-tr="'+v[0]+'" aria-pressed="'+(state.tr===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
-}
-
-/* ---------- TAB: 개요 ---------- */
-function tabOv(){
-  var kp='<div class="kpis">'+KPI.map(function(k){
-    var v=k.auto==="fat"?ddTxt(nextShip().fatD):(k.auto==="margin"?String(marginOf(SH[0])):(k.auto==="margin_next"?String(marginOf(nextShip())):k.v));
-    return '<div class="kpi'+(k.bad?" k-bad":"")+'"><span class="l">'+esc(k.l)+'</span><span class="v">'+esc(v)+(k.u?'<small>'+esc(k.u)+'</small>':"")+'</span><span class="s">'+esc(String(k.s||"").replace(/\{tr\}/g,state.tr))+'</span></div>';
-  }).join("")+'</div>';
-  var up=ITEMS.filter(function(i){return pv(i)&&i.d&&i.s!=="done"&&i.s!=="risk"&&dd(i.d)>=0&&(i.a==="sch"||i.a==="ms");}).sort(cmp).slice(0,6);
-  var iss=ITEMS.filter(function(i){return pv(i)&&i.k&&i.s!=="done"&&(i.s==="risk"||i.a!=="sch");}).sort(function(a,b){
-    var ra=a.s==="risk"?0:1, rb=b.s==="risk"?0:1; if(ra!==rb) return ra-rb; return cmp(a,b);}).slice(0,7);
-  var shs=SH.filter(shHas);
-  var rows=shs.map(function(s){
-    return [esc(s.n)+'<span class="sub">'+codes(s)+'</span>', shQ(s)+(state.proj!=="all"?'<span class="sub">항차 '+s.q+'</span>':""), esc(s.win), esc(s.fat)+'<span class="sub">'+esc(s.att)+'</span>', md(fmt(arrive(s))), marg(marginOf(s)), stDot(s.st[0],esc(s.st[1]))];
-  });
-  if(rows.length>1) rows.push({cls:"tot",c:["합계",shs.reduce(function(a,s){return a+shQ(s);},0),"","","","",""]});
-  var snap=rows.length?tbl(["항차","면수","출고","FAT · 입회","도착 ("+state.tr+"일)","여유","상태"],rows,{num:[1,4,5]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다.</div>';
-  return kp+'<div class="grid">'
-    +panel("sch","다가오는 일정","오늘 이후 · 위험 항목은 오른쪽",'<div class="rows">'+(up.length?up.map(function(i){return itemEl(i);}).join(""):'<div class="empty">예정된 일정이 없습니다.</div>')+'</div>',5)
-    +panel("risk","지금 풀어야 할 핵심 이슈","핵심 "+iss.length+"건",'<div class="rows">'+(iss.length?iss.map(function(i){return itemEl(i);}).join(""):'<div class="empty">해당 항목이 없습니다.</div>')+'</div>',7)
-    +panel("sch","항차 현황","출고·FAT·도착·여유 한눈에 · "+trSeg(),snap,12)
-    +'</div>';
-}
-
-/* ---------- TAB: 일정 ---------- */
-function tabSch(){
-  var rows=SH.filter(shHas).map(function(s){
-    return [s.n, shQ(s)+(state.proj!=="all"?'<span class="sub">항차 '+s.q+'</span>':""), s.win, s.fat+'<span class="sub">'+s.att+'</span>', '<b>'+ddTxt(s.fatD)+'</b>', md(fmt(arrive(s))), marg(marginOf(s))];
-  });
-  if(rows.length>1) rows.push({cls:"tot",c:["합계",SH.filter(shHas).reduce(function(a,s){return a+shQ(s);},0),"","","","",""]});
-  var MAJOR=[
-   ["대홍","2026-10-08","Modbus 통신 테스트","대홍전기 · 완료","done"],
-   ["대홍","2026-10-20","UL 초도 생산 공장검사 (10:30)","24V MCB 불일치 지적 · 고객 협의 완료, 4A 기준 · 전수조사에서 EPB 부적합 추가 발견","prog"],
-   ["대홍","2026-10-21","IP55 방진 테스트 입회","KOMERI 울산 · 일보 품질란은 10/22로 표기, 확인 필요","prog"],
-   ["대홍","2026-10-23","IP55 방수 테스트 입회","KOMERI 울산 · 일보 기준","open"],
-   ["On Energy","2026-10-26","1항차 FAT 10/26~30","4면 · Crusoe 10/28 화상 참관 · 차주 Comment 후속 대응","prog"],
-   ["대홍","2026-10-26","1항차 출고 100면 10/26~30","대홍전기 · 100/100면 출고 완료 (10/30)","done"],
-   ["On Energy","2026-10-29","On Energy Remain Audit","검사자 Eduardo Hisatugo · 실시 · Audit Comment 대응","prog"]
-  ];
-  var mj=MAJOR.map(function(m){var n=dd(m[1]),t=m[4]==="done"?"완료":(n<0?"+"+(-n)+"일 경과":ddTxt(m[1])),st=STAT[m[4]];
-    return '<div class="it">'+chipO(m[0])+'<div class="tx">'+m[2]+'</div><div class="dd '+(n<0&&m[4]!=="done"?"late":(n<=5&&m[4]!=="done"?"now":""))+'">'+t+'</div><div class="mt"><span>'+md(m[1])+'</span><span>'+m[3]+'</span>'+stDot(st[0],st[1])+'</div></div>';}).join("");
-  var daily=tbl(["항차","출고일","프로젝트 · 수량","일계","항차 누계"],DAILY.map(function(r){return [r[0]||'&nbsp;',r[1],r[2],r[3],r[4]];}).concat([{cls:"tot",c:["합계","","",561,""]}]),{num:[3,4]});
-  return '<div class="grid">'
-   +panel("sch","항차 타임라인","운송 기준 "+trSeg(),gantt(),12)
-   +panel("sch","항차별 출고 · FAT · 도착",(state.proj==="all"?"":PN[state.proj]+" 포함 항차만"),
-      rows.length?tbl(["항차","면수","출고 창","FAT · 입회","FAT D-day","도착 ("+state.tr+"일)","여유"],rows,{num:[1,4,5,6]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다.</div>',7)
-   +panel("sch","10월 말 주요 일정","7건이 2주 안에 몰려 있음",'<div class="rows">'+mj+'</div>',5)
-   +'</div>'
-   +'<details style="margin-top:14px"><summary>항차별 일자별 출고표 <small>16 · 24 · 16 · 24대 패턴, 컨테이너 8unit 단위 · 561면</small></summary><div class="dbody">'+daily
-   +note("출고 창 마지막 날이 항차 출고일입니다. 3항차만 일자표 마지막 날(12-24)과 항차표 Factory Release(12-25)가 하루 어긋납니다. Factory Release → Delivery on Site는 전 구간 65일(운송 60일 + 버퍼 5일)입니다.")+'</div></details>';
-}
-
-/* ---------- TAB: 마일스톤 ---------- */
-function tabMs(){
-  function sum(a,f){return a.reduce(function(t,r){return t+(+f(r)||0);},0);}
-  var TOT=sum(INV,function(r){return r.amt;}), paid=sum(INV,function(r){return r.paid?r.sum:0;}), unpaid=sum(INV,function(r){return r.paid?0:r.sum;}), sopLater=sum(INV,function(r){return r.sopLater;}), fat=sum(REM,function(r){return r.fat;}), ddp=sum(REM,function(r){return r.ddp;});
-  var DEPT=sum(INV,function(r){return r.dep;}), SOPB=sum(INV,function(r){return r.sop;}), npaid=INV.filter(function(r){return r.paid;}).length;
-  var seg=[[paid,"b1","입금 확인",paid],[unpaid,"b2","청구 · 미입금",unpaid],[sopLater,"b3","SOP 예정 (Eagle)",sopLater],[fat,"b4","Ready for Delivery 60%",fat],[ddp,"b5","Delivery Completion 10%",ddp]].filter(function(s){return s[0]>0;});
-  var bar='<div class="stack" role="img" aria-label="'+INV.length+'개 PO 합계 '+usd(TOT)+' 결제 진행">'+seg.map(function(s){return '<i style="width:'+(s[0]/TOT*100).toFixed(2)+'%;background:var(--'+s[1]+')" title="'+s[2]+' '+usd(s[3])+'"></i>';}).join("")+'</div>'
-    +'<div class="leg">'+seg.map(function(s){return '<span><em style="background:var(--'+s[1]+')"></em>'+s[2]+' <b>'+usd(s[3])+'</b> ('+(s[0]/TOT*100).toFixed(1)+'%)</span>';}).join("")+'</div>';
-  var flow='<div class="flow" style="--n:4">'
-    +'<div class="fl h"><div class="a">Deposit 5% · PO 수락 시</div><div class="b">'+usd(DEPT)+'</div><div class="c">청구 9/21 · 입금 완료('+npaid+'건)</div></div>'
-    +'<div class="fl h"><div class="a">SOP 25% · 첫 Delivery 28주 전</div><div class="b">'+usd(SOPB+sopLater)+'</div><div class="c">청구 '+usd(SOPB)+' · Eagle '+usd(sopLater)+' 2027-06-05</div></div>'
-    +'<div class="fl"><div class="a">Ready for Delivery 60% · FAT 완료</div><div class="b">'+usd(fat)+'</div><div class="c">항차별 FAT 6회 (10/26 ~ 2027-03-15)</div></div>'
-    +'<div class="fl"><div class="a">Delivery Completion 10% · DDP 인도</div><div class="b">'+usd(ddp)+'</div><div class="c">승인 인보이스 후 +120~150일</div></div></div>';
-  var pay=panel("ms","결제 마일스톤 진행",INV.length+"개 PO 합계 "+usd(TOT)+" · 지급은 인보이스 승인 +30일",bar+flow,12);
-
-  var mrows=INV.filter(function(r){return state.proj==="all"||state.proj===r.k;}).map(function(r){
-    var rem=REM.filter(function(x){return x.k===r.k;})[0]||{fat:0,ddp:0};
-    var due='<span class="sub">청구 · '+(r.sched?md(r.sched)+' 입금 예정':'미입금')+'</span>';
-    var dep=r.paid?stDot("good",usd(r.dep))+'<span class="sub">입금 '+md(r.paid)+'</span>':stDot("mid",usd(r.dep))+due;
-    var sop=r.sopLater?stDot("off",usd(r.sopLater))+'<span class="sub">2027-06-05 예정</span>':(r.paid?stDot("good",usd(r.sop))+'<span class="sub">입금 '+md(r.paid)+'</span>':stDot("mid",usd(r.sop))+due);
-    var c=[esc(r.n)+'<span class="sub">'+esc(r.po)+'</span>',usd(r.amt),dep,sop,stDot("off",usd(rem.fat))+'<span class="sub">항차별 FAT</span>',stDot("off",usd(rem.ddp))+'<span class="sub">DDP 인도 후</span>'];
-    return r.paid?c:{cls:"emph",c:c};
-  });
-  if(state.proj==="all") mrows.push({cls:"tot",c:[INV.length+"개 PO 합계",usd(TOT),usd(DEPT),usd(SOPB+sopLater),usd(fat),usd(ddp)]});
-  if(state.proj==="all"||state.proj==="GE") mrows.push(["GoldenEye"+'<span class="sub">PO-000327 · 릴리스 대기</span>',usd(5405600),'<span class="mut">— (PO 시 0%)</span>',stDot("off",usd(1621680))+'<span class="sub">SOP 30% · 2027-01-02</span>',stDot("off",usd(3243360))+'<span class="sub">FAT 2027-03-26</span>',stDot("off",usd(540560))+'<span class="sub">DDP 인도 후</span>']);
-  var mat=panel("ms","프로젝트별 마일스톤","● 입금  ● 청구  ○ 예정"+(state.proj==="all"?"":" · "+PN[state.proj]),mrows.length?tbl(["프로젝트 · PO","PO 금액","Deposit 5%","SOP 25%","FAT 60%","DDP 10%"],mrows,{num:[1,2,3,4,5]}):'<div class="empty">해당 프로젝트의 결제 일정이 없습니다.</div>',12);
-
-  function cell(d){var n=dd(d);return n<0?stDot("good",md(d)):md(d);}
-  function rng(a,b){return (dd(b)<0?stDot("good",md(a)+"~"+md(b)):md(a)+"~"+md(b));}
-  var grows=SH.filter(shHas).map(function(s){
-    return [s.n+'<span class="sub">'+shQ(s)+'면 · '+codes(s)+'</span>',cell(s.prod[0]),rng(s.insp[0],s.insp[1]),s.fat+'<span class="sub">'+s.att+'</span>',s.win,md(fmt(arrive(s)))+'<span class="sub">'+state.tr+'일 기준</span>',md(fmt(s.deadline))+'<span class="sub">여유 '+marginOf(s)+'일</span>'];
-  });
-  var gr=panel("ms","항차별 생산 · 검사 · 인도 이정표","● 경과  ·  운송 기준 "+trSeg(),grows.length?tbl(["항차","생산 착수","검사 · FAT (ACE)","고객 FAT","출고","도착","납품 기한"],grows,{}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다.</div>',12);
-  return '<div class="grid">'+pay+mat+gr+'</div>';
-}
-
-/* ---------- TAB: 비용 ---------- */
-function tabCost(){
-  var re=panel("cost","재견적 포지션","원가는 확정, 가격은 열려 있음",
-    '<div class="stats"><div class="stat"><div class="l">변경분 자재 발주</div><div class="v">554면</div><div class="s">100% 원가 확정</div></div><div class="stat"><div class="l">청구 단가 (9/21)</div><div class="v">$46,600</div><div class="s">기존 단가 / 면</div></div><div class="stat"><div class="l">차액 정산 방식</div><div class="v c-bad">미정</div><div class="s">문서 확보 필요</div></div></div>'
-    +'<ol class="steps">'
-    +'<li><div><b>차액 정산 원칙을 문서로 확보</b><span>재견적 제출 시 “차액은 FAT 60% 또는 Change Order에서 정산” 명시</span></div></li>'
-    +'<li><div><b>변경 전후 차액 구조로 제출</b><span>변경 항목 · 전 단가 · 후 단가 · 차액 × 554면</span></div></li>'
-    +'<li><div><b>Mike 후속 파라미터 메일에 정산 원칙 한 줄</b><span>GoldenEye는 이미 단독 수락(9/2) — 남은 통로는 이 메일뿐</span></div></li>'
-    +'<li><div><b>SPD 428EA를 재견적 범위에 넣을지 결정</b><span>4·5·6항차 미발주 · 3항차 착수(11/04) 전 결론</span></div></li></ol>'
-    +note("<b>레버리지는 상대에게 있습니다.</b> 자재가 554면 전량 발주돼 협상이 길어져도 ACE가 멈출 수 있는 것이 없습니다. 그래서 재견적은 단독으로 올리지 말고, 상대가 먼저 보내기로 한 리드타임·캐파 파라미터 메일에 묶어야 합니다."),5);
-  var rows=INV.filter(function(r){return state.proj==="all"||state.proj===r.k;}).map(function(r){
-    var c=[esc(r.n)+'<span class="sub">'+esc(r.inv)+'</span>',r.q,usd(r.amt),usd(r.dep),r.sop?usd(r.sop):"—",usd(r.sum),r.paid?stDot("good","입금 "+md(r.paid)):stDot("mid",r.sched?"입금 예정 "+md(r.sched):"미입금")];
-    return r.paid?c:{cls:"emph",c:c};
-  });
-  function s2(f){return INV.reduce(function(t,r){return t+(+f(r)||0);},0);}
-  if(state.proj==="all") rows.push({cls:"tot",c:["합계",s2(function(r){return r.q;}),usd(s2(function(r){return r.amt;})),usd(s2(function(r){return r.dep;})),usd(s2(function(r){return r.sop;})),usd(s2(function(r){return r.sum;})),usd(s2(function(r){return r.paid?r.sum:0;}))+" 입금"]});
-  var unp=INV.filter(function(r){return !r.paid;}).map(function(r){return r.n+(r.sched?"은 "+md(r.sched)+" 입금 예정":" 미입금");}).join(" · ");
-  var lastPaid=INV.filter(function(r){return r.paid;}).map(function(r){return r.paid;}).sort().pop();
-  var inv=panel("cost","청구 · 입금 (2026-09-21 청구)","지급기한 10/21 · "+(unp?esc(unp):INV.length+"건 모두 입금 완료"+(lastPaid?" (마지막 "+md(lastPaid)+")":""))+" · 기존 단가 $46,600/면",rows.length?tbl(["프로젝트 · Invoice","면수","PO 금액","Deposit 5%","SOP 25%","청구 합계","입금"],rows,{num:[1,2,3,4,5]}):'<div class="empty">해당 프로젝트의 청구 내역이 없습니다.</div>',7);
-  var EXP=[
-   ["사양변경 차액 (554면)",nw("ACE"),"재견적 제출 전","미산정"],
-   ["설계 변경 3건 (561면)",nw("ACE"),"3항차 착수 전 11/04","범위·비용 미정"],
-   ["SPD 428EA (4·5·6항차)",nw("ACE"),"11/04","428EA 미발주"],
-   ["항공 운송 (1항차 일부)",nw("ACE"),"수량 확정 즉시","면당 중량 미확인"],
-   ["연장 보증 (도장 요구 ⑦)",nw("ACE 경영진"),"재견적과 함께","하자 충당 미정"],
-   ["취소수수료 (GoldenEye · Eagle)",nw("ACE"),"릴리스 이후","MSA 16.5 요율 미확인"],
-   ["물류 견적 재산출",nw("물류팀"),"차주","마진 상세 포함"]
-  ];
-  var ex=panel("cost","금액이 아직 정해지지 않은 항목","7건",tbl(["항목","담당","시점","상태"],EXP,{}),5);
-  var rr=REM.filter(function(r){return state.proj==="all"||state.proj===r.k;}).map(function(r){return [r.n,usd(r.fat),usd(r.ddp),usd(r.fat+r.ddp),"항차별 FAT 완료 시"];});
-  if(state.proj==="all") rr.push({cls:"tot",c:["소계",usd(17279280),usd(2879880),usd(20159160),""]});
-  if(state.proj==="all"||state.proj==="GE") rr.push({cls:"emph",c:["GoldenEye (릴리스 대기)",usd(3243360),usd(540560),usd(3783920),"SOP 30% "+usd(1621680)+" (2027-01-02) 별도 · FAT 2027-03-26"]});
-  var rem=panel("cost","앞으로 청구할 금액","FAT 60% · DDP 10%",rr.length?tbl(["프로젝트","FAT 60%","DDP 10%","합계","청구 조건"],rr,{num:[1,2,3]}):'<div class="empty">해당 없음</div>',7);
-  return '<div class="grid">'+re+inv+ex+rem+'</div>'
-    +'<div class="foot" style="margin-top:10px"><span>GoldenEye는 PO 116면(29대 × 4배치) 기준 $5,405,600 · 트래커의 113면은 정정본으로 전달됨</span></div>';
-}
-
-/* ---------- TAB: 생산·품질 ---------- */
-function pbar(p){return '<span class="pb"><i style="width:'+p+'%"></i></span> <b class="num">'+p+'%</b>';}
-function tabProd(){
-  var prog=panel("q","항차별 공정 진척",esc(DLY.progMeta),tbl(["항차 · 공정","진척","계획","상태"],PR.map(function(r){return [esc(r[0])+(r[1]?'<span class="sub">'+esc(r[1])+'</span>':""),pbar(Math.max(0,Math.min(100,+r[2]||0))),esc(r[3]),stDot(r[5]||"off",esc(r[4]))];}),{}),7,"rs2");
-  var daily=panel("q",esc(DLY.title),esc(DLY.meta),
-    '<div class="stats">'+DLY.stats.map(function(s){return '<div class="stat"><div class="l">'+esc(s[0])+'</div><div class="v">'+esc(s[1])+(s[2]?'<small>'+esc(s[2])+'</small>':"")+'</div><div class="s">'+esc(s[3])+'</div></div>';}).join("")+'</div>'
-    +tbl([esc(DLY.matsHead||"이번 주 자재"),"일정","내용"],DLY.mats.map(function(r){return [esc(r[0]),esc(r[1]),esc(r[2])];}),{}),5);
-  var ins=panel("q","검사 · 서류","10월 말",tbl(["구분","일정","상태","비고"],INS.map(function(r){return [esc(r[0]),esc(r[1]),stDot(r[2]||"off",esc(r[3])),esc(r[4])];}),{}),5);
-  var PAINT=[
-   ["1","180 µm DFT 불가 사유","기술 설명","ACE · 대홍"],["2","벤더 자료 AL109K · MA10DK","문서","AkzoNobel"],["3","ISO 12944-5 Table B.2 미달","기술 근거","ACE · AkzoNobel"],
-   ["4","시험 결과 부재","시험","ACE"],["5","시험 범위 (현장 실적 없으면 촉진시험)","시험","ACE"],["6","AkzoNobel 장기 현장 실적","확인","AkzoNobel"],
-   ["7","연장 보증 범위","상업 조건","ACE 경영진"],["8","제3자 시험성적서","문서","ACE"],["9","적용 지침 (표면처리 · 온습도)","문서","AkzoNobel"],
-   ["10","공정 관리 입증","공정","ACE · 대홍"],["11","도장 수행 장소","사실 확인","ACE"]];
-  var paint=panel("q","도장 사양 — On Energy 요구 11개","ISO 12944-5",tbl(["#","요구 항목","유형","확보처"],PAINT,{}),6,"rs2");
-  var mat=panel("q","자재 — 1항차 미입고 (9/14 기준표)","일정 갱신 필요",tbl(["입고 예정","품목","상태"],[
-    ["09-08","SPD RAYCAP 35-G-HV-M",stDot("bad","예정일 경과 · 미확인")],
-    ["09-17","FAN",stDot("off","확인 필요")],
-    ["09-25","MCCB BJL26015LU · 100면분",stDot("off","확인 필요")],
-    ["09-30","AIR FILTER 2종 (554면 전량)",stDot("off","확인 필요")],
-    ["10-07","IR WINDOW 2종",stDot("good","65면 10/08 · 40면 10/20 입고")]],{}),6);
-  var short=panel("q","자재 — 발주 수량 부족","4건",tbl(["품목","필요","주문","차이"],[
-    ["SPD RAYCAP 35-G-HV-M","1,108","680",'<b class="c-bad">−428</b>'],
-    ["6항차 자재 배정","40","35",'<b class="c-bad">−5</b>'],
-    ["TCP/RTU 컨버터 (1항차)","100","42",'<b class="c-bad">−58</b>'],
-    ["Coffee 7면분 자재","7","—","미반영"]],{num:[1,2,3]}),6);
-  var mcb=panel("q","24V MCB 스펙 불일치 — 재발방지 요청 4가지","10/21 메일 (남종현) · 고객 협의 완료 → DC cabinet V2는 4A 기준으로 출하",
-    note("일보(10/21)에서는 MCB 오입고로 분류하고 ACE–대홍 재발방지 대책회의를 실시했습니다. 발주 사양과 실제 입고품이 달랐는데도 <b>입고검사 · 생산 조립 · 자체검사/FAT에서 사전에 발견하지 못한 점</b>이 핵심입니다. 출하가 다수 임박해 MCB 변경으로 끝내지 말고 생산·품질 관리체계를 점검해 달라는 요청입니다.")
-    +tbl(["#","조치","세부 내용","담당"],[
-      ["①","현재 생산·완성품 전수 확인","설치된 24V MCB 모델명·정격을 실제 제품 기준으로 확인 · C60BPR-D / 4A 적용 여부 확인·기록",nw("대홍")],
-      ["②","입고검사 강화","발주서·BOM과 입고품의 Maker / Model No. / Rating 개별 대조 · 외관·동일 계열이 아닌 정확한 P/N 기준",nw("대홍")],
-      ["③","생산·FAT Check Sheet 보완","Critical Component의 도면·BOM vs 설치품 Model No.·Rating 대조 항목 추가 · 최초 조립품과 양산품 동일 적용",nw("대홍")],
-      ["④","이력·변경관리","BOM·도면 변경 시 최신 Revision 현장 적용 확인 · 승인도면과 설치품 차이는 즉시 설계·인증 담당자에게 공유",nw("대홍")],
-      {cls:"emph",c:["UL","4A 기준 UL 인증서류 · Rev.20 도면 업데이트","DC cabinet V2 제품 기준 · 임준영 차장에게 요청",nw("ACE")]}],{}),12);
-  return '<div class="grid">'+mcb+prog+daily+ins+paint+mat+short+'</div>';
-}
-
-/* ---------- TAB: 물류·PO ---------- */
-function tabLogi(){
-  var cols=["A9","A10","C1","W1","CF"];
-  var rows=SH.filter(shHas).map(function(s){return [s.n,s.ship.slice(5),cols.map(function(k){return s.m[k]?s.m[k]:'<span class="mut">—</span>';}),shQ(s)].reduce(function(a,v){return a.concat(v);},[]);});
-  var comp=panel("l","항차 구성 (프로젝트별 면수)","A9 Abilene 9 · A10 Abilene 10 · C1 Childress 1 · W1 Warrenton 1 · CF Coffee",
-    rows.length?tbl(["항차","출고","A9","A10","C1","W1","CF","합계"],rows.concat(state.proj==="all"?[{cls:"tot",c:["합계","",170,170,113,101,7,561]}]:[]),{num:[2,3,4,5,6,7]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다. GoldenEye 116면은 릴리스 대기입니다.</div>',6);
-  var lead=panel("l","구간 리드타임","합계 30~33일 · 지연 제외 · 대외 공유 60일",
-    '<div class="flow" style="--n:5"><div class="fl h"><div class="a">대홍전기 출고</div><div class="b">1일</div><div class="c">CFS까지</div></div><div class="fl h"><div class="a">CFS 혼재 · 적입</div><div class="b">1일</div><div class="c">부산</div></div><div class="fl h"><div class="a">부산신항 → 도착 항구</div><div class="b">25~27일</div><div class="c">해상</div></div><div class="fl h"><div class="a">양하 · 통관</div><div class="b">1일</div><div class="c">도착 항구</div></div><div class="fl h"><div class="a">CFS 디배닝 → MPS</div><div class="b">1~2일</div><div class="c">내륙</div></div></div>'
-    +note("차이 27~30일이 대외적으로 드러나지 않은 버퍼입니다. 해상 25~27일은 걸프 항로 값에 가까워 도착 항구 확인이 필요합니다.")
-    +'<div class="stats" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="stat"><div class="l">1항차 일부 항공 검토</div><div class="v c-bad">수량 미확정</div><div class="s">DDP라 운임은 ACE 부담</div></div><div class="stat"><div class="l">53′ dry van 상한</div><div class="v">5,500<small>lb/면</small></div><div class="s">44,000 lb ÷ 8unit</div></div></div>',6);
-  var DEST=[["1항차",50,50,0,100,13,14],["2항차",40,57,7,104,13,14],["3항차",53,64,0,117,15,15],["4항차",64,40,0,104,13,13],["5항차",24,72,0,96,12,12],["6항차",40,0,0,40,5,5]];
-  var dst=panel("l","인도지별 면수 · 컨테이너","혼적 71대 → 목적지 분리 73대",tbl(["항차","McKinney","Lewisville 2","Douglas GA","합계","혼적","분리"],DEST.map(function(r){return r.map(function(v,i){return i>0&&i<4&&v===0?'<span class="mut">—</span>':v;});}).concat([{cls:"tot",c:["합계",271,283,7,561,71,73]}]),{num:[1,2,3,4,5,6]}),7);
-  var addr=panel("l","최종 인도지와 물류팀 미답변","MPS 2곳 + 별건 1곳",tbl(["시설","주소","대상 · 면수"],[
-    ["McKinney (Mars)","400 Harry McKillop Blvd, McKinney, TX 75069","Abilene 10 · Warrenton 1 · 271"],
-    ["Lewisville 2","2555 S. Valley Pkwy, Lewisville, TX 75067","Abilene 9 · Childress 1 · 283"],
-    ["Coffee (별건)","745 Brantley Blvd, Douglas, GA 31535","Coffee · 7"]],{})
-    +'<ol class="steps"><li><div><b>제품 손상 발견 시 대응 절차</b><span>통보 시한 · 검수 주체 · 사진 요건 — 1항차 도착(12/02) 전 확정</span></div></li><li><div><b>변경 주소 기준 견적 재산출</b><span>30~33일이 변경 전 주소 기준인지 확인</span></div></li><li><div><b>마진 관련 상세</b><span>재견적과 한 번에 낼지 나눠 낼지 결정</span></div></li></ol>',5);
-  var po=panel("l","신규 PO 3건","접수 완료 · 확정 561면 + 173면 = 734면",tbl(["프로젝트","PO","수량","단계","납품 구간","인도지","FAT","결제 · 취소 조건"],[
-    ["Coffee","PO-000319","7","2항차 편입 (생산 26-10~11)","2027-01-19 ~ 02-12","Douglas, GA","2026-11-18","표준 MSA · Deposit·SOP 청구 완료"],
-    ["GoldenEye","PO-000327","116 (29×4)",stDot("mid","릴리스 대기 12/15"),"2027-06-09 ~ 2028-04-16","TBD-Texas","2027-03-26","SOP 30% · 릴리스 전 취소수수료 0%"],
-    ["Eagle","PO-000213","57 (11·23·23)","PO 접수","2027-11-12 ~ 2028-03-01","Lewisville 2","2027-03-26 (오기 가능성)","Deposit 청구 · SOP 25% 2027-06-05"],
-    {cls:"tot",c:["합계","","180","","","","",""]}],{num:[2]}),12);
-  var SEQ=[["2027-06-05","GoldenEye B1",29,"2027-06-09","2027-07-17"],["2027-09-04","GoldenEye B2",29,"2027-08-31","2027-10-16"],["2027-11-06","Eagle B1",11,"2027-11-12","2027-12-18"],["2027-12-05","GoldenEye B3",29,"2027-12-09","2028-01-16"],["2027-12-13","Eagle B2",23,"2027-12-19","2028-01-24"],["2028-01-19","Eagle B3",23,"2028-01-25","2028-03-01"],["2028-03-05","GoldenEye B4",29,"2028-03-08","2028-04-16"]];
-  var seq=panel("l","GoldenEye · Eagle 대홍전기 출고 순서","출고 = Delivery Date − 6주 · 주말이면 직전 금요일 · 출항 = 출고 다음 주 수요일",tbl(["대홍전기 출고","배치","수량","납품 개시","Delivery Date","출항","도착 예상","여유"],SEQ.map(function(r){var f=sail(D(r[0])+state.slip*864e5),ea=eta(f);return r.concat([mdw(f),mdw(ea),marg(days(ea,D(r[4])))]);}).filter(function(r){return state.proj==="all"||(state.proj==="GE"&&r[1].indexOf("Golden")===0)||(state.proj==="EG"&&r[1].indexOf("Eagle")===0);}).concat(state.proj==="all"?[{cls:"tot",c:["합계","",173,"","","","",""]}]:[]),{num:[2]}),7);
-  /* monthly load */
-  var load={};
-  SH.forEach(function(s){var a=D(s.prod[0]),b=D(s.prod[1]),n=days(a,b)+1,per=s.q/n;for(var k=0;k<n;k++){var d=new Date(a+k*864e5),key=d.getUTCFullYear()+"-"+((d.getUTCMonth()+1)<10?"0":"")+(d.getUTCMonth()+1);load[key]=(load[key]||0)+per;}});
-  var keys=Object.keys(load).sort(), CAP=150, top=CAP*1.2;
-  var bars='<div class="cap" style="--n:'+keys.length+'">'+keys.map(function(k){var v=Math.round(load[k]);return '<div class="cb" title="'+k+' 제작 '+v+'면"><span>'+v+'</span><i style="height:'+(v/top*100*0.82).toFixed(1)+'%"></i></div>';}).join("")+'<div class="cl" style="bottom:'+(CAP/top*100*0.82).toFixed(1)+'%"><span>캐파 150</span></div></div>'
-    +'<div class="capx" style="--n:'+keys.length+'">'+keys.map(function(k){var v=Math.round(load[k]);return '<div>'+k.replace("2026-","26.").replace("2027-","27.").replace(/\.0/,".")+'월<br>잔여 '+Math.max(0,CAP-v)+'</div>';}).join("")+'</div>';
-  var cap=panel("l","월별 제작 물량과 캐파 150면","잔여 = 150 − 확정 부하",bars+note("26년 11~12월이 가장 빡빡합니다. 이 구간에 hold 물량을 얹으면 확정 수주의 버퍼가 줄어듭니다."),5);
-  return '<div class="grid">'+etaPanel()+comp+lead+dst+addr+po+seq+cap+'</div>';
-}
-
-/* ---------- 대홍전기 출고 → 출항 → 도착 예상 ---------- */
-var WD=["일","월","화","수","목","금","토"], PRE=2;
-function mdw(ms){var d=new Date(ms);return (d.getUTCMonth()+1)+"/"+d.getUTCDate()+"("+WD[d.getUTCDay()]+")";}
-/* 출항 = 대홍전기 출고일이 속한 주의 다음 주 수요일 */
-function sail(t){var dow=new Date(t).getUTCDay(), mon=t-((dow+6)%7)*864e5; return mon+9*864e5;}
-function eta(sailMs){return sailMs+(state.tr-PRE)*864e5;}
-function span2(a,b){return a===b?mdw(a):mdw(a)+" ~ "+mdw(b);}
-function shipSpan(n){
-  var cur="",a=null,b=null;
-  DAILY.forEach(function(r){if(r[0])cur=r[0]; if(cur===n){var t=D(r[1]); if(a===null||t<a)a=t; if(b===null||t>b)b=t;}});
-  return [a,b];
-}
-function slipFor(a){return a>T?state.slip:0;}
-function calcRes(){
-  var v=state.cd; if(!v||!/^\d{4}-\d{2}-\d{2}$/.test(v)) return '<div class="stat" style="grid-column:1/-1"><div class="s">대홍전기 출고일을 선택하면 출항·도착 예상일이 계산됩니다.</div></div>';
-  var s0=D(v), sl=sail(s0);
-  return '<div class="stat"><div class="l">출항 (다음 주 수)</div><div class="v">'+mdw(sl)+'</div><div class="s">'+fmt(sl)+'</div></div>'
-   +[[30,"실측 30일"],[33,"실측 33일"],[60,"대외 60일"]].map(function(x){
-    var e=sl+(x[0]-PRE)*864e5;
-    return '<div class="stat"><div class="l">도착 · '+x[1]+'</div><div class="v">'+mdw(e)+'</div><div class="s">'+fmt(e)+'</div></div>';
-  }).join("");
-}
-function etaPanel(){
-  var rows=[];
-  SH.filter(shHas).forEach(function(s){
-    var sp=shipSpan(s.n), a=sp[0], b=sp[1]; if(a===null) return;
-    var sl=slipFor(a), as=a+sl*864e5, bs=b+sl*864e5, fa=sail(as), fb=sail(bs), ea=eta(fa), eb=eta(fb);
-    var mg=days(eb,s.deadline);
-    var stt=eb<=T?stDot("good","도착 완료"):(fa<=T?stDot("mid","운송 중"):(as<=T?stDot("mid","출항 대기"):stDot("off","출고 전")));
-    rows.push([s.n+'<span class="sub">'+codes(s)+'</span>',
-      span2(as,bs)+(sl?'<span class="sub c-bad">+'+sl+'일 지연</span>':""),
-      span2(fa,fb),
-      '<b>'+span2(ea,eb)+'</b>',
-      mdw(s.deadline),
-      marg(mg),
-      stt]);
-  });
-  var seg1=trSeg();
-  var seg2='<div class="seg" role="group" aria-label="출고 지연">'+[[0,"계획대로"],[3,"+3일"],[7,"+7일"],[14,"+14일"],[30,"+30일"]].map(function(v){return '<button data-slip="'+v[0]+'" aria-pressed="'+(state.slip===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
-  var ctl='<div class="ctl"><div><span class="lb">운송 기준</span>'+seg1+'</div><div><span class="lb">출고 지연 시뮬레이션</span>'+seg2+'</div></div>';
-  var tb=rows.length?tbl(["항차 · 프로젝트","대홍전기 출고","출항 (다음 주 수)","도착 예상","인도 기한","여유","상태"],rows,{ctr:[6]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다. GoldenEye · Eagle은 아래 순서표에서 확인하세요.</div>';
-  var calc='<div class="ctl" style="align-items:flex-start;margin-top:2px"><div><label class="lb" for="cdate">대홍전기 출고일을 직접 입력</label><br><input type="date" id="cdate" value="'+state.cd+'"></div><div class="calc" id="cres">'+calcRes()+'</div></div>';
-  var dl=SH.filter(shHas).length?'<details style="margin-top:2px"><summary>일자별 대홍전기 출고 → 출항 → 도착 예상 <small>하루 단위 · 위에서 고른 운송 기준·지연 반영</small></summary><div class="dbody">'
-    +tbl(["항차","대홍전기 출고","프로젝트 · 수량","항차 누계","출항","도착 예상"],DAILY.map(function(r,i){
-      var cur="";for(var k=i;k>=0;k--){if(DAILY[k][0]){cur=DAILY[k][0];break;}}
-      var sh=SH.filter(function(x){return x.n===cur;})[0]; if(sh&&!shHas(sh)) return null;
-      var t=D(r[1])+slipFor(shipSpan(cur)[0])*864e5, f=sail(t);
-      return [r[0]||'&nbsp;',mdw(t),r[2],r[4],mdw(f),'<b>'+mdw(eta(f))+'</b>'];
-    }).filter(Boolean),{num:[3]})+'</div></details>':"";
-  return panel("l","대홍전기 출고 · 출항 · 도착 예상","출항 = 출고 다음 주 수요일 · 도착 = 출항 + (운송일 − 2일)",ctl+tb+calc+dl+note("운송 기준일(30·33·60일)은 대홍전기 출고부터 MPS 도착까지입니다. 이 중 출고→CFS→부산 적입 2일은 출항 대기 안에 포함된 것으로 보고, 출항일에 (운송일 − 2일)을 더했습니다. 1항차는 이미 전량 출고돼 지연 시뮬레이션이 적용되지 않습니다. 여유는 항차 마지막 출고분 도착 기준으로 가장 이른 인도 기한과 비교합니다."),12);
-}
-
-/* ---------- TAB: 이슈 ---------- */
-function tabRisk(){
-  var iss=ITEMS.filter(function(i){return pv(i)&&i.k&&i.s!=="done";}).sort(function(a,b){var ra=a.s==="risk"?0:1,rb=b.s==="risk"?0:1;if(ra!==rb)return ra-rb;return cmp(a,b);});
-  var pri=panel("risk","우선순위 이슈","핵심 "+iss.length+"건 · 전체는 ‘담당별 · 일정별’ 보기",'<div class="rows">'+(iss.length?iss.map(function(i){return itemEl(i);}).join(""):'<div class="empty">해당 항목이 없습니다.</div>')+'</div>',7,"rs2");
-  var mis=panel("risk","문서 간 불일치","",tbl(["항목","한쪽 문서","다른 문서","판정"],[
-    ["Childress 1","납기표 13/25/25/25/25","대홍 17/24/24/24/24",stDot("bad","전 배치 상이")],
-    ["Warrenton 1","납기표 13/22/22/22/22","대홍 13/24/24/24/16",stDot("bad","B2~B5 상이")],
-    ["Abilene 9 · 10","B1 10+10 / B2~B5 각 40","동일",stDot("good","8/31 해소")],
-    ["Coffee 납기","출고표 2027-01-31","PO 01-19 ~ 02-12",stDot("mid","PO 기준 분리")],
-    ["Warrenton 선행분","Delivery on Site 2026-02-22","2027 기재 오류 추정",stDot("mid","정정 필요")],
-    ["3항차 Factory Release","일자표 12-24","항차표 12-25",stDot("mid","하루 차이")]],{}),5);
-  var cl=panel("risk","GoldenEye PO — 확보되지 않은 조항","PO 원문 A-2",tbl(["항목","판정"],[
-    ["납기 연장 (Buyer 지연 시)",stDot("mid","부분 확보 — 릴리스에 걸리지 않음")],
-    ["릴리스가 A-2 마일스톤인가",stDot("bad","공백")],
-    ["릴리스 미이행 시 처리",stDot("bad","없음")],
-    ["릴리스 전 자재 발주 금지",stDot("bad","없음")],
-    ["취소수수료 요율",stDot("off","MSA 16.5 확인 필요")]],{}),5);
-  var par='<details style="margin-top:14px"><summary>후속 파라미터 초안 <small>Mike 회신 전 정렬용 · release 기준 리드타임과 캐파 예약</small></summary><div class="dbody">'
-    +'<div class="flow" style="--n:5"><div class="fl h"><div class="a">Firm release</div><div class="b">기산점</div></div><div class="fl"><div class="a">자재 수급 3개월</div><div class="b">release +3개월</div><div class="c">제작 착수 (SOP)</div></div><div class="fl"><div class="a">제작 1개월</div><div class="b">release +4개월</div><div class="c">출고</div></div><div class="fl"><div class="a">운송 up to 60일</div><div class="b">release +6개월</div><div class="c">납품 개시</div></div><div class="fl"><div class="a">release deadline</div><div class="b">개시 −180일</div><div class="c">GoldenEye B1 → 2026-12-10</div></div></div>'
-    +'<ol class="steps"><li><div><b>월 제작 캐파 150면을 문서에 명시</b><span>예약 한도 협의의 기준선</span></div></li><li><div><b>hold 물량의 월별 예약 한도</b><span>해당 월 잔여 캐파의 일정 비율(예: 50%)까지</span></div></li><li><div><b>예약 유효기간 = release deadline</b><span>미이행 시 자동 해제, 재예약은 그 시점 잔여 캐파 기준</span></div></li><li><div><b>표준 리드타임 내 납기 요청은 case-by-case</b><span>자재 발주 승인서 또는 부분 선수금을 조건으로</span></div></li></ol>'
-    +tbl(["월","26-09","26-10","26-11","26-12","27-01","27-02","27-03","27-04~"],[["확정 부하",76,97,120,122,99,36,4,0],["잔여 (150 기준)",74,53,30,28,51,114,146,150]],{num:[1,2,3,4,5,6,7,8]})+'</div></details>';
-  var ref='<details style="margin-top:10px"><summary>참고 자료 <small>FUSE · 사내 일보 교차 확인 · 계산 기준</small></summary><div class="dbody">'
-    +note("<b>FUSE (ACE 사급)</b> 실보유 404EA (08-14 입고 16 → 08-20 불출 12 → 08-27 입고 400). 추가 입고 필요 96EA = 단락시험 보충 12 + Coffee 84. Eaton 5,436 + Schneider 1,212 소요에 더해지며 Eaton은 5항차 누적 여유 0입니다. 10/30 Schneider DC Fuse 168개가 첫 입고됐습니다 (수입검사 입회).")
-    +note("<b>사내 생산일보 교차 확인 (9/08)</b> DC Cabinet은 대홍 외주 생산이라 ACE 함안·칠서 일보에는 없습니다. 환경안전팀 ‘페인트 이슈사항 보고서’(9/09)는 도장 요구 ①·⑩ 회신 자료의 출발점일 수 있고, ABB Audit 결과는 ABB 480V 차단기 공급 조건과 연결될 수 있습니다.")
-    +note("<b>계산 기준</b> 도착일 = 출고일 + 운송일. 여유 = 해당 항차 배치 중 가장 이른 Delivery Date − 도착일. 월별 생산은 대홍 생산일정을 일할 배분했습니다.")+'</div></details>';
-  return '<div class="grid">'+pri+mis+cl+'</div>'+par+ref;
-}
-
-/* ---------- shell ---------- */
-var BODY={ov:tabOv,sch:tabSch,ms:tabMs,cost:tabCost,prod:tabProd,logi:tabLogi,risk:tabRisk};
-function chrome(){
-  var cnt=ITEMS.filter(function(i){return pv(i)&&i.s==="risk";}).length;
-  $("tabs").innerHTML=TABS.map(function(t){return '<button class="tab" role="tab" id="tab-'+t[0]+'" data-tab="'+t[0]+'" aria-selected="'+(state.tab===t[0])+'">'+t[1]+(t[0]==="risk"&&cnt?'<span class="cnt" title="위험 상태 항목">'+cnt+'</span>':"")+'</button>';}).join("");
-  $("views").innerHTML=VIEWS.map(function(v){return '<button data-view="'+v[0]+'" aria-pressed="'+(state.view===v[0])+'">'+v[1]+'</button>';}).join("");
-  $("pjs").innerHTML=PJ.map(function(p){return '<button class="pj" data-pj="'+p[0]+'" aria-pressed="'+(state.proj===p[0])+'">'+p[1]+'</button>';}).join("");
-}
-function render(){
-  chrome();
-  var h=state.view==="own"?ownerView(state.tab):(state.view==="date"?dateView(state.tab):BODY[state.tab]());
-  var m=$("main"); m.setAttribute("role","tabpanel"); m.setAttribute("aria-labelledby","tab-"+state.tab);
-  m.innerHTML=h;
-  $("today").textContent=fmt(T);
-  $("bnTx").innerHTML=rich(BN.text); $("asofTx").textContent=BN.asof||""; $("srcTx").textContent=BN.src||"";
-  if(BN.dd){$("bnDd").textContent=ddLine(BN.dd);} else {var ns=nextShip(), n=dd(ns.fatD); $("bnDd").textContent=ns.n+" FAT "+(n>0?"D-"+n:(n===0?"D-DAY":"진행 중"))+" · 출고 "+ns.win;}
-  $("updTx").textContent=DATA.updated?("마지막 수정 "+fmtLocal(DATA.updated)+(DATA.by?" · "+DATA.by:"")):"";
-  $("edBtn").hidden=!canEdit();
-  $("edBtn").textContent=ED.dirty?"편집 ●":"편집";
-}
-function fmtLocal(iso){var d=new Date(iso); if(isNaN(d)) return ""; var p=function(x){return (x<10?"0":"")+x;}; return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes());}
-
-/* ---------- editor ---------- */
-var REPO="on-dashboard/on-dashboard.github.io", API="https://api.github.com/repos/"+REPO+"/contents/data.json", TK="ondash_gh_token", CK="ondash_cache", KK="ondash_edit_key", NK="ondash_name";
-/* per-person edit links: editors.json holds one encrypted copy of the save token per person */
-var EAPI="https://api.github.com/repos/"+REPO+"/contents/editors.json", LK="ondash_admin_links", EDS=[], ME=null;
 function ls(k){try{return localStorage.getItem(k);}catch(_){return null;}}
+function lset(k,v){try{if(v==null) localStorage.removeItem(k); else localStorage.setItem(k,v);}catch(_){}}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function unesc(s){return String(s).replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&amp;/g,"&");}
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function p2(x){return (x<10?"0":"")+x;}
+function today(){var d=new Date();return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate());}
+function stamp(d){d=d||new Date();return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate())+" "+p2(d.getHours())+":"+p2(d.getMinutes());}
+function b64(s){var u=new TextEncoder().encode(s),b="";for(var i=0;i<u.length;i+=0x8000)b+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(b);}
+function unb64(s){var b=atob(String(s).replace(/\s/g,"")),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return new TextDecoder().decode(u);}
+function fromB64(s){var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u;}
+function toB64(u){var b="";for(var i=0;i<u.length;i++)b+=String.fromCharCode(u[i]);return btoa(b);}
+function b64url(u){return toB64(u).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
+
+/* =================== source parsing (Claude HTML → editable values) =================== */
+function scanEnd(s,i){var st=0,q=null;for(var k=i;k<s.length;k++){var c=s[k];
+  if(q){if(c==="\\"){k++;continue;}if(c===q)q=null;continue;}
+  if(c==='"'||c==="'"||c==="`"){q=c;continue;}
+  if(c==="/"&&s[k+1]==="*"){k=s.indexOf("*/",k+2)+1;if(k<=0)return -1;continue;}
+  if(c==="/"&&s[k+1]==="/"){k=s.indexOf("\n",k);if(k<0)return -1;continue;}
+  if(c==="["||c==="{"||c==="(")st++;else if(c==="]"||c==="}"||c===")"){st--;if(!st)return k+1;}}return -1;}
+function strEnd(s,i){var q=s[i];for(var k=i+1;k<s.length;k++){if(s[k]==="\\"){k++;continue;}if(s[k]===q)return k+1;}return -1;}
+var CONSTS={};
+function scope(){return new Proxy({},{has:function(){return true;},get:function(t,k){
+  if(k===Symbol.unscopables)return undefined;
+  if(Object.prototype.hasOwnProperty.call(CONSTS,k))return clone(CONSTS[k]);
+  if(k in window)return window[k];
+  var f=function(){return {__f:k,a:[].slice.call(arguments)};};f.__ref=k;return f;}});}
+function evalLit(t){return Function("__s","with(__s){return ("+t+");}")(scope());}
+function ser(v,top){
+  if(v===null||v===undefined)return "null";
+  if(typeof v==="function"&&v.__ref)return v.__ref;
+  if(v&&v.__f)return v.__f+"("+v.a.map(function(x){return ser(x);}).join(",")+")";
+  if(Array.isArray(v)){var p=v.map(function(x){return ser(x);});return top?"[\n "+p.join(",\n ")+"\n]":"["+p.join(",")+"]";}
+  if(typeof v==="object")return "{"+Object.keys(v).filter(function(k){return v[k]!==undefined;}).map(function(k){return (/^[A-Za-z_$][\w$]*$/.test(k)?k:JSON.stringify(k))+":"+ser(v[k]);}).join(",")+"}";
+  if(typeof v==="string")return JSON.stringify(v).replace(/<\//g,"<\\/").replace(/\u2028/g,"\\u2028").replace(/\u2029/g,"\\u2029");
+  return String(v);}
+function arrAfter(s,re){var m=re.exec(s);if(!m)return null;var st=s.indexOf("[",m.index+m[0].length-1);var e=scanEnd(s,st);if(e<0)return null;return {s:st,e:e};}
+function stmt(s,anchor){var i=s.indexOf(anchor);if(i<0)return null;var p=s.indexOf("(",i+anchor.length-1);var e=scanEnd(s,p);return e<0?null:{s:i,p:p,e:e};}
+function strsAt(s,from,n){var out=[],k=from;while(out.length<n&&k<s.length){var c=s[k];if(c==='"'||c==="'"){var e=strEnd(s,k);out.push({s:k,e:e,v:evalLit(s.slice(k,e))});k=e;}else if(/[\s,(]/.test(c))k++;else return null;}return out.length===n?out:null;}
+function tblParts(s,st){var t=s.indexOf("tbl(",st.p);if(t<0||t>st.e)return null;var h=s.indexOf("[",t);var he=scanEnd(s,h);var r=s.indexOf("[",he);var re=scanEnd(s,r);if(he<0||re<0||re>st.e)return null;return {h:{s:h,e:he},r:{s:r,e:re}};}
+function jsq(s){return String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'");}
+function unjsq(s){return String(s).replace(/\\(.)/g,"$1");}
+function splitSmall(h){var m=/^([\s\S]*?)<small>([\s\S]*?)<\/small>\s*$/.exec(h);return m?[unesc(m[1]),unesc(m[2])]:[unesc(h),""];}
+function joinSmall(v,u){return esc(v)+(u?"<small>"+esc(u)+"</small>":"");}
+
+var SRC="", SHA=null, R={}, DATA={}, ED={sec:"bn",dirty:false,q:"",fs:"",fo:""};
+function parse(src){
+  var s=src; R={}; DATA={}; CONSTS={};
+  var cre=/\bvar\s+([A-Za-z_$][\w$]*)\s*=\s*(\[[^\[\]{}()]*\])\s*[;,]/g, m;
+  while((m=cre.exec(s))){try{CONSTS[m[1]]=Function("return "+m[2])();}catch(_){}}
+  function tryR(key,fn){try{var r=fn();if(r){R[key]=r;DATA[key]=r.val;}}catch(e){console.warn("parse",key,e);}}
+  tryR("text",function(){var m=/(<span class="lead">오늘 쟁점<\/span>\s*<span[^>]*>)([\s\S]*?)(<\/span>\s*<span class="dd")/.exec(s);if(!m)return null;
+    var raw=m[2];var tx=raw.replace(/<b>/g,"**").replace(/<\/b>/g,"**");if(/</.test(tx))return null;var st=m.index+m[1].length;
+    return {s:st,e:st+raw.length,val:unesc(tx).trim(),w:function(v){return esc(v).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");}};});
+  tryR("asof",function(){var m=/(<span class="asof">기준 <span id="today"><\/span> · )([^<]*)(<\/span>)/.exec(s);if(!m)return null;var st=m.index+m[1].length;return {s:st,e:st+m[2].length,val:unesc(m[2]),w:esc};});
+  tryR("src",function(){var m=/(<span>출처: )([^<]*)(<\/span>)/.exec(s);if(!m)return null;var st=m.index+m[1].length;return {s:st,e:st+m[2].length,val:unesc(m[2]),w:esc};});
+  tryR("kpis",function(){var a=s.indexOf("var kp='<div class=\"kpis\">'");if(a<0)return null;var b=s.indexOf("'</div>';",a);
+    var re=/'<div class="kpi( k-bad)?"><span class="l">([\s\S]*?)<\/span><span class="v">([\s\S]*?)<\/span><span class="s">([\s\S]*?)<\/span><\/div>'/g;re.lastIndex=a;var list=[],m;
+    while((m=re.exec(s))&&m.index<b){var ro=function(x){return /'\s*\+/.test(x);};var vv=ro(m[3])?[m[3],""]:splitSmall(unjsq(m[3]));
+      list.push({s:m.index,e:m.index+m[0].length,bad:m[1]?1:0,l:ro(m[2])?m[2]:unesc(unjsq(m[2])),v:vv[0],u:vv[1],x:ro(m[4])?m[4]:unesc(unjsq(m[4])),ro:{l:ro(m[2]),v:ro(m[3]),s:ro(m[4])}});}
+    if(!list.length)return null;
+    return {multi:list,val:list.map(function(k){return {l:k.l,v:k.v,u:k.u,s:k.x,bad:k.bad,ro:k.ro};})};});
+  [["items",/\bvar\s+ITEMS\s*=\s*\[/],["ships",/\bvar\s+SH\s*=\s*\[/],["inv",/\bvar\s+INV\s*=\s*\[/],["prog",/\bvar\s+PR\s*=\s*\[/]].forEach(function(x){
+    tryR(x[0],function(){var g=arrAfter(s,x[1]);if(!g)return null;var v=evalLit(s.slice(g.s,g.e));if(!Array.isArray(v))return null;return {s:g.s,e:g.e,val:v,w:function(v){return ser(v,true);}};});});
+  tryR("progMeta",function(){var st=stmt(s,"var prog=panel(");if(!st)return null;var a=strsAt(s,st.p+1,3);if(!a)return null;return {s:a[2].s,e:a[2].e,val:a[2].v,w:function(v){return JSON.stringify(v);}};});
+  var dst=null;try{dst=stmt(s,"var daily=panel(");}catch(_){}
+  if(dst){
+    tryR("dTitle",function(){var a=strsAt(s,dst.p+1,3);if(!a)return null;return {s:a[1].s,e:a[2].e,val:{title:a[1].v,meta:a[2].v},w:function(v){return JSON.stringify(v.title)+","+JSON.stringify(v.meta);}};});
+    tryR("dStats",function(){var i=s.indexOf('<div class="stats">',dst.s);if(i<0||i>dst.e)return null;var q=s.lastIndexOf("'",i);var qe=strEnd(s,q);var inner0=i+'<div class="stats">'.length,inner1=qe-1-"</div>".length;
+      if(s.slice(inner1,qe-1)!=="</div>")return null;var body=s.slice(inner0,inner1);var re=/<div class="stat"><div class="l">([\s\S]*?)<\/div><div class="v">([\s\S]*?)<\/div><div class="s">([\s\S]*?)<\/div><\/div>/g,m,out=[];
+      while((m=re.exec(body))){var vv=splitSmall(unjsq(m[2]));out.push([unesc(unjsq(m[1])),vv[0],vv[1],unesc(unjsq(m[3]))]);}if(!out.length)return null;
+      return {s:inner0,e:inner1,val:out,w:function(v){return v.map(function(r){return jsq('<div class="stat"><div class="l">'+esc(r[0])+'</div><div class="v">'+joinSmall(r[1],r[2])+'</div><div class="s">'+esc(r[3])+'</div></div>');}).join("");}};});
+    tryR("dHead",function(){var t=tblParts(s,dst);if(!t)return null;var v=evalLit(s.slice(t.h.s,t.h.e));return {s:t.h.s,e:t.h.e,val:v,w:function(v){return ser(v);}};});
+    tryR("mats",function(){var t=tblParts(s,dst);if(!t)return null;var v=evalLit(s.slice(t.r.s,t.r.e));if(!Array.isArray(v))return null;return {s:t.r.s,e:t.r.e,val:v,w:function(v){return "[\n      "+v.map(function(r){return ser(r);}).join(",\n      ")+"]";}};});
+  }
+  tryR("ins",function(){var st=stmt(s,"var ins=panel(");if(!st)return null;var t=tblParts(s,st);if(!t)return null;var v=evalLit(s.slice(t.r.s,t.r.e));
+    if(!Array.isArray(v)||!v.every(function(r){return Array.isArray(r)&&r.length===4&&r[2]&&r[2].__f==="stDot";}))return null;
+    return {s:t.r.s,e:t.r.e,val:v,w:function(v){return "[\n    "+v.map(function(r){return ser(r);}).join(",\n    ")+"]";}};});
+}
+function build(){
+  var reps=[];
+  Object.keys(R).forEach(function(k){var r=R[k];
+    if(r.multi){r.multi.forEach(function(x,i){var d=DATA.kpis[i];if(!d)return;
+      var l=d.ro.l?d.l:jsq(esc(d.l)), v=d.ro.v?d.v:jsq(joinSmall(d.v,d.u)), sx=d.ro.s?d.s:jsq(esc(d.s));
+      reps.push({s:x.s,e:x.e,t:"'<div class=\"kpi"+(d.bad?" k-bad":"")+"\"><span class=\"l\">"+l+"</span><span class=\"v\">"+v+"</span><span class=\"s\">"+sx+"</span></div>'"});});}
+    else reps.push({s:r.s,e:r.e,t:r.w(DATA[k])});});
+  reps.sort(function(a,b){return b.s-a.s;});
+  var out=SRC;reps.forEach(function(r){out=out.slice(0,r.s)+r.t+out.slice(r.e);});return out;}
+
+/* =================== iframe preview =================== */
+var curTab=(location.hash||"").replace("#","").split("&")[0];
+function show(src){
+  var f=$("dash"), w=f.contentWindow, y=0;
+  try{var sel=w.document.querySelector('[role="tab"][aria-selected="true"]');if(sel&&sel.dataset.tab)curTab=sel.dataset.tab;y=w.scrollY||0;}catch(_){}
+  var doc=/^\s*<!doctype/i.test(src)?src:"<!doctype html>"+src;
+  f.onload=function(){$("msg").style.display="none";try{var d=f.contentDocument;
+    if(curTab){var b=d.querySelector('[data-tab="'+curTab+'"]');if(b)b.click();}
+    f.contentWindow.scrollTo(0,y);
+    d.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-tab]");if(b){curTab=b.dataset.tab;try{history.replaceState(null,"","#"+curTab);}catch(_){}}});
+  }catch(_){}};
+  f.srcdoc=doc;}
+var pv;function preview(){clearTimeout(pv);pv=setTimeout(function(){show(build());},350);}
+
+/* =================== auth (admin token / per-person links) =================== */
+var EDS=[],ME=null;
 function isAdmin(){return !!ls(TK);}
 function canEdit(){return !!(ls(TK)||ME);}
-function fromB64(s){var b=atob(s), u=new Uint8Array(b.length); for(var i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return u;}
-function toB64(u){var b=""; for(var i=0;i<u.length;i++) b+=String.fromCharCode(u[i]); return btoa(b);}
-function b64url(u){return toB64(u).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
-async function aesKey(secret,use){var raw=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(secret)); return crypto.subtle.importKey("raw",raw,"AES-GCM",false,[use]);}
-async function tryDec(secret,e){try{var k=await aesKey(secret,"decrypt"); var pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:fromB64(e.iv)},k,fromB64(e.ct)); return new TextDecoder().decode(pt);}catch(_){return null;}}
-async function findMe(list){var s=ls(KK); if(!s) return null; for(var i=0;i<list.length;i++){var t=await tryDec(s,list[i]); if(t) return {e:list[i],tok:t};} return null;}
+async function aesKey(secret,use){var raw=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(secret));return crypto.subtle.importKey("raw",raw,"AES-GCM",false,[use]);}
+async function tryDec(secret,e){try{var k=await aesKey(secret,"decrypt");var pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:fromB64(e.iv)},k,fromB64(e.ct));return new TextDecoder().decode(pt);}catch(_){return null;}}
+async function findMe(list){var s=ls(KK);if(!s)return null;for(var i=0;i<list.length;i++){var t=await tryDec(s,list[i]);if(t)return {e:list[i],tok:t};}return null;}
 async function loadEditors(){
-  var okLoad=false;
-  try{var r=await fetch("editors.json?_="+Date.now(),{cache:"no-store"}); EDS=r.ok?((await r.json()).editors||[]):[]; okLoad=r.ok||r.status===404;}catch(_){EDS=[];}
+  var ok=false;try{var r=await fetch("editors.json?_="+Date.now(),{cache:"no-store"});EDS=r.ok?((await r.json()).editors||[]):[];ok=r.ok||r.status===404;}catch(_){EDS=[];}
   var m=await findMe(EDS);
-  if(m&&m.e.adm){
-    try{localStorage.setItem(TK,m.tok); localStorage.setItem("ondash_admin_via",m.e.id); localStorage.removeItem(KK); if(!ls(NK)) localStorage.setItem(NK,String(m.e.n).replace(/\s*\(.*\)\s*$/,""));}catch(_){}
-    m=null;
-  }
-  var av=ls("ondash_admin_via");
-  if(okLoad&&av&&!EDS.some(function(x){return x.id===av&&x.adm;})){try{localStorage.removeItem(TK); localStorage.removeItem("ondash_admin_via");}catch(_){}}
-  ME=m?{id:m.e.id,n:m.e.n}:null; render();
-}
-async function keyToken(){var m=await findMe(EDS); return m?m.tok:null;}
-async function getTok(){return ls(TK)||await keyToken();}
-var ED={sec:"bn",dirty:false,sha:null,q:"",fs:"",fo:""};
+  if(m&&m.e.adm){lset(TK,m.tok);lset("ondash_admin_via",m.e.id);lset(KK,null);if(!ls(NK))lset(NK,String(m.e.n).replace(/\s*\(.*\)\s*$/,""));m=null;}
+  var av=ls("ondash_admin_via");if(ok&&av&&!EDS.some(function(x){return x.id===av&&x.adm;})){lset(TK,null);lset("ondash_admin_via",null);}
+  ME=m?{id:m.e.id,n:m.e.n}:null;$("fab").hidden=!canEdit();}
+async function getTok(){if(ls(TK))return ls(TK);var m=await findMe(EDS);return m?m.tok:null;}
+async function gh(path,method,body){var tk=await getTok(),h={"Accept":"application/vnd.github+json"};if(tk)h.Authorization="Bearer "+tk;if(body)h["Content-Type"]="application/json";
+  return fetch(API+path+(method==="GET"?(path.indexOf("?")<0?"?":"&")+"ref=main&_="+Date.now():""),{method:method,headers:h,body:body?JSON.stringify(body):undefined,cache:"no-store"});}
+function myName(){return ME?ME.n:(ls(NK)||"");}
+
+/* =================== editor UI =================== */
 var KIND=[["good","초록 · 완료"],["mid","청록 · 진행"],["bad","빨강 · 위험"],["off","회색 · 대기"]];
 var STS=[["open","대기"],["prog","진행"],["risk","위험"],["done","완료"]];
 var AREAS=[["sch","일정"],["ms","마일스톤"],["cost","비용"],["q","품질"],["l","물류"],["risk","계약·기타"]];
 var A2T={sch:"sch",ms:"ms",cost:"cost",q:"prod",l:"logi",risk:"risk"};
 var TT=[["sch","일정"],["ms","마일스톤"],["cost","비용"],["prod","생산·품질"],["logi","물류·PO"],["risk","이슈"]];
-var PJC=["A9","A10","C1","W1","CF","GE","EG"], SITES=Object.keys(ABBR);
+var OWN=["ACE","대홍","On Energy"], PJC=["A9","A10","C1","W1","CF","GE","EG"], SITES=["Abilene #9","Abilene #10","Childress #1","Warrenton #1","Coffee"];
 var SECS=[["bn","오늘 쟁점 · KPI"],["it","일정 · 이슈"],["sh","항차"],["inv","입금 · 청구"],["pr","생산 · 품질"]];
-function todayS(){return fmt(T);}
-function getP(path){var o=DATA; if(path) path.split(".").forEach(function(k){o=o[k];}); return o;}
-function getK(o,k){String(k).split(".").forEach(function(x){o=o==null?undefined:o[x];}); return o;}
-function setK(o,k,v){var ks=String(k).split("."); for(var i=0;i<ks.length-1;i++){if(o[ks[i]]==null) o[ks[i]]=[]; o=o[ks[i]];} o[ks[ks.length-1]]=v;}
-function inp(path,i,c,val){
-  var a=' data-p="'+path+'" data-i="'+i+'" data-k="'+c.k+'" data-t="'+(c.t||"text")+'"';
-  if(c.t==="sel") return '<select'+a+'>'+c.o.map(function(o){return '<option value="'+esc(o[0])+'"'+(String(val==null?"":val)===String(o[0])?" selected":"")+'>'+esc(o[1])+'</option>';}).join("")+'</select>';
-  if(c.t==="chk") return '<input type="checkbox"'+a+(val?" checked":"")+'>';
-  if(c.t==="area") return '<textarea'+a+'>'+esc(val)+'</textarea>';
-  return '<input type="'+(c.t==="date"?"date":(c.t==="num"?"number":"text"))+'"'+a+' value="'+esc(val==null?"":val)+'"'+(c.ph?' placeholder="'+esc(c.ph)+'"':"")+'>';
-}
-function grid(path,cols,blank,minW){
-  var rows=getP(path)||[];
+function getP(path){var o=DATA;path.split(".").forEach(function(k){o=o==null?undefined:o[k];});return o;}
+function getK(o,k){String(k).split(".").forEach(function(x){o=o==null?undefined:o[x];});return o;}
+function setK(o,k,v){var ks=String(k).split(".");for(var i=0;i<ks.length-1;i++){if(o[ks[i]]==null)o[ks[i]]=[];o=o[ks[i]];}o[ks[ks.length-1]]=v;}
+function na(t){return '<div class="na">'+t+' — 이번 대시보드 파일에서 찾지 못해 웹 편집에서 빠졌어요. 클로드에서 고쳐 주세요.</div>';}
+function inp(path,i,c,val,ro){
+  var a=' data-p="'+path+'" data-i="'+i+'" data-k="'+c.k+'" data-t="'+(c.t||"text")+'"'+(ro?" disabled":"");
+  if(c.t==="sel")return '<select'+a+'>'+c.o.map(function(o){return '<option value="'+esc(o[0])+'"'+(String(val==null?"":val)===String(o[0])?" selected":"")+'>'+esc(o[1])+'</option>';}).join("")+'</select>';
+  if(c.t==="chk")return '<input type="checkbox"'+a+(val?" checked":"")+'>';
+  if(c.t==="area")return '<textarea'+a+'>'+esc(val)+'</textarea>';
+  return '<input type="'+(c.t==="date"?"date":(c.t==="num"?"number":"text"))+'"'+a+' value="'+esc(val==null?"":val)+'"'+(c.ph?' placeholder="'+esc(c.ph)+'"':"")+'>';}
+function grid(path,cols,blank,minW){var rows=getP(path)||[];
   return '<div style="overflow-x:auto"><table class="ed-g"'+(minW?' style="min-width:'+minW+'px"':"")+'><thead><tr>'+cols.map(function(c){return '<th'+(c.w?' style="width:'+c.w+'"':"")+'>'+c.h+'</th>';}).join("")+'<th></th></tr></thead><tbody>'
    +rows.map(function(r,i){return '<tr>'+cols.map(function(c){return '<td>'+inp(path,i,c,getK(r,c.k))+'</td>';}).join("")+'<td class="x"><button type="button" class="del" data-del="'+path+'" data-i="'+i+'" title="이 행 삭제">×</button></td></tr>';}).join("")
-   +'</tbody></table></div><button type="button" class="add" data-add="'+path+'" data-blank="'+esc(JSON.stringify(blank))+'">+ 행 추가</button>';
-}
-function fld(path,k,label,t,o){return '<label class="f"><span>'+label+'</span>'+inp(path,"",{k:k,t:t,o:o},getK(getP(path),k))+'</label>';}
+   +'</tbody></table></div><button type="button" class="add" data-add="'+path+'" data-blank="'+esc(JSON.stringify(blank))+'">+ 행 추가</button>';}
+function fld(key,label,t){return '<label class="f"><span>'+label+'</span>'+inp(key,"",{k:"",t:t},DATA[key])+'</label>';}
 function f4(P,i,k,label,t,o,span){return '<label class="f"'+(span?' style="grid-column:span '+span+'"':"")+'><span>'+label+'</span>'+inp(P,i,{k:k,t:t,o:o},getK(getP(P)[i],k))+'</label>';}
 function chip(i,k,val,label,on){return '<button type="button" class="chip" data-cp="items" data-i="'+i+'" data-k="'+k+'" data-val="'+val+'" aria-pressed="'+on+'">'+label+'</button>';}
 
-function secBn(){
-  return '<h4>오늘 쟁점 (상단 배너)</h4><p class="hint">**이렇게** 별표 두 개로 감싸면 굵은 글씨가 됩니다. 배너 오른쪽의 FAT D-day는 항차 일정에서 자동으로 계산됩니다.</p>'
-   +fld("banner","text","문구","area")+fld("banner","dd","배너 오른쪽 D-day (날짜를 {2026-11-10}처럼 쓰면 D-day로 바뀜 · 비우면 다음 항차 FAT 자동)")+fld("banner","asof","기준 문서 (상단 오른쪽)")+fld("banner","src","출처 (하단)")
-   +'<h4>KPI 카드 (개요 탭 상단)</h4><p class="hint">값을 ‘자동’으로 두면 날짜가 지나면서 저절로 바뀝니다. 설명에 {tr}을 쓰면 선택한 운송일수로 바뀝니다.</p>'
-   +grid("kpis",[{k:"l",h:"제목"},{k:"auto",h:"값",t:"sel",o:[["","직접 입력"],["fat","자동 · 다음 FAT D-day"],["margin","자동 · 1항차 도착 여유일"],["margin_next","자동 · 다음 항차 도착 여유일"]],w:"150px"},{k:"v",h:"직접 입력 값",w:"80px"},{k:"u",h:"단위",w:"48px"},{k:"s",h:"설명"},{k:"bad",h:"빨강",t:"chk",w:"36px"}],{l:"새 KPI",auto:"",v:"",u:"",s:"",bad:0},640);
-}
-function itemCard(it,i){
-  var P="items";
-  return '<div class="ed-it'+(it.k?" k":"")+(it.s==="risk"?" risk":"")+'" data-row="'+i+'"><div class="ed-row">'
+function secBn(){var h='<h4>오늘 쟁점 (상단 배너)</h4><p class="hint">**이렇게** 별표 두 개로 감싸면 굵은 글씨가 됩니다.</p>';
+  h+=("text" in DATA)?fld("text","문구","area"):na("배너 문구");
+  h+=("asof" in DATA)?fld("asof","기준 문서 (상단 오른쪽)"):"";
+  h+=("src" in DATA)?fld("src","출처 (하단)"):"";
+  h+='<h4>KPI 카드 (개요 탭 상단)</h4>';
+  if(!DATA.kpis) return h+na("KPI 카드");
+  h+='<p class="hint">회색으로 잠긴 칸은 날짜에 따라 자동 계산되는 값이라 여기서 바꿀 수 없어요.</p><div style="overflow-x:auto"><table class="ed-g" style="min-width:600px"><thead><tr><th>제목</th><th style="width:110px">값</th><th style="width:50px">단위</th><th>설명</th><th style="width:36px">빨강</th></tr></thead><tbody>';
+  DATA.kpis.forEach(function(k,i){h+='<tr><td>'+inp("kpis",i,{k:"l"},k.ro.l?"(자동)":k.l,k.ro.l)+'</td><td>'+inp("kpis",i,{k:"v"},k.ro.v?"(자동)":k.v,k.ro.v)+'</td><td>'+inp("kpis",i,{k:"u"},k.u,k.ro.v)+'</td><td>'+inp("kpis",i,{k:"s"},k.ro.s?"(자동)":k.s,k.ro.s)+'</td><td>'+inp("kpis",i,{k:"bad",t:"chk"},k.bad)+'</td></tr>';});
+  return h+'</tbody></table></div>';}
+function itemCard(it,i){var P="items";
+  return '<div class="ed-it'+(it.k?" k":"")+(it.s==="risk"?" risk":"")+'"><div class="ed-row">'
    +'<label title="체크하면 개요 · 이슈 탭에 올라갑니다">'+inp(P,i,{k:"k",t:"chk"},it.k)+'핵심</label>'
-   +inp(P,i,{k:"o",t:"sel",o:OWN.map(function(o){return [o,o];})},it.o)
-   +inp(P,i,{k:"a",t:"sel",o:AREAS},it.a)
-   +inp(P,i,{k:"d",t:"date"},it.d)
-   +inp(P,i,{k:"s",t:"sel",o:STS},it.s)
+   +inp(P,i,{k:"o",t:"sel",o:OWN.map(function(o){return [o,o];})},it.o)+inp(P,i,{k:"a",t:"sel",o:AREAS},it.a)+inp(P,i,{k:"d",t:"date"},it.d)+inp(P,i,{k:"s",t:"sel",o:STS},it.s)
    +'<span></span><button type="button" class="del" data-del="items" data-i="'+i+'" title="이 항목 삭제">×</button></div>'
    +'<div class="tx">'+inp(P,i,{k:"x",ph:"내용을 입력하세요"},it.x)+'</div>'
-   +'<div class="ed-chips"><b>프로젝트</b>'+PJC.map(function(c){return chip(i,"p",c,c,(it.p||[]).indexOf(c)>-1);}).join("")
-   +'<b>표시 탭</b>'+TT.map(function(t){return chip(i,"t",t[0],t[1],(it.t||[]).indexOf(t[0])>-1);}).join("")+'</div></div>';
-}
-function itemList(){
-  var q=ED.q.toLowerCase(), out="", n=0;
-  ITEMS.forEach(function(it,i){
-    if(ED.fs&&it.s!==ED.fs) return; if(ED.fo&&it.o!==ED.fo) return;
-    if(q&&String(it.x).toLowerCase().indexOf(q)<0) return; n++; out+=itemCard(it,i);
-  });
-  return '<p class="hint">'+n+'건 표시 · 전체 '+ITEMS.length+'건</p>'+(out||'<div class="empty">조건에 맞는 항목이 없습니다.</div>');
-}
-function secIt(){
-  return '<div class="ed-flt"><input type="search" id="edQ" placeholder="내용 검색" value="'+esc(ED.q)+'">'
-   +'<select id="edFs"><option value="">상태 전체</option>'+STS.map(function(s){return '<option value="'+s[0]+'"'+(ED.fs===s[0]?" selected":"")+'>'+s[1]+'</option>';}).join("")+'</select>'
-   +'<select id="edFo"><option value="">담당 전체</option>'+OWN.map(function(o){return '<option'+(ED.fo===o?" selected":"")+'>'+o+'</option>';}).join("")+'</select>'
-   +'<button type="button" class="add" style="margin:0" data-additem="1">+ 새 항목</button></div>'
-   +'<p class="hint">‘핵심’에 체크하면 개요 · 이슈 탭에 올라갑니다. 영역을 고르면 해당 탭에 자동으로 표시되고, ‘표시 탭’으로 다른 탭에도 띄울 수 있습니다. 날짜를 비우면 ‘일자 미정’입니다.</p>'
-   +'<div id="edList">'+itemList()+'</div>';
-}
-function secSh(){
-  var h='<p class="hint">출고일 · FAT 날짜를 바꾸면 타임라인, 도착일, 여유일, D-day가 자동으로 다시 계산됩니다. 여유일은 배치의 Delivery Date 중 가장 이른 날 기준입니다.</p>';
-  DATA.ships.forEach(function(s,i){
-    var P="ships";
+   +'<div class="ed-chips"><b>프로젝트</b>'+PJC.map(function(c){return chip(i,"p",c,c,(Array.isArray(it.p)?it.p:[]).indexOf(c)>-1);}).join("")
+   +'<b>표시 탭</b>'+TT.map(function(t){return chip(i,"t",t[0],t[1],(it.t||[]).indexOf(t[0])>-1);}).join("")+'</div></div>';}
+function itemList(){var q=ED.q.toLowerCase(),out="",n=0;
+  DATA.items.forEach(function(it,i){if(ED.fs&&it.s!==ED.fs)return;if(ED.fo&&it.o!==ED.fo)return;if(q&&String(it.x).toLowerCase().indexOf(q)<0)return;n++;out+=itemCard(it,i);});
+  return '<p class="hint">'+n+'건 표시 · 전체 '+DATA.items.length+'건</p>'+(out||'<div class="empty">조건에 맞는 항목이 없습니다.</div>');}
+function secIt(){if(!DATA.items)return na("일정·이슈 항목");
+  return '<div class="ed-flt"><input type="search" id="edQ" placeholder="내용 검색" value="'+esc(ED.q)+'"><select id="edFs"><option value="">상태 전체</option>'+STS.map(function(s){return '<option value="'+s[0]+'"'+(ED.fs===s[0]?" selected":"")+'>'+s[1]+'</option>';}).join("")+'</select>'
+   +'<select id="edFo"><option value="">담당 전체</option>'+OWN.map(function(o){return '<option'+(ED.fo===o?" selected":"")+'>'+o+'</option>';}).join("")+'</select><button type="button" class="add" style="margin:0" data-additem="1">+ 새 항목</button></div>'
+   +'<p class="hint">‘핵심’에 체크하면 개요 · 이슈 탭에 올라갑니다. 날짜를 비우면 ‘일자 미정’입니다.</p><div id="edList">'+itemList()+'</div>';}
+function secSh(){if(!DATA.ships)return na("항차");var h='<p class="hint">날짜를 바꾸면 타임라인 · 도착일 · 여유일 · D-day가 다시 계산됩니다.</p>';
+  DATA.ships.forEach(function(s,i){var P="ships";
     h+='<div class="ed-card"><div class="hd"><b>'+esc(s.n)+'</b><button type="button" class="del" data-del="ships" data-i="'+i+'">항차 삭제</button></div><div class="ed-f4">'
      +f4(P,i,"n","항차명")+f4(P,i,"q","면수","num")+f4(P,i,"win","출고 창 (표시용)")+f4(P,i,"ship","출고일 (마지막 날)","date")
      +f4(P,i,"fatD","FAT 날짜","date")+f4(P,i,"fat","FAT (표시용)")+f4(P,i,"att","입회")+f4(P,i,"cn","컨테이너","num")
      +f4(P,i,"prod.0","생산 착수","date")+f4(P,i,"prod.1","생산 종료","date")+f4(P,i,"insp.0","검사 시작","date")+f4(P,i,"insp.1","검사 종료","date")
-     +f4(P,i,"st.0","상태 색","sel",KIND)+f4(P,i,"st.1","상태 문구","text",null,3)
-     +'</div><p class="hint" style="margin-top:8px">배치 구성</p>'
-     +grid("ships."+i+".b",[{k:"0",h:"프로젝트",t:"sel",o:SITES.map(function(x){return [x,x];})},{k:"1",h:"배치",w:"56px"},{k:"2",h:"면수",t:"num",w:"64px"},{k:"3",h:"납품 개시",t:"date"},{k:"4",h:"Delivery Date",t:"date"}],[SITES[0],"B1",0,todayS(),todayS()],520)+'</div>';
-  });
-  var t=todayS();
-  return h+'<button type="button" class="add" data-add="ships" data-blank="'+esc(JSON.stringify({n:"새 항차",q:0,prod:[t,t],ship:t,win:"",fatD:t,fat:"",att:"On Energy",insp:[t,t],fat60:0,cn:0,st:["off","대기"],b:[]}))+'">+ 항차 추가</button>';
-}
-function secInv(){
-  return '<p class="hint">입금일을 넣으면 ‘입금 확인’(초록)으로 바뀌고, 비워 두면 미입금으로 표시되며 입금 예정일이 보입니다. 합계와 결제 진행 막대는 자동 계산됩니다. 개요 탭의 ‘입금 확인’ KPI 카드는 ‘오늘 쟁점 · KPI’에서 따로 고쳐 주세요.</p>'
+     +f4(P,i,"st.0","상태 색","sel",KIND)+f4(P,i,"st.1","상태 문구","text",null,3)+'</div><p class="hint" style="margin-top:8px">배치 구성</p>'
+     +grid("ships."+i+".b",[{k:"0",h:"프로젝트",t:"sel",o:SITES.map(function(x){return [x,x];})},{k:"1",h:"배치",w:"56px"},{k:"2",h:"면수",t:"num",w:"64px"},{k:"3",h:"납품 개시",t:"date"},{k:"4",h:"Delivery Date",t:"date"}],[SITES[0],"B1",0,today(),today()],520)+'</div>';});
+  return h;}
+function secInv(){if(!DATA.inv)return na("청구 · 입금");
+  return '<p class="hint">입금일을 넣으면 ‘입금 확인’(초록)으로 바뀝니다. 비워 두면 미입금이에요. KPI의 입금 카드는 ‘오늘 쟁점 · KPI’에서 따로 고쳐 주세요.</p>'
    +grid("inv",[{k:"k",h:"코드",t:"sel",o:PJC.map(function(c){return [c,c];}),w:"64px"},{k:"n",h:"프로젝트"},{k:"inv",h:"Invoice"},{k:"po",h:"PO"},{k:"q",h:"면수",t:"num",w:"60px"},{k:"amt",h:"PO 금액",t:"num"},{k:"dep",h:"Deposit 5%",t:"num"},{k:"sop",h:"SOP 25%",t:"num"},{k:"sum",h:"청구 합계",t:"num"},{k:"paid",h:"입금일",t:"date"},{k:"sched",h:"입금 예정일",t:"date"}],
-     {k:"A9",n:"",inv:"",po:"",d:todayS(),q:0,amt:0,dep:0,sop:0,sum:0,paid:null,sched:""},1180);
-}
-function secPr(){
-  return '<h4>항차별 공정 진척</h4>'+fld("daily","progMeta","표 설명")
-   +grid("prog",[{k:"0",h:"공정"},{k:"1",h:"세부"},{k:"2",h:"진척 %",t:"num",w:"64px"},{k:"3",h:"계획"},{k:"4",h:"상태 문구"},{k:"5",h:"색",t:"sel",o:KIND,w:"110px"}],["새 공정","",0,"","대기","off"],620)
-   +'<h4>생산품질일보</h4><div class="ed-f4"><div style="grid-column:span 3">'+fld("daily","title","제목 (예: 생산품질일보 10/21)")+'</div>'+fld("daily","meta","주차")+'</div>'
-   +'<p class="hint">숫자 카드</p>'+grid("daily.stats",[{k:"0",h:"제목"},{k:"1",h:"값",w:"70px"},{k:"2",h:"단위",w:"48px"},{k:"3",h:"설명"}],["","","",""])
-   +'<p class="hint">아래 표</p>'+fld("daily","matsHead","표 첫 열 제목")+grid("daily.mats",[{k:"0",h:"품목"},{k:"1",h:"일정"},{k:"2",h:"내용"}],["","",""])
-   +'<h4>검사 · 서류</h4>'+grid("ins",[{k:"0",h:"구분"},{k:"1",h:"일정",w:"90px"},{k:"2",h:"색",t:"sel",o:KIND,w:"110px"},{k:"3",h:"상태",w:"70px"},{k:"4",h:"비고"}],["","","off","대기",""],600);
-}
+     {k:"A9",n:"",inv:"",po:"",d:today(),q:0,amt:0,dep:0,sop:0,sum:0,paid:null},1180);}
+function secPr(){var h='<h4>항차별 공정 진척</h4>';
+  h+=("progMeta" in DATA)?fld("progMeta","표 설명"):"";
+  h+=DATA.prog?grid("prog",[{k:"0",h:"공정"},{k:"1",h:"세부"},{k:"2",h:"진척 %",t:"num",w:"64px"},{k:"3",h:"계획"},{k:"4",h:"상태 문구"},{k:"5",h:"색",t:"sel",o:KIND,w:"110px"}],["새 공정","",0,"","대기","off"],620):na("공정 진척 표");
+  h+='<h4>생산품질일보</h4>';
+  if(DATA.dTitle)h+='<div class="ed-f4"><label class="f" style="grid-column:span 3"><span>제목 (예: 생산품질일보 11/04)</span>'+inp("dTitle","",{k:"title"},DATA.dTitle.title)+'</label><label class="f"><span>주차</span>'+inp("dTitle","",{k:"meta"},DATA.dTitle.meta)+'</label></div>';
+  h+=DATA.dStats?'<p class="hint">숫자 카드</p>'+grid("dStats",[{k:"0",h:"제목"},{k:"1",h:"값",w:"70px"},{k:"2",h:"단위",w:"48px"},{k:"3",h:"설명"}],["","","",""]):na("일보 숫자 카드");
+  if(DATA.mats){h+='<p class="hint">아래 표</p>'+(DATA.dHead?'<label class="f"><span>표 첫 열 제목</span>'+inp("dHead","",{k:"0"},DATA.dHead[0])+'</label>':"")+grid("mats",[{k:"0",h:"항목"},{k:"1",h:"일정"},{k:"2",h:"내용"}],["","",""]);}else h+=na("일보 표");
+  h+='<h4>검사 · 서류</h4>';
+  h+=DATA.ins?grid("ins",[{k:"0",h:"구분"},{k:"1",h:"일정",w:"90px"},{k:"2.a.0",h:"색",t:"sel",o:KIND,w:"110px"},{k:"2.a.1",h:"상태",w:"70px"},{k:"3",h:"비고"}],["","",{__f:"stDot",a:["off","대기"]},""],600):na("검사 · 서류 표");
+  return h;}
 function adminLinks(){try{return JSON.parse(ls(LK)||"{}");}catch(_){return {};}}
-function secEd(){
-  if(!isAdmin()) return '<div class="empty">관리자만 볼 수 있습니다.</div>';
-  var L=adminLinks();
-  var h='<h4>편집자 (사람별 편집 링크)</h4><p class="hint">이름을 넣고 추가하면 그 사람 전용 편집 링크가 만들어집니다. 링크를 받은 사람만 저장할 수 있고, 수정 기록에 그 이름이 자동으로 남습니다. ‘권한 끄기’를 누르면 그 사람은 더 이상 저장할 수 없습니다. 보기는 누구나 기본 주소로 가능합니다.</p>'
-   +'<div class="ed-flt"><input id="edNewName" placeholder="이름 (예: 홍길동 · 대홍전기)"><button type="button" class="add" style="margin:0" data-edx="addEditor">+ 편집자 추가</button><button type="button" class="add" style="margin:0" data-edx="addAdmin" title="내 다른 브라우저(크롬 등)를 관리자로 만드는 링크">+ 관리자 링크</button></div><p class="hint">‘관리자 링크’는 본인의 다른 브라우저(크롬, 다른 PC)용입니다. 그 브라우저에서 한 번 열면 편집자 관리까지 할 수 있어요. 절대 다른 사람에게 주지 마세요.</p>';
-  if(!EDS.length) h+='<div class="empty">아직 등록된 편집자가 없습니다.</div>';
-  EDS.forEach(function(e){
-    var lk=L[e.id];
-    h+='<div class="ed-it"><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><b style="margin-right:auto;font-size:13px">'+esc(e.n)+(e.adm?' <span class="own o-a" style="font-size:11px">관리자</span>':'')+'</b><span class="hint" style="margin:0">추가 '+esc(e.at||"")+'</span>'
-     +(lk?'<button type="button" class="btn" data-copy="'+esc(lk)+'">링크 복사</button>':'')
-     +'<button type="button" class="btn" data-rekey="'+esc(e.id)+'">새 링크 발급</button><button type="button" class="del" data-revoke="'+esc(e.id)+'">권한 끄기</button></div>'
-     +(lk?'<input readonly value="'+esc(lk)+'" style="margin-top:5px">':'<p class="hint" style="margin:5px 0 0">이 브라우저에는 링크가 저장돼 있지 않아요. 필요하면 ‘새 링크 발급’을 누르세요 (기존 링크는 막힘).</p>')+'</div>';
-  });
-  return h;
-}
-async function makeEntry(name,id,adm){
-  var tok=ls(TK), secret=b64url(crypto.getRandomValues(new Uint8Array(18)));
-  var k=await aesKey(secret,"encrypt"), iv=crypto.getRandomValues(new Uint8Array(12));
-  var ct=new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv:iv},k,new TextEncoder().encode(tok)));
-  return {e:{id:id||b64url(crypto.getRandomValues(new Uint8Array(6))),n:name,at:todayS(),adm:adm?1:0,iv:toB64(iv),ct:toB64(ct)},link:location.origin+location.pathname+"#edit="+secret};
-}
-async function saveEditors(list,msg){
-  var h={"Accept":"application/vnd.github+json","Authorization":"Bearer "+ls(TK)};
-  var g=await fetch(EAPI+"?ref=main&_="+Date.now(),{headers:h,cache:"no-store"}), sha=null;
-  if(g.ok) sha=(await g.json()).sha; else if(g.status!==404) throw new Error("GitHub 확인 실패 ("+g.status+")");
-  var body={message:msg,content:b64(JSON.stringify({v:1,editors:list},null,1)),branch:"main"}; if(sha) body.sha=sha;
-  h["Content-Type"]="application/json";
-  var w=await fetch(EAPI,{method:"PUT",headers:h,body:JSON.stringify(body)});
-  if(!w.ok) throw new Error("저장 실패 ("+w.status+")");
-  EDS=list;
-}
-async function edAdmin(act,arg){
-  try{
-    var L=adminLinks();
-    if(act==="add"){
-      var nm=($("edNewName").value||"").trim(); if(!nm){edSay("이름을 입력해 주세요.","err"); return;}
-      edSay("링크 만드는 중…"); var r=await makeEntry(nm,null,arg==="adm");
-      await saveEditors(EDS.concat([r.e]),"편집자 추가 · "+nm); L[r.e.id]=r.link;
-      try{localStorage.setItem(LK,JSON.stringify(L));}catch(_){}
-      edBody(); edSay("‘"+nm+"’ 편집 링크를 만들었어요. ‘링크 복사’로 전달하세요. 1~2분 뒤부터 작동합니다.","ok");
-    } else if(act==="rekey"){
-      var old=EDS.filter(function(x){return x.id===arg;})[0]; if(!old) return;
-      if(!confirm("‘"+old.n+"’의 링크를 새로 만들까요? 기존 링크는 더 이상 저장할 수 없게 됩니다.")) return;
-      edSay("새 링크 만드는 중…"); var r2=await makeEntry(old.n,old.id,old.adm);
-      await saveEditors(EDS.map(function(x){return x.id===arg?r2.e:x;}),"편집 링크 재발급 · "+old.n); L[arg]=r2.link;
-      try{localStorage.setItem(LK,JSON.stringify(L));}catch(_){}
-      edBody(); edSay("‘"+old.n+"’ 새 링크를 만들었어요.","ok");
-    } else if(act==="revoke"){
-      var o=EDS.filter(function(x){return x.id===arg;})[0]; if(!o) return;
-      if(!confirm("‘"+o.n+"’의 편집 권한을 끌까요?")) return;
-      edSay("권한 끄는 중…");
-      await saveEditors(EDS.filter(function(x){return x.id!==arg;}),"편집자 제거 · "+o.n); delete L[arg];
-      try{localStorage.setItem(LK,JSON.stringify(L));}catch(_){}
-      edBody(); edSay("‘"+o.n+"’의 편집 권한을 껐어요.","ok");
-    }
-  }catch(err){edSay(err.message,"err");}
-}
-var SECF={bn:secBn,it:secIt,sh:secSh,inv:secInv,pr:secPr,ed:secEd};
+function secEd(){if(!isAdmin())return '<div class="empty">관리자만 볼 수 있습니다.</div>';var L=adminLinks();
+  var h='<h4>편집자 (사람별 편집 링크)</h4><p class="hint">이름을 넣고 추가하면 그 사람 전용 링크가 만들어집니다. ‘권한 끄기’를 누르면 그 사람은 더 이상 저장할 수 없어요.</p>'
+   +'<div class="ed-flt"><input id="edNewName" placeholder="이름 (예: 홍길동 · 대홍전기)"><button type="button" class="add" style="margin:0" data-edx="addEditor">+ 편집자 추가</button><button type="button" class="add" style="margin:0" data-edx="addAdmin">+ 관리자 링크</button></div><p class="hint">‘관리자 링크’는 본인의 다른 브라우저(크롬, 다른 PC)용이에요. 다른 사람에게 주지 마세요.</p>';
+  if(!EDS.length)h+='<div class="empty">아직 등록된 편집자가 없습니다.</div>';
+  EDS.forEach(function(e){var lk=L[e.id];h+='<div class="ed-it"><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><b style="margin-right:auto;font-size:13px">'+esc(e.n)+(e.adm?' <span class="own o-a">관리자</span>':'')+'</b><span class="hint" style="margin:0">추가 '+esc(e.at||"")+'</span>'
+     +(lk?'<button type="button" class="btn" data-copy="'+esc(lk)+'">링크 복사</button>':'')+'<button type="button" class="btn" data-rekey="'+esc(e.id)+'">새 링크 발급</button><button type="button" class="del" data-revoke="'+esc(e.id)+'">권한 끄기</button></div>'
+     +(lk?'<input readonly value="'+esc(lk)+'" style="margin-top:5px">':'<p class="hint" style="margin:5px 0 0">이 브라우저에는 링크가 저장돼 있지 않아요. 필요하면 ‘새 링크 발급’을 누르세요 (기존 링크는 막힘).</p>')+'</div>';});
+  return h;}
+var HIST=null;
+function secVer(){var h='<h4>클로드가 만든 새 버전 올리기</h4><p class="hint">클로드에서 받은 대시보드 HTML 파일을 여기에 끌어다 놓으면 바로 반영돼요. PC에 자동 업로드를 설치했다면 다운로드만 해도 자동으로 올라갑니다.</p>'
+   +'<div class="drop" id="drop">여기에 HTML 파일을 끌어다 놓거나 클릭해서 선택<input type="file" id="upf" accept=".html,.htm" hidden></div>'
+   +'<p class="hint"><a href="https://raw.githubusercontent.com/'+REPO+'/main/'+FILE+'" target="_blank" rel="noopener">현재 최신본 HTML 받기</a> · 클로드에 이 파일을 주고 수정을 맡기면 웹에서 고친 내용이 사라지지 않아요.</p>'
+   +'<h4>최근 변경 기록</h4><div id="hist">'+(HIST?histHtml():'불러오는 중…')+'</div>';
+  if(!HIST)loadHist();return h;}
+function histHtml(){if(!HIST.length)return '<div class="empty">기록이 없습니다.</div>';
+  return '<table class="hist">'+HIST.map(function(c){return '<tr><td class="t">'+stamp(new Date(c.commit.author.date))+'</td><td>'+esc(c.commit.message.split("\n")[0])+'</td></tr>';}).join("")+'</table>';}
+async function loadHist(){try{var r=await fetch("https://api.github.com/repos/"+REPO+"/commits?path="+FILE+"&per_page=15");HIST=r.ok?await r.json():[];}catch(_){HIST=[];}var e=$("hist");if(e)e.innerHTML=histHtml();}
+var SECF={bn:secBn,it:secIt,sh:secSh,inv:secInv,pr:secPr,ed:secEd,ver:secVer};
+function secList(){return SECS.concat([["ver","버전 · 업로드"]]).concat(isAdmin()?[["ed","편집자 관리"]]:[]);}
 function edShell(){
-  $("ed").innerHTML='<div class="ed-h"><h2>자료 편집</h2><button type="button" data-edx="close">닫기</button><button type="button" data-edx="revert">변경 취소</button><button type="button" class="pri" data-edx="save" id="edSave">GitHub에 저장</button><div class="ed-st" id="edSt"></div></div>'
-   +'<div class="ed-tabs" role="tablist">'+SECS.concat(isAdmin()?[["ed","편집자 관리"]]:[]).map(function(s){return '<button type="button" role="tab" data-es="'+s[0]+'" aria-selected="'+(ED.sec===s[0])+'">'+s[1]+'</button>';}).join("")+'</div>'
-   +'<div class="ed-b" id="edB"></div>'
-   +'<div class="ed-f"><span id="edTk"></span>'+(ls(TK)?'<button type="button" data-edx="token">토큰 변경</button>':'<button type="button" data-edx="forget">이 브라우저 편집 해제</button>')+'<button type="button" data-edx="backup">백업 다운로드</button><span class="sp">입력하면 왼쪽 화면에 바로 반영되고, 저장해야 다른 사람에게도 보입니다.</span></div>';
-  edBody(); edStatus(); if(ED.dirty) edSay("저장하지 않은 변경이 있습니다.");
-}
-function edBody(){if(ED.sec==="ed"&&!isAdmin()) ED.sec="bn"; $("edB").innerHTML=SECF[ED.sec](); $("edB").scrollTop=0;}
-function edSay(m,c){var e=$("edSt"); if(e){e.textContent=m||""; e.className="ed-st "+(c||"");}}
-function edStatus(){
-  var k=$("edTk"); if(k) k.textContent=isAdmin()?("관리자"+(ls(NK)?" · "+ls(NK):"")):(ME?"편집자 · "+ME.n:"편집 권한 없음");
-  var s=$("edSave"); if(s) s.textContent=ED.dirty?"GitHub에 저장 ●":"GitHub에 저장";
-  $("edBtn").textContent=ED.dirty?"편집 ●":"편집";
-}
-var rT; function later(){clearTimeout(rT); rT=setTimeout(function(){applyData(DATA); render();},120);}
-function dirty(){if(!ED.dirty){ED.dirty=true; edStatus(); edSay("저장하지 않은 변경이 있습니다.");}}
-function onField(e){
-  var el=e.target; if(!el.dataset||el.dataset.p==null) return;
-  var p=el.dataset.p, i=el.dataset.i, k=el.dataset.k, t=el.dataset.t, row=i===""?getP(p):getP(p)[+i], v;
-  if(t==="chk") v=el.checked?1:0;
-  else if(t==="num") v=el.value===""?0:(+String(el.value).replace(/,/g,"")||0);
-  else v=el.value;
-  if(p==="inv"&&k==="paid"&&!v) v=null;
-  if(getK(row,k)===v) return;
-  setK(row,k,v);
-  if(p==="items"){
-    var card=el.closest(".ed-it");
-    if(k==="a"){row.t=row.t||[]; var tt=A2T[v]; if(tt&&row.t.indexOf(tt)<0){row.t.push(tt); var c=card&&card.querySelector('.chip[data-k="t"][data-val="'+tt+'"]'); if(c) c.setAttribute("aria-pressed","true");}}
-    if(card){card.classList.toggle("k",!!row.k); card.classList.toggle("risk",row.s==="risk");}
-  }
-  dirty(); later();
-}
-function dl(name,text){var a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([text],{type:"application/json"})); a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(a.href); a.remove();},500);}
-function b64(s){var u=new TextEncoder().encode(s), b=""; for(var i=0;i<u.length;i+=0x8000) b+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000)); return btoa(b);}
-function unb64(s){var b=atob(String(s).replace(/\s/g,"")), u=new Uint8Array(b.length); for(var i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return new TextDecoder().decode(u);}
-async function ghApi(method,body){
-  var tk=await getTok(), h={"Accept":"application/vnd.github+json"};
-  if(tk) h.Authorization="Bearer "+tk; if(body) h["Content-Type"]="application/json";
-  return await fetch(API+(method==="GET"?"?ref=main&_="+Date.now():""),{method:method,headers:h,body:body?JSON.stringify(body):undefined,cache:"no-store"});
-}
-function askToken(){
-  var t=prompt("GitHub 토큰을 붙여 넣으세요.\n이 브라우저에만 보관되고, ‘GitHub에 저장’을 누를 때만 GitHub로 전송됩니다.","");
-  if(t&&t.trim()){localStorage.setItem(TK,t.trim()); edStatus(); return true;} return false;
-}
-async function fetchLatest(){
-  try{var r=await ghApi("GET"); if(r.status===401&&ls(TK)){localStorage.removeItem(TK); r=await ghApi("GET");} if(!r.ok) return null; var j=await r.json(); return {sha:j.sha,data:JSON.parse(unb64(j.content))};}catch(_){return null;}
-}
+  $("ed").innerHTML='<div class="ed-h"><h2>자료 편집</h2><button type="button" data-edx="close">닫기</button><button type="button" data-edx="revert">변경 취소</button><button type="button" class="pri" data-edx="save" id="edSave">저장</button><div class="ed-st" id="edSt"></div></div>'
+   +'<div class="ed-tabs" role="tablist">'+secList().map(function(s){return '<button type="button" role="tab" data-es="'+s[0]+'" aria-selected="'+(ED.sec===s[0])+'">'+s[1]+'</button>';}).join("")+'</div>'
+   +'<div class="ed-b" id="edB"></div><div class="ed-f"><span id="edTk"></span>'+(isAdmin()?'':'<button type="button" data-edx="forget">이 브라우저 편집 해제</button>')+'<span class="sp">입력하면 왼쪽에 바로 미리 보이고, 저장해야 모두에게 반영돼요.</span></div>';
+  edBody();edStatus();if(ED.dirty)edSay("저장하지 않은 변경이 있습니다.");}
+function edBody(){if(ED.sec==="ed"&&!isAdmin())ED.sec="bn";$("edB").innerHTML=SECF[ED.sec]();$("edB").scrollTop=0;if(ED.sec==="ver")wireDrop();}
+function edSay(m,c){var e=$("edSt");if(e){e.textContent=m||"";e.className="ed-st "+(c||"");}}
+function edStatus(){var k=$("edTk");if(k)k.textContent=isAdmin()?("관리자"+(ls(NK)?" · "+ls(NK):"")):(ME?"편집자 · "+ME.n:"편집 권한 없음");var s=$("edSave");if(s)s.textContent=ED.dirty?"저장 ●":"저장";}
+function dirty(){if(!ED.dirty){ED.dirty=true;edStatus();edSay("저장하지 않은 변경이 있습니다.");}preview();}
+function onField(e){var el=e.target;if(!el.dataset||el.dataset.p==null)return;
+  var p=el.dataset.p,i=el.dataset.i,k=el.dataset.k,t=el.dataset.t,v;
+  if(t==="chk")v=el.checked?1:0;else if(t==="num")v=el.value===""?0:(+String(el.value).replace(/,/g,"")||0);else v=el.value;
+  if(i===""&&k===""){if(DATA[p]===v)return;DATA[p]=v;dirty();return;}
+  var row=i===""?DATA[p]:getP(p)[+i];
+  if(p==="inv"&&k==="paid"&&!v)v=null;
+  if(getK(row,k)===v)return;setK(row,k,v);
+  if(p==="items"){var card=el.closest(".ed-it");
+    if(k==="a"){row.t=row.t||[];var tt=A2T[v];if(tt&&row.t.indexOf(tt)<0){row.t.push(tt);var c=card&&card.querySelector('.chip[data-k="t"][data-val="'+tt+'"]');if(c)c.setAttribute("aria-pressed","true");}}
+    if(card){card.classList.toggle("k",!!row.k);card.classList.toggle("risk",row.s==="risk");}}
+  dirty();}
+
+async function fetchLatest(){var r=await gh(FILE,"GET");if(!r.ok)throw new Error("최신본 확인 실패 ("+r.status+")");var j=await r.json();return {sha:j.sha,src:unb64(j.content)};}
 async function save(){
-  if(!isAdmin()){
-    var tk0=await keyToken();
-    if(!tk0){ME=null; edSay("편집 권한이 없거나 해제됐어요. 관리자에게 편집 링크를 받아 주세요.","err"); return;}
-    try{var er=await fetch(EAPI+"?ref=main&_="+Date.now(),{headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+tk0},cache:"no-store"});
-      var still=false; if(er.ok){var ej=JSON.parse(unb64((await er.json()).content)); still=(ej.editors||[]).some(function(x){return x.id===ME.id;});}
-      if(!still){EDS=EDS.filter(function(x){return x.id!==ME.id;}); ME=null; edSay("편집 권한이 해제됐어요. 관리자에게 문의해 주세요.","err"); return;}
-    }catch(_){edSay("권한 확인에 실패했어요. 잠시 후 다시 시도해 주세요.","err"); return;}
-  }
-  var nm=ME?ME.n:(ls(NK)||"");
-  if(isAdmin()&&!nm){nm=prompt("이름을 입력해 주세요. 수정 기록에 남습니다.",""); if(nm===null){edSay("저장을 취소했어요."); return;} nm=nm.trim(); if(nm){try{localStorage.setItem(NK,nm);}catch(_){}}}
-  var btn=$("edSave"); btn.disabled=true; edSay("저장 중…");
-  try{
-    var r=await ghApi("GET"), cur=null;
-    if(r.status===401){if(ls(TK)){localStorage.removeItem(TK); edSay("토큰이 올바르지 않거나 만료됐어요. ‘토큰 변경’으로 다시 넣어 주세요.","err");} else edSay("편집 권한이 만료됐어요. 관리자에게 새 편집 링크를 받아 주세요.","err"); edStatus(); return;}
-    if(r.ok) cur=await r.json(); else if(r.status!==404){edSay("GitHub 확인 실패 ("+r.status+")","err"); return;}
-    if(cur&&ED.sha&&cur.sha!==ED.sha&&!confirm("편집을 시작한 뒤 다른 곳에서 먼저 저장된 내용이 있습니다.\n지금 내용으로 덮어쓸까요?")){edSay("저장을 취소했어요."); return;}
-    DATA.updated=new Date().toISOString(); DATA.by=nm||"";
-    var body={message:"자료 수정 · "+fmtLocal(DATA.updated)+(nm?" · "+nm:""),content:b64(JSON.stringify(DATA,null,1)),branch:"main"}; if(cur) body.sha=cur.sha;
-    var w=await ghApi("PUT",body);
-    if(!w.ok){edSay(w.status===401||w.status===403||w.status===404?"저장 권한이 없어요 ("+w.status+"). 토큰에 이 저장소의 Contents 읽기/쓰기 권한이 있는지 확인해 주세요.":"저장 실패 ("+w.status+")","err"); return;}
-    var j=await w.json(); ED.sha=j.content.sha; ED.dirty=false;
-    try{localStorage.setItem(CK,JSON.stringify({sha:ED.sha,data:DATA}));}catch(_){}
-    render(); edStatus(); edSay("저장 완료 · 다른 사람 화면에는 1~2분 안에 반영됩니다.","ok");
-  }catch(err){edSay("저장 중 오류: "+err.message,"err");}
-  finally{btn.disabled=false;}
-}
-async function openEd(){
-  document.body.classList.add("editing"); $("ed").hidden=false; edShell();
-  if(!ED.dirty){
-    edSay("최신 자료 확인 중…");
-    var L=await fetchLatest();
-    if(L){ED.sha=L.sha; if(!ED.dirty&&L.data&&L.data.v===1&&(L.data.updated||"")>(DATA.updated||"")){applyData(L.data); render(); edBody();}}
-    if(!ED.dirty) edSay("");
-  }
-}
-function closeEd(){document.body.classList.remove("editing"); $("ed").hidden=true;}
-$("edBtn").addEventListener("click",function(){ if($("ed").hidden) openEd(); else closeEd(); });
-$("ed").addEventListener("input",function(e){
-  if(e.target.id==="edQ"){ED.q=e.target.value; $("edList").innerHTML=itemList(); return;}
-  onField(e);
-});
-$("ed").addEventListener("change",function(e){
-  if(e.target.id==="edFs"){ED.fs=e.target.value; $("edList").innerHTML=itemList(); return;}
-  if(e.target.id==="edFo"){ED.fo=e.target.value; $("edList").innerHTML=itemList(); return;}
-  onField(e);
-});
-$("ed").addEventListener("click",function(e){
-  var b=e.target.closest("button"); if(!b) return;
-  if(b.dataset.es){ED.sec=b.dataset.es; edShell(); return;}
+  var tk=await getTok();
+  if(!tk){edSay(ls(KK)?"편집 권한이 없거나 해제됐어요. 관리자에게 편집 링크를 받아 주세요.":"편집 권한이 없어요.","err");return;}
+  if(!isAdmin()){try{var er=await fetch(API+"editors.json?ref=main&_="+Date.now(),{headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+tk},cache:"no-store"});var ej=er.ok?JSON.parse(unb64((await er.json()).content)):{editors:[]};
+    if(!(ej.editors||[]).some(function(x){return ME&&x.id===ME.id;})){ME=null;edSay("편집 권한이 해제됐어요. 관리자에게 문의해 주세요.","err");return;}}catch(_){edSay("권한 확인에 실패했어요.","err");return;}}
+  var nm=myName();if(isAdmin()&&!nm){nm=prompt("이름을 입력해 주세요. 수정 기록에 남습니다.","");if(nm===null)return;nm=nm.trim();if(nm)lset(NK,nm);}
+  var btn=$("edSave");btn.disabled=true;edSay("저장 중…");
+  try{var L=await fetchLatest();
+    if(L.sha!==SHA){btn.disabled=false;
+      if(!confirm("편집을 시작한 뒤 새 버전(클로드 업로드 또는 다른 사람 저장)이 올라왔어요.\n\n[확인] 새 버전을 불러오기 (지금 고친 내용은 버려지니 다시 입력해 주세요)\n[취소] 그대로 두기"))return;
+      SRC=L.src;SHA=L.sha;parse(SRC);ED.dirty=false;show(SRC);edShell();edSay("새 버전을 불러왔어요. 다시 고친 뒤 저장해 주세요.","ok");return;}
+    var out=build();
+    var w=await gh(FILE,"PUT",{message:"웹 수정 · "+(nm||"이름 없음")+" · "+stamp(),content:b64(out),sha:SHA,branch:"main"});
+    if(!w.ok){edSay("저장 실패 ("+w.status+")","err");return;}
+    var j=await w.json();SHA=j.content.sha;SRC=out;parse(SRC);ED.dirty=false;HIST=null;
+    try{sessionStorage.setItem(SC,JSON.stringify({sha:SHA,src:SRC,at:Date.now()}));}catch(_){}
+    edShell();edSay("저장 완료 · 다른 사람 화면에는 1~2분 안에 반영됩니다.","ok");
+  }catch(err){edSay("저장 중 오류: "+err.message,"err");}finally{var b=$("edSave");if(b)b.disabled=false;}}
+async function uploadFile(file){
+  if(!isAdmin()&&!ME){edSay("편집 권한이 없어요.","err");return;}
+  var text=await file.text();
+  if(!/var\s+ITEMS\s*=/.test(text)||!/<script/i.test(text)){edSay("대시보드 HTML이 아닌 것 같아요: "+file.name,"err");return;}
+  var webEd=0;try{var r=await fetch("https://api.github.com/repos/"+REPO+"/commits?path="+FILE+"&per_page=20");var cs=r.ok?await r.json():[];for(var i=0;i<cs.length;i++){if(/^웹 수정/.test(cs[i].commit.message))webEd++;else break;}}catch(_){}
+  if(webEd&&!confirm("마지막 클로드 버전 이후 웹에서 고친 기록이 "+webEd+"건 있어요.\n이 파일에 그 내용이 없다면 사라집니다. 그래도 올릴까요?"))return;
+  if(ED.dirty&&!confirm("저장하지 않은 웹 수정이 있어요. 버리고 새 버전을 올릴까요?"))return;
+  edSay("올리는 중…");
+  try{var L=await fetchLatest();var nm=myName();
+    var w=await gh(FILE,"PUT",{message:"클로드 버전 업로드 · "+file.name+(nm?" · "+nm:""),content:b64(text),sha:L.sha,branch:"main"});
+    if(!w.ok){edSay("업로드 실패 ("+w.status+")","err");return;}
+    var j=await w.json();SHA=j.content.sha;SRC=text;parse(SRC);ED.dirty=false;HIST=null;show(SRC);
+    try{sessionStorage.setItem(SC,JSON.stringify({sha:SHA,src:SRC,at:Date.now()}));}catch(_){}
+    edShell();edSay("새 버전을 올렸어요 · 1~2분 안에 모두에게 반영됩니다.","ok");}catch(e){edSay("업로드 오류: "+e.message,"err");}}
+function wireDrop(){var d=$("drop"),f=$("upf");if(!d)return;d.onclick=function(){f.click();};f.onchange=function(){if(f.files[0])uploadFile(f.files[0]);};
+  d.ondragover=function(e){e.preventDefault();d.classList.add("on");};d.ondragleave=function(){d.classList.remove("on");};
+  d.ondrop=function(e){e.preventDefault();d.classList.remove("on");if(e.dataTransfer.files[0])uploadFile(e.dataTransfer.files[0]);};}
+
+/* editors.json admin */
+async function makeEntry(name,id,adm){var tok=ls(TK),secret=b64url(crypto.getRandomValues(new Uint8Array(18)));var k=await aesKey(secret,"encrypt"),iv=crypto.getRandomValues(new Uint8Array(12));
+  var ct=new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv:iv},k,new TextEncoder().encode(tok)));
+  return {e:{id:id||b64url(crypto.getRandomValues(new Uint8Array(6))),n:name,at:today(),adm:adm?1:0,iv:toB64(iv),ct:toB64(ct)},link:location.origin+location.pathname+"#edit="+secret};}
+async function saveEditors(list,msg){var g=await gh("editors.json","GET"),sha=null;if(g.ok)sha=(await g.json()).sha;else if(g.status!==404)throw new Error("GitHub 확인 실패 ("+g.status+")");
+  var body={message:msg,content:b64(JSON.stringify({v:1,editors:list},null,1)),branch:"main"};if(sha)body.sha=sha;var w=await gh("editors.json","PUT",body);if(!w.ok)throw new Error("저장 실패 ("+w.status+")");EDS=list;}
+async function edAdmin(act,arg){try{var L=adminLinks();
+  if(act==="add"){var nm=($("edNewName").value||"").trim();if(!nm){edSay("이름을 입력해 주세요.","err");return;}edSay("링크 만드는 중…");var r=await makeEntry(nm,null,arg==="adm");
+    await saveEditors(EDS.concat([r.e]),"편집자 추가 · "+nm);L[r.e.id]=r.link;lset(LK,JSON.stringify(L));edBody();edSay("‘"+nm+"’ 링크를 만들었어요. ‘링크 복사’로 전달하세요. 1~2분 뒤부터 작동합니다.","ok");}
+  else if(act==="rekey"){var old=EDS.filter(function(x){return x.id===arg;})[0];if(!old||!confirm("‘"+old.n+"’의 링크를 새로 만들까요? 기존 링크는 막힙니다."))return;
+    var r2=await makeEntry(old.n,old.id,old.adm);await saveEditors(EDS.map(function(x){return x.id===arg?r2.e:x;}),"편집 링크 재발급 · "+old.n);L[arg]=r2.link;lset(LK,JSON.stringify(L));edBody();edSay("‘"+old.n+"’ 새 링크를 만들었어요.","ok");}
+  else if(act==="revoke"){var o=EDS.filter(function(x){return x.id===arg;})[0];if(!o||!confirm("‘"+o.n+"’의 편집 권한을 끌까요?"))return;
+    await saveEditors(EDS.filter(function(x){return x.id!==arg;}),"편집자 제거 · "+o.n);delete L[arg];lset(LK,JSON.stringify(L));edBody();edSay("‘"+o.n+"’의 편집 권한을 껐어요.","ok");}
+  }catch(err){edSay(err.message,"err");}}
+
+async function openEd(){document.body.classList.add("editing");$("ed").hidden=false;edShell();
+  if(!ED.dirty){edSay("최신 자료 확인 중…");try{var L=await fetchLatest();if(L.sha!==SHA||L.src!==SRC){SRC=L.src;SHA=L.sha;parse(SRC);show(SRC);edBody();}else if(!SHA)SHA=L.sha;edSay("");}catch(e){edSay(e.message,"err");}}}
+function closeEd(){document.body.classList.remove("editing");$("ed").hidden=true;}
+$("fab").addEventListener("click",openEd);
+$("ed").addEventListener("input",function(e){if(e.target.id==="edQ"){ED.q=e.target.value;$("edList").innerHTML=itemList();return;}onField(e);});
+$("ed").addEventListener("change",function(e){if(e.target.id==="edFs"){ED.fs=e.target.value;$("edList").innerHTML=itemList();return;}if(e.target.id==="edFo"){ED.fo=e.target.value;$("edList").innerHTML=itemList();return;}onField(e);});
+$("ed").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
+  if(b.dataset.es){ED.sec=b.dataset.es;edShell();return;}
   var x=b.dataset.edx;
-  if(x==="close"){closeEd(); return;}
-  if(x==="save"){save(); return;}
-  if(x==="token"){askToken(); return;}
-  if(x==="addEditor"){edAdmin("add"); return;}
-  if(x==="addAdmin"){if(!($("edNewName").value||"").trim()) $("edNewName").value=(ls(NK)||"관리자")+" (크롬)"; edAdmin("add","adm"); return;}
-  if(b.dataset.rekey){edAdmin("rekey",b.dataset.rekey); return;}
-  if(b.dataset.revoke){edAdmin("revoke",b.dataset.revoke); return;}
-  if(b.dataset.copy){var cv=b.dataset.copy; (navigator.clipboard?navigator.clipboard.writeText(cv):Promise.reject()).then(function(){edSay("링크를 복사했어요.","ok");},function(){var ip=b.closest(".ed-it").querySelector("input"); if(ip){ip.select();} edSay("링크를 선택했어요. Ctrl+C로 복사하세요.");}); return;}
-  if(x==="forget"){if(!confirm("이 브라우저에서 편집 권한을 지울까요? 다시 편집하려면 편집 링크로 들어오면 됩니다.")) return; try{localStorage.removeItem(KK);}catch(_){} ME=null; ED.dirty=false; closeEd(); render(); return;}
-  if(x==="backup"){dl("ondash-data-"+todayS()+".json",JSON.stringify(DATA,null,1)); return;}
-  if(x==="revert"){
-    if(ED.dirty&&!confirm("저장하지 않은 변경을 모두 버릴까요?")) return;
-    edSay("마지막 저장본 불러오는 중…");
-    fetchLatest().then(function(L){ if(L){ED.sha=L.sha; applyData(L.data);} else applyData(clone(DEF)); ED.dirty=false; render(); edShell(); edSay("마지막 저장본으로 되돌렸습니다.","ok"); });
-    return;
-  }
-  if(b.dataset.cp){
-    var it=ITEMS[+b.dataset.i], k=b.dataset.k, v=b.dataset.val; it[k]=it[k]||[];
-    var ix=it[k].indexOf(v); if(ix>-1) it[k].splice(ix,1); else it[k].push(v);
-    b.setAttribute("aria-pressed",String(ix<0)); dirty(); later(); return;
-  }
-  if(b.dataset.del!=null){
-    var arr=getP(b.dataset.del), di=+b.dataset.i;
-    if(b.dataset.del==="ships"&&!confirm((arr[di].n||"이 항차")+"를 삭제할까요?")) return;
-    arr.splice(di,1); dirty(); applyData(DATA); render();
-    if(ED.sec==="it") $("edList").innerHTML=itemList(); else {var sc0=$("edB").scrollTop; edBody(); $("edB").scrollTop=sc0;} return;
-  }
-  if(b.dataset.add){getP(b.dataset.add).push(JSON.parse(b.dataset.blank)); dirty(); applyData(DATA); render(); var sc=$("edB").scrollTop; edBody(); $("edB").scrollTop=sc; return;}
-  if(b.dataset.additem){
-    ITEMS.unshift({t:["sch"],a:"sch",o:"ACE",d:todayS(),x:"",s:"open",p:[],k:0});
-    ED.q=""; ED.fs=""; ED.fo=""; dirty(); applyData(DATA); render(); edBody();
-    var first=$("edList").querySelector('input[data-k="x"]'); if(first) first.focus(); return;
-  }
+  if(x==="close"){closeEd();return;}
+  if(x==="save"){save();return;}
+  if(x==="forget"){if(!confirm("이 브라우저에서 편집 권한을 지울까요?"))return;lset(KK,null);ME=null;ED.dirty=false;parse(SRC);show(SRC);closeEd();$("fab").hidden=!canEdit();return;}
+  if(x==="revert"){if(ED.dirty&&!confirm("저장하지 않은 변경을 모두 버릴까요?"))return;parse(SRC);ED.dirty=false;show(SRC);edShell();edSay("되돌렸어요.","ok");return;}
+  if(x==="addEditor"){edAdmin("add");return;}
+  if(x==="addAdmin"){if(!($("edNewName").value||"").trim())$("edNewName").value=(ls(NK)||"관리자")+" (크롬)";edAdmin("add","adm");return;}
+  if(b.dataset.rekey){edAdmin("rekey",b.dataset.rekey);return;}
+  if(b.dataset.revoke){edAdmin("revoke",b.dataset.revoke);return;}
+  if(b.dataset.copy){var cv=b.dataset.copy;(navigator.clipboard?navigator.clipboard.writeText(cv):Promise.reject()).then(function(){edSay("링크를 복사했어요.","ok");},function(){edSay("링크 칸을 선택해 Ctrl+C로 복사하세요.");});return;}
+  if(b.dataset.cp){var it=DATA.items[+b.dataset.i],k=b.dataset.k,v=b.dataset.val;if(!Array.isArray(it[k]))it[k]=it[k]&&it[k].length?clone(it[k]):[];var ix=it[k].indexOf(v);if(ix>-1)it[k].splice(ix,1);else it[k].push(v);b.setAttribute("aria-pressed",String(ix<0));dirty();return;}
+  if(b.dataset.del!=null){var arr=getP(b.dataset.del),di=+b.dataset.i;if(b.dataset.del==="ships"&&!confirm((arr[di].n||"이 항차")+"를 삭제할까요?"))return;arr.splice(di,1);dirty();if(ED.sec==="it")$("edList").innerHTML=itemList();else{var sc0=$("edB").scrollTop;edBody();$("edB").scrollTop=sc0;}return;}
+  if(b.dataset.add){getP(b.dataset.add).push(JSON.parse(b.dataset.blank));dirty();var sc=$("edB").scrollTop;edBody();$("edB").scrollTop=sc;return;}
+  if(b.dataset.additem){DATA.items.unshift({t:["sch"],a:"sch",o:"ACE",d:today(),x:"",s:"open",p:[],k:0});ED.q="";ED.fs="";ED.fo="";dirty();edBody();var f=$("edList").querySelector('input[data-k="x"]');if(f)f.focus();return;}
 });
-window.addEventListener("beforeunload",function(e){if(ED.dirty){e.preventDefault(); e.returnValue="";}});
-window.ONDASH={data:function(){return DATA;}};
-document.addEventListener("click",function(e){
-  var b=e.target.closest("button"); if(!b) return;
-  if(b.dataset.tab){state.tab=b.dataset.tab; try{history.replaceState(null,"","#"+state.tab);}catch(_){} render(); window.scrollTo({top:0});}
-  else if(b.dataset.view){state.view=b.dataset.view; render();}
-  else if(b.dataset.pj){state.proj=b.dataset.pj; render();}
-  else if(b.dataset.tr){state.tr=+b.dataset.tr; render();}
-  else if(b.dataset.slip){state.slip=+b.dataset.slip; render();}
-});
-document.addEventListener("input",function(e){
-  if(e.target&&e.target.id==="cdate"){state.cd=e.target.value; var r=$("cres"); if(r) r.innerHTML=calcRes();}
-});
-(function init(){
+window.addEventListener("beforeunload",function(e){if(ED.dirty){e.preventDefault();e.returnValue="";}});
+window.ONDASH={load:function(s,sha){SRC=s;SHA=sha||null;parse(SRC);show(SRC);},parse:parse,build:build,data:function(){return DATA;},src:function(){return SRC;}};
+
+/* =================== boot =================== */
+(async function(){
   var hm=(location.hash||"").match(/(?:^#|&)edit=([^&]+)/);
-  if(hm){try{localStorage.setItem(KK,decodeURIComponent(hm[1]));}catch(_){} try{history.replaceState(null,"",location.pathname+location.search);}catch(_){}}
-  var h=(location.hash||"").replace("#","");
-  if(BODY[h]) state.tab=h;
-  render();
+  if(hm){lset(KK,decodeURIComponent(hm[1]));curTab="";try{history.replaceState(null,"",location.pathname+location.search);}catch(_){}}
+  var src=null;
+  try{var c=JSON.parse(sessionStorage.getItem(SC)||"null");if(c&&Date.now()-c.at<5*60e3){src=c.src;SHA=c.sha;}}catch(_){}
+  if(!src){try{var r=await fetch(FILE+"?_="+Date.now(),{cache:"no-store"});if(r.ok)src=await r.text();}catch(_){}}
+  if(!src){$("msg").textContent="대시보드를 불러오지 못했어요. 잠시 후 새로고침해 주세요.";return;}
+  SRC=src;parse(SRC);show(SRC);
   loadEditors();
-  var c=null; try{c=JSON.parse(localStorage.getItem(CK)||"null");}catch(_){}
-  fetch("data.json?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}).then(function(d){
-    var best=d; if(c&&c.data&&(!d||(c.data.updated||"")>(d.updated||""))) best=c.data;
-    if(best&&best.v===1&&!ED.dirty){applyData(clone(best)); render();}
-  });
 })();
 })();
 </script>
-
 </body></html>
