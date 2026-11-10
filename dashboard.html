@@ -472,13 +472,16 @@ var DAILY=[
  ["5항차","2027-02-15","Warrenton 1 16",16,16],["","2027-02-16","Warrenton 1 8 · Childress 1 16",24,40],["","2027-02-17","Childress 1 16",16,56],["","2027-02-18","Childress 1 24",24,80],["","2027-02-19","Childress 1 16",16,96],
  ["6항차","2027-03-18","Warrenton 1 16",16,16],["","2027-03-19","Warrenton 1 24",24,40]
 ];
-var state={tab:"rev",ru:"qty",rt:60,rv:"arr",view:"area",proj:"all",tr:60,slip:0,cd:"2026-11-23"};
+var state={tab:"rev",ru:"qty",rt:"ship",rv:"arr",view:"area",proj:"all",tr:"ship",slip:0,cd:"2026-11-23"};
 
 /* ---------- small builders ---------- */
 function pv(it){return state.proj==="all"||!it.p||!it.p.length||it.p.indexOf(state.proj)>-1;}
 function shHas(s){return state.proj==="all"||s.m[state.proj]>0;}
 function shQ(s){return state.proj==="all"?s.q:(s.m[state.proj]||0);}
-function arrive(s){return D(s.ship)+state.tr*864e5;}
+/* 운송 기준: ship = 대홍전기 출고일 +60일 · sail = 출항일(출고 다음 주 수요일) +53일 */
+function arrOf(t,m){return m==="sail"?sail(t)+53*864e5:t+60*864e5;}
+function trTxt(m){return m==="sail"?"출항 +53일":"출고 +60일";}
+function arrive(s){return arrOf(D(s.ship),state.tr);}
 function marginOf(s){return days(arrive(s),s.deadline);}
 function lateOf(s){return days(s.winStart,arrive(s));}
 function chipO(o){return '<span class="own o-'+OK[o]+'">'+o+'</span>';}
@@ -582,7 +585,7 @@ function gantt(){
   return '<div class="scroll"><div class="gt">'+h+'</div></div>'+leg;
 }
 function trSeg(){
-  return '<div class="seg" role="group" aria-label="운송 기준">'+[[60,"출고 +60일 · 출항 +53일"],[33,"참고 33일"],[30,"참고 30일"]].map(function(v){return '<button data-tr="'+v[0]+'" aria-pressed="'+(state.tr===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
+  return '<div class="seg" role="group" aria-label="운송 기준">'+[["ship","출고일 기준 +60일"],["sail","출항일 기준 +53일"]].map(function(v){return '<button data-tr="'+v[0]+'" aria-pressed="'+(state.tr===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
 }
 
 /* ---------- TAB: 개요 ---------- */
@@ -593,7 +596,7 @@ function tabOv(){
    +'<div class="kpi"><span class="l">1항차 출고 완료</span><span class="v">100<small>면</small></span><span class="s">전량 (10/26~30) · 10/30 20면 · 출하 레포트 제출</span></div>'
    +'<div class="kpi"><span class="l">2항차 외함조립</span><span class="v">104<small>면</small></span><span class="s">2항차 전체 완료 · 3항차 14면 · 누계 218/226 (96%)</span></div>'
    +'<div class="kpi"><span class="l">확정 생산</span><span class="v">561<small>면</small></span><span class="s">+ GoldenEye 116 · Eagle 57</span></div>'
-   +'<div class="kpi"><span class="l">1항차 도착 여유</span><span class="v">'+marginOf(SH[0])+'<small>일</small></span><span class="s">'+state.tr+'일 운송 기준 (출고 +60 · 출항 +53)</span></div>'
+   +'<div class="kpi"><span class="l">1항차 도착 여유</span><span class="v">'+marginOf(SH[0])+'<small>일</small></span><span class="s">'+trTxt(state.tr)+' 기준</span></div>'
    +'</div>';
   var up=ITEMS.filter(function(i){return pv(i)&&i.d&&i.s!=="done"&&i.s!=="risk"&&dd(i.d)>=0&&(i.a==="sch"||i.a==="ms");}).sort(cmp).slice(0,6);
   var iss=ITEMS.filter(function(i){return pv(i)&&i.k&&i.s!=="done"&&(i.s==="risk"||i.a!=="sch");}).sort(function(a,b){
@@ -603,7 +606,7 @@ function tabOv(){
     return [s.n+'<span class="sub">'+codes(s)+'</span>', shQ(s)+(state.proj!=="all"?'<span class="sub">항차 '+s.q+'</span>':""), s.win, s.fat+'<span class="sub">'+s.att+'</span>', md(fmt(arrive(s))), marg(marginOf(s)), stDot(s.st[0],s.st[1])];
   });
   if(rows.length>1) rows.push({cls:"tot",c:["합계",shs.reduce(function(a,s){return a+shQ(s);},0),"","","","",""]});
-  var snap=rows.length?tbl(["항차","면수","출고","FAT · 입회","도착 ("+state.tr+"일)","여유","상태"],rows,{num:[1,4,5]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다.</div>';
+  var snap=rows.length?tbl(["항차","면수","출고","FAT · 입회","도착 ("+trTxt(state.tr)+")","여유","상태"],rows,{num:[1,4,5]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다.</div>';
   return kp+'<div class="grid">'
     +panel("sch","다가오는 일정","오늘 이후 · 위험 항목은 오른쪽",'<div class="rows">'+(up.length?up.map(function(i){return itemEl(i);}).join(""):'<div class="empty">예정된 일정이 없습니다.</div>')+'</div>',5)
     +panel("risk","지금 풀어야 할 핵심 이슈","핵심 "+iss.length+"건",'<div class="rows">'+(iss.length?iss.map(function(i){return itemEl(i);}).join(""):'<div class="empty">해당 항목이 없습니다.</div>')+'</div>',7)
@@ -632,7 +635,7 @@ function tabSch(){
   return '<div class="grid">'
    +panel("sch","항차 타임라인","운송 기준 "+trSeg(),gantt(),12)
    +panel("sch","항차별 출고 · FAT · 도착",(state.proj==="all"?"":PN[state.proj]+" 포함 항차만"),
-      rows.length?tbl(["항차","면수","출고 창","FAT · 입회","FAT D-day","도착 ("+state.tr+"일)","여유"],rows,{num:[1,4,5,6]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다.</div>',7)
+      rows.length?tbl(["항차","면수","출고 창","FAT · 입회","FAT D-day","도착 ("+trTxt(state.tr)+")","여유"],rows,{num:[1,4,5,6]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다.</div>',7)
    +panel("sch","10월 말 주요 일정","7건이 2주 안에 몰려 있음",'<div class="rows">'+mj+'</div>',5)
    +'</div>'
    +'<details style="margin-top:14px"><summary>항차별 일자별 출고표 <small>16 · 24 · 16 · 24대 패턴, 컨테이너 8unit 단위 · 561면</small></summary><div class="dbody">'+daily
@@ -666,7 +669,7 @@ function tabMs(){
   function cell(d){var n=dd(d);return n<0?stDot("good",md(d)):md(d);}
   function rng(a,b){return (dd(b)<0?stDot("good",md(a)+"~"+md(b)):md(a)+"~"+md(b));}
   var grows=SH.filter(shHas).map(function(s){
-    return [s.n+'<span class="sub">'+shQ(s)+'면 · '+codes(s)+'</span>',cell(s.prod[0]),rng(s.insp[0],s.insp[1]),s.fat+'<span class="sub">'+s.att+'</span>',s.win,md(fmt(arrive(s)))+'<span class="sub">'+state.tr+'일 기준</span>',md(fmt(s.deadline))+'<span class="sub">여유 '+marginOf(s)+'일</span>'];
+    return [s.n+'<span class="sub">'+shQ(s)+'면 · '+codes(s)+'</span>',cell(s.prod[0]),rng(s.insp[0],s.insp[1]),s.fat+'<span class="sub">'+s.att+'</span>',s.win,md(fmt(arrive(s)))+'<span class="sub">'+trTxt(state.tr)+' 기준</span>',md(fmt(s.deadline))+'<span class="sub">여유 '+marginOf(s)+'일</span>'];
   });
   var gr=panel("ms","항차별 생산 · 검사 · 인도 이정표","● 경과  ·  운송 기준 "+trSeg(),grows.length?tbl(["항차","생산 착수","검사 · FAT (ACE)","고객 FAT","출고","도착","납품 기한"],grows,{}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다.</div>',12);
   return '<div class="grid">'+pay+mat+gr+'</div>';
@@ -797,7 +800,7 @@ function tabLogi(){
     ["Eagle","PO-000213","57 (11·23·23)","PO 접수","2027-11-12 ~ 2028-03-01","Lewisville 2","2027-03-26 (오기 가능성)","Deposit 청구 · SOP 25% 2027-06-05"],
     {cls:"tot",c:["합계","","180","","","","",""]}],{num:[2]}),12);
   var SEQ=[["2027-06-05","GoldenEye B1",29,"2027-06-09","2027-07-17"],["2027-09-04","GoldenEye B2",29,"2027-08-31","2027-10-16"],["2027-11-06","Eagle B1",11,"2027-11-12","2027-12-18"],["2027-12-05","GoldenEye B3",29,"2027-12-09","2028-01-16"],["2027-12-13","Eagle B2",23,"2027-12-19","2028-01-24"],["2028-01-19","Eagle B3",23,"2028-01-25","2028-03-01"],["2028-03-05","GoldenEye B4",29,"2028-03-08","2028-04-16"]];
-  var seq=panel("l","GoldenEye · Eagle 대홍전기 출고 순서","출고 = Delivery Date − 6주 · 주말이면 직전 금요일 · 출항 = 출고 다음 주 수요일",tbl(["대홍전기 출고","배치","수량","납품 개시","Delivery Date","출항","도착 예상","여유"],SEQ.map(function(r){var f=sail(D(r[0])+state.slip*864e5),ea=eta(f);return r.concat([mdw(f),mdw(ea),marg(days(ea,D(r[4])))]);}).filter(function(r){return state.proj==="all"||(state.proj==="GE"&&r[1].indexOf("Golden")===0)||(state.proj==="EG"&&r[1].indexOf("Eagle")===0);}).concat(state.proj==="all"?[{cls:"tot",c:["합계","",173,"","","","",""]}]:[]),{num:[2]}),7);
+  var seq=panel("l","GoldenEye · Eagle 대홍전기 출고 순서","출고 = Delivery Date − 6주 · 주말이면 직전 금요일 · 출항 = 출고 다음 주 수요일",tbl(["대홍전기 출고","배치","수량","납품 개시","Delivery Date","출항","도착 예상","여유"],SEQ.map(function(r){var t0=D(r[0])+state.slip*864e5,f=sail(t0),ea=arrOf(t0,state.tr);return r.concat([mdw(f),mdw(ea),marg(days(ea,D(r[4])))]);}).filter(function(r){return state.proj==="all"||(state.proj==="GE"&&r[1].indexOf("Golden")===0)||(state.proj==="EG"&&r[1].indexOf("Eagle")===0);}).concat(state.proj==="all"?[{cls:"tot",c:["합계","",173,"","","","",""]}]:[]),{num:[2]}),7);
   /* monthly load */
   var load={};
   SH.forEach(function(s){var a=D(s.prod[0]),b=D(s.prod[1]),n=days(a,b)+1,per=s.q/n;for(var k=0;k<n;k++){var d=new Date(a+k*864e5),key=d.getUTCFullYear()+"-"+((d.getUTCMonth()+1)<10?"0":"")+(d.getUTCMonth()+1);load[key]=(load[key]||0)+per;}});
@@ -813,7 +816,6 @@ var WD=["일","월","화","수","목","금","토"], PRE=7; /* 운송 기준: 출
 function mdw(ms){var d=new Date(ms);return (d.getUTCMonth()+1)+"/"+d.getUTCDate()+"("+WD[d.getUTCDay()]+")";}
 /* 출항 = 대홍전기 출고일이 속한 주의 다음 주 수요일 */
 function sail(t){var dow=new Date(t).getUTCDay(), mon=t-((dow+6)%7)*864e5; return mon+9*864e5;}
-function eta(sailMs){return sailMs+(state.tr-PRE)*864e5;}
 function span2(a,b){return a===b?mdw(a):mdw(a)+" ~ "+mdw(b);}
 function shipSpan(n){
   var cur="",a=null,b=null;
@@ -833,7 +835,7 @@ function etaPanel(){
   var rows=[];
   SH.filter(shHas).forEach(function(s){
     var sp=shipSpan(s.n), a=sp[0], b=sp[1]; if(a===null) return;
-    var sl=slipFor(a), as=a+sl*864e5, bs=b+sl*864e5, fa=sail(as), fb=sail(bs), ea=eta(fa), eb=eta(fb);
+    var sl=slipFor(a), as=a+sl*864e5, bs=b+sl*864e5, fa=sail(as), fb=sail(bs), ea=arrOf(as,state.tr), eb=arrOf(bs,state.tr);
     var mg=days(eb,s.deadline);
     var stt=eb<=T?stDot("good","도착 완료"):(fa<=T?stDot("mid","운송 중"):(as<=T?stDot("mid","출항 대기"):stDot("off","출고 전")));
     rows.push([s.n+'<span class="sub">'+codes(s)+'</span>',
@@ -854,9 +856,9 @@ function etaPanel(){
       var cur="";for(var k=i;k>=0;k--){if(DAILY[k][0]){cur=DAILY[k][0];break;}}
       var sh=SH.filter(function(x){return x.n===cur;})[0]; if(sh&&!shHas(sh)) return null;
       var t=D(r[1])+slipFor(shipSpan(cur)[0])*864e5, f=sail(t);
-      return [r[0]||'&nbsp;',mdw(t),r[2],r[4],mdw(f),'<b>'+mdw(eta(f))+'</b>'];
+      return [r[0]||'&nbsp;',mdw(t),r[2],r[4],mdw(f),'<b>'+mdw(arrOf(t,state.tr))+'</b>'];
     }).filter(Boolean),{num:[3]})+'</div></details>':"";
-  return panel("l","대홍전기 출고 · 출항 · 도착 예상","출항 = 출고 다음 주 수요일 · 도착 = 출항 + 53일 (출고 기준 60일)",ctl+tb+calc+dl+note("운송 기준은 대홍전기 출고일 기준 60일, 출항일 기준 53일입니다(출고→출항 7일). 이 표의 도착 예상은 출항일 + 53일이고, 항차 요약·간트·여유 KPI는 출고일 + 60일로 계산합니다. 참고 33·30일을 고르면 출항일 + (운송일 − 7일)로 바뀝니다. 1항차는 이미 전량 출고돼 지연 시뮬레이션이 적용되지 않습니다. 여유는 항차 마지막 출고분 도착 기준으로 가장 이른 인도 기한과 비교합니다."),12);
+  return panel("l","대홍전기 출고 · 출항 · 도착 예상","출항 = 출고 다음 주 수요일 · 도착 = "+(state.tr==="sail"?"출항일 + 53일":"출고일 + 60일"),ctl+tb+calc+dl+note("운송 기준은 두 가지입니다. 출고일 기준은 대홍전기 출고일 + 60일, 출항일 기준은 출항일(출고 다음 주 수요일) + 53일입니다. 고른 기준이 이 표와 항차 현황·간트·여유 KPI·GoldenEye·Eagle 순서표에 함께 적용됩니다. 1항차는 이미 전량 출고돼 지연 시뮬레이션이 적용되지 않습니다. 여유는 항차 마지막 출고분 도착 기준으로 가장 이른 인도 기한과 비교합니다."),12);
 }
 
 /* ---------- TAB: 이슈 ---------- */
@@ -909,11 +911,11 @@ function revPlan(){
   function add(q,k,m,ship,ar,qty){q[k][m]=(q[k][m]||0)+qty;}
   SH.forEach(function(sh){
     var sp=shipSpan(sh.n); if(sp[0]===null) return;
-    var e=sp[1]+state.rt*864e5, mk=mkOf(e), sk=skOf(sp[1]);
+    var e=arrOf(sp[1],state.rt), mk=mkOf(e), sk=skOf(sp[1]);
     sh.order.forEach(function(k){add(A,k,mk,0,0,sh.m[k]); add(S,k,sk,0,0,sh.m[k]);});
     P.push({n:sh.n,sub:codes(sh),ship:sp[1],arr:e,mk:mk,sk:sk,q:sh.q});
   });
-  GESEQ.forEach(function(g){var sh=D(g[0]), e=sh+state.rt*864e5, mk=mkOf(e), sk=skOf(sh); add(A,g[1],mk,0,0,g[3]); add(S,g[1],sk,0,0,g[3]); P.push({n:g[2],sub:"",ship:sh,arr:e,mk:mk,sk:sk,q:g[3]});});
+  GESEQ.forEach(function(g){var sh=D(g[0]), e=arrOf(sh,state.rt), mk=mkOf(e), sk=skOf(sh); add(A,g[1],mk,0,0,g[3]); add(S,g[1],sk,0,0,g[3]); P.push({n:g[2],sub:"",ship:sh,arr:e,mk:mk,sk:sk,q:g[3]});});
   P.sort(function(x,y){return x.arr-y.arr;});
   return {A:A,S:S,P:P};
 }
@@ -954,7 +956,7 @@ function tabRev(){
    +'<div class="kpi"><span class="l">현재 인식 완료</span><span class="v">0<small>면</small></span><span class="s">1항차 100면 출고 완료 · 도착 대기</span></div>'
    +'</div>';
   var segU='<div class="seg" role="group" aria-label="단위">'+[["qty","수량 (면)"],["usd","매출 USD (백만)"],["krw","매출 억원 @1,250"]].map(function(v){return '<button data-ru="'+v[0]+'" aria-pressed="'+(u===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
-  var segR='<div class="seg" role="group" aria-label="운송 기준">'+[[60,"출고일 + 60일"],[33,"+ 33일"],[30,"+ 30일"]].map(function(v){return '<button data-rt="'+v[0]+'" aria-pressed="'+(state.rt===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
+  var segR='<div class="seg" role="group" aria-label="운송 기준">'+[["ship","출고일 기준 +60일"],["sail","출항일 기준 +53일"]].map(function(v){return '<button data-rt="'+v[0]+'" aria-pressed="'+(state.rt===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
   var ctl='<div class="ctl"><div><span class="lb">단위</span>'+segU+'</div>'+(view==="ship"?"":'<div><span class="lb">운송 기준 (대홍전기 출고 → 도착)</span>'+segR+'</div>')+'</div>';
   var head=["PJT","PO","수량"].concat(cols.map(lab));
   var body=rows.map(function(r){
@@ -969,7 +971,7 @@ function tabRev(){
   var sub=view==="ship"?"대홍전기 출고 기준 · 항차 마지막 출고일이 속한 달":"도착 시점(매출 인식) 기준 · 단가 $46,600/면 · 환율 1,250원";
   var nt=view==="ship"
     ?"출고월 = 항차(배치) 마지막 <b>대홍전기 출고일</b>이 속한 달입니다. 출고 계획은 이 보드의 항차 일정(1항차 실적, 2~6항차 계획)과 GoldenEye · Eagle 출고 순서표(Delivery Date − 6주)를 그대로 씁니다. 금액은 같은 단가(수량 × $46,600)로 환산한 참고값이며 매출 인식은 ‘도착 시점 기준’ 보기에서 확인하세요."
-    :"인식월 = 항차 마지막 <b>대홍전기 출고일 + "+state.rt+"일</b>이 속한 달입니다. 금액은 수량 × $46,600(기존 청구 단가)이며 재견적 차액은 반영하지 않았습니다.";
+    :"인식월 = 항차 마지막 <b>"+(state.rt==="sail"?"대홍전기 출고 다음 주 수요일(출항) + 53일":"대홍전기 출고일 + 60일")+"</b>이 속한 달입니다. 금액은 수량 × $46,600(기존 청구 단가)이며 재견적 차액은 반영하지 않았습니다.";
   var main=panel(null,ttl,sub,ctl+tbl(head,body,{num:[2].concat(cols.map(function(_,i){return i+3;}))})+note(nt),12);
   var mx=Math.max.apply(null,cols.map(function(k){return tot[k]||0;}).concat([1])), top=mx*1.18;
   var cf={},hd={}; cols.forEach(function(k){cf[k]=0;hd[k]=0;});
@@ -986,10 +988,10 @@ function tabRev(){
   var ys=panel(null,view==="ship"?"연도별 출고":"연도별 인식","합계 "+fm(tq)+"면",tbl(["연도","면수","USD (백만)","억원","비중"],YR.map(function(y){return [y[0],fm(y[1]),(y[1]*UNITP/1e6).toFixed(2),(y[1]*UNITP*FXR/1e8).toFixed(1),tq?(y[1]/tq*100).toFixed(0)+"%":"–"];}).concat([{cls:"tot",c:["합계",fm(tq),(tq*UNITP/1e6).toFixed(2),(tq*UNITP*FXR/1e8).toFixed(1),"100%"]}]),{num:[1,2,3,4]}),5);
   var plRows=PL.P.filter(function(p){return state.proj==="all"||(p.sub?p.sub.indexOf(state.proj+" ")>-1:(state.proj==="GE"?p.n.indexOf("Golden")===0:(state.proj==="EG"&&p.n.indexOf("Eagle")===0)));}).map(function(p){
     return [p.n+(p.sub?'<span class="sub">'+p.sub+'</span>':""),mdw(p.ship),'<b>'+skLabel(p.sk)+'</b>',mdw(p.arr),'<b>'+MKL[p.mk]+'</b>',fm(p.q),(p.q*UNITP/1e6).toFixed(2)];});
-  var sch=panel(null,"항차별 출고 · 인식 일정","도착 = 마지막 출고일 + "+state.rt+"일",tbl(["항차 · 배치","대홍전기 출고","출고월","도착 예상","인식월","면수","USD (백만)"],plRows,{num:[5,6]}),7);
+  var sch=panel(null,"항차별 출고 · 인식 일정","도착 = "+(state.rt==="sail"?"마지막 출고분 출항일 + 53일":"마지막 출고일 + 60일"),tbl(["항차 · 배치","대홍전기 출고","출고월","도착 예상","인식월","면수","USD (백만)"],plRows,{num:[5,6]}),7);
   var lastY=p1?days(p1.ship,D("2026-12-31")):0, slack=p1?days(p1.arr,D("2026-12-31")):0;
   var chk=panel(null,"확인 필요","초안 가정",'<ol class="steps">'
-    +'<li><div><b>2026년 연말 컷오프</b><span>1항차 마지막 출고 '+(p1?mdw(p1.ship):"")+' + '+state.rt+'일 = '+(p1?mdw(p1.arr):"")+(slack>=0?' · 12/31까지 '+slack+'일 여유':' · 연도 경과')+' (운송이 '+lastY+'일을 넘으면 2026년 인식 0면)</span></div></li>'
+    +'<li><div><b>2026년 연말 컷오프</b><span>1항차 마지막 출고 '+(p1?mdw(p1.ship):"")+' → '+trTxt(state.rt)+' = '+(p1?mdw(p1.arr):"")+(slack>=0?' · 12/31까지 '+slack+'일 여유':' · 연도 경과')+' (출고 후 '+lastY+'일 안에 도착하지 못하면 2026년 인식 0면)</span></div></li>'
     +'<li><div><b>인식 시점의 정의</b><span>최종 인도월 = MPS 도착 기준인지, 고객 인수·검수 기준인지 확인</span></div></li>'
     +'<li><div><b>단가</b><span>$46,600/면은 기존 청구 단가이며 재견적·설계 변경 차액은 미반영</span></div></li>'
     +'<li><div><b>미반영 173면</b><span>GoldenEye 116(릴리스 대기, 12/15 전까지 취소 가능) · Eagle 57은 대홍 마스터플랜에 없음</span></div></li></ol>',5);
@@ -1018,9 +1020,9 @@ document.addEventListener("click",function(e){
   else if(b.dataset.view){state.view=b.dataset.view; render();}
   else if(b.dataset.ru){state.ru=b.dataset.ru; render();}
   else if(b.dataset.rv){state.rv=b.dataset.rv; render();}
-  else if(b.dataset.rt){state.rt=+b.dataset.rt; render();}
+  else if(b.dataset.rt){state.rt=b.dataset.rt; render();}
   else if(b.dataset.pj){state.proj=b.dataset.pj; render();}
-  else if(b.dataset.tr){state.tr=+b.dataset.tr; render();}
+  else if(b.dataset.tr){state.tr=b.dataset.tr; render();}
   else if(b.dataset.slip){state.slip=+b.dataset.slip; render();}
 });
 document.addEventListener("input",function(e){
