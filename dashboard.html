@@ -381,7 +381,7 @@ var ITEMS=[
  {t:["sch"],a:"sch",o:"On Energy",d:"2027-01-15",x:"4항차 FAT (금) → 출고 1/18~22 · 104면",s:"open",p:["A9","A10","W1"]},
  {t:["sch"],a:"sch",o:"On Energy",d:"2027-02-12",x:"5항차 FAT (금) → 출고 2/15~19 · 96면",s:"open",p:["C1","W1"]},
  {t:["sch"],a:"sch",o:"On Energy",d:"2027-03-15",x:"6항차 FAT (월) → 출고 3/18~19 · 40면",s:"open",p:["W1"]},
- {t:["sch","logi"],a:"sch",o:"ACE",d:"2026-12-02",x:"1항차 도착 (실측 33일) · 기한 1/3까지 32일",s:"open",p:["A9","A10"]},
+ {t:["sch","logi"],a:"sch",o:"ACE",d:"2026-12-29",x:"1항차 도착 예정 12/29 (출고 10/30 + 60일 · 출항 11/04 + 53일이면 12/27) · 기한 1/3까지 5일",s:"open",p:["A9","A10"]},
  {t:["sch","ms"],a:"sch",o:"대홍",d:"2026-11-04",x:"3항차 생산 착수 · SPD 428EA 결론 필요",s:"open",p:["A9","A10","C1","W1"]},
  {t:["sch","prod"],a:"sch",o:"ACE",d:"2026-10-20",x:"출고 서류 미팅 완료 (Shipping Mark·출고증·인수증)",s:"done"},
  {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-11-06",x:"2항차 샘플 부품 합동 검사 실시(11/4) · BOM Sub assembly 정보 추가 기재 요청 · Indicating Light(Green) 미입고로 차주 검사 · 결과 Reporting ~11/06",s:"prog",p:["A9","A10","C1","CF"],k:1},
@@ -405,7 +405,7 @@ var ITEMS=[
  {t:["ms","prod"],a:"ms",o:"대홍",d:"2026-10-09",x:"1항차 완성품조립 종료 계획 · 전장조립 100% 완료 (10/30 일보)",s:"done",p:["A9","A10"]},
  {t:["ms","prod"],a:"ms",o:"대홍",d:"2026-11-07",x:"2항차 판금 완료 11/07 (Rev.06 계획 11/05, Rev.05 계획 10/23) · BUS 완료 11/02 · 외함조립 104/104면",s:"done",p:["A9","A10","C1","CF"],k:1},
  {t:["ms"],a:"ms",o:"대홍",d:"2026-12-03",x:"4·5·6항차 생산 착수 12/03 · 12/30 · 2/10",s:"open"},
- {t:["ms"],a:"ms",o:"On Energy",d:"2027-01-03",x:"1항차 납품 완료 기한 (대외 60일 기준 여유 5일)",s:"open",p:["A9","A10"]},
+ {t:["ms"],a:"ms",o:"On Energy",d:"2027-01-03",x:"1항차 납품 완료 기한 (출고 +60일 기준 여유 5일)",s:"open",p:["A9","A10"]},
  {t:["ms","logi","risk"],a:"ms",o:"ACE",d:"2026-12-10",x:"GoldenEye 릴리스를 A-2 마일스톤에 편입 · deadline = 개시 −180일",s:"open",p:["GE"],k:1},
  {t:["sch","ms"],a:"sch",o:"On Energy",d:"2026-12-15",x:"GoldenEye 릴리스 기한 · 취소수수료 면제 종료",s:"open",p:["GE"],k:1},
  {t:["ms"],a:"ms",o:"On Energy",d:"2027-03-26",x:"GoldenEye FAT (Eagle PO 동일 날짜는 오기 가능성)",s:"open",p:["GE","EG"]},
@@ -445,7 +445,7 @@ var ITEMS=[
  {t:["prod"],a:"q",o:"대홍",d:"",x:"MCCB·SPD·FAN 입고 확인 (품목표는 9/14 기준)",s:"open",p:["A9","A10"]},
  {t:["prod"],a:"q",o:"대홍",d:"",x:"설계 생산배포 0% 표기 확인 (기입 누락 추정)",s:"open"},
  {t:["logi"],a:"l",o:"ACE",d:"",x:"변경 주소 기준 리드타임 재산출 (30~33일 유지 여부)",s:"open"},
- {t:["logi"],a:"l",o:"ACE",d:"2026-12-02",x:"제품 손상 대응 절차 확정 (통보 시한·검수·사진)",s:"open"},
+ {t:["logi"],a:"l",o:"ACE",d:"2026-12-27",x:"제품 손상 대응 절차 확정 (통보 시한·검수·사진)",s:"open"},
  {t:["logi"],a:"l",o:"ACE",d:"",x:"DC Cabinet 면당 중량 (53′ 밴 상한 5,500 lb/면)",s:"open"},
  {t:["logi"],a:"l",o:"대홍",d:"2026-10-26",x:"출고 차량 배차 Scope (DDP 공장 구간 부담 주체)",s:"open"},
  {t:["logi"],a:"l",o:"ACE",d:"",x:"Coffee 인도지 Douglas, GA — 별건 견적 · 컨테이너 분리",s:"open",p:["CF"]},
@@ -472,7 +472,7 @@ var DAILY=[
  ["5항차","2027-02-15","Warrenton 1 16",16,16],["","2027-02-16","Warrenton 1 8 · Childress 1 16",24,40],["","2027-02-17","Childress 1 16",16,56],["","2027-02-18","Childress 1 24",24,80],["","2027-02-19","Childress 1 16",16,96],
  ["6항차","2027-03-18","Warrenton 1 16",16,16],["","2027-03-19","Warrenton 1 24",24,40]
 ];
-var state={tab:"rev",ru:"qty",rt:60,rv:"arr",view:"area",proj:"all",tr:33,slip:0,cd:"2026-11-23"};
+var state={tab:"rev",ru:"qty",rt:60,rv:"arr",view:"area",proj:"all",tr:60,slip:0,cd:"2026-11-23"};
 
 /* ---------- small builders ---------- */
 function pv(it){return state.proj==="all"||!it.p||!it.p.length||it.p.indexOf(state.proj)>-1;}
@@ -582,7 +582,7 @@ function gantt(){
   return '<div class="scroll"><div class="gt">'+h+'</div></div>'+leg;
 }
 function trSeg(){
-  return '<div class="seg" role="group" aria-label="운송 기준">'+[[60,"대외 60일"],[33,"실측 33일"],[30,"실측 30일"]].map(function(v){return '<button data-tr="'+v[0]+'" aria-pressed="'+(state.tr===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
+  return '<div class="seg" role="group" aria-label="운송 기준">'+[[60,"출고 +60일 · 출항 +53일"],[33,"참고 33일"],[30,"참고 30일"]].map(function(v){return '<button data-tr="'+v[0]+'" aria-pressed="'+(state.tr===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
 }
 
 /* ---------- TAB: 개요 ---------- */
@@ -593,7 +593,7 @@ function tabOv(){
    +'<div class="kpi"><span class="l">1항차 출고 완료</span><span class="v">100<small>면</small></span><span class="s">전량 (10/26~30) · 10/30 20면 · 출하 레포트 제출</span></div>'
    +'<div class="kpi"><span class="l">2항차 외함조립</span><span class="v">104<small>면</small></span><span class="s">2항차 전체 완료 · 3항차 14면 · 누계 218/226 (96%)</span></div>'
    +'<div class="kpi"><span class="l">확정 생산</span><span class="v">561<small>면</small></span><span class="s">+ GoldenEye 116 · Eagle 57</span></div>'
-   +'<div class="kpi"><span class="l">1항차 도착 여유</span><span class="v">'+marginOf(SH[0])+'<small>일</small></span><span class="s">'+state.tr+'일 운송 기준 · 대외 60일이면 5일</span></div>'
+   +'<div class="kpi"><span class="l">1항차 도착 여유</span><span class="v">'+marginOf(SH[0])+'<small>일</small></span><span class="s">'+state.tr+'일 운송 기준 (출고 +60 · 출항 +53)</span></div>'
    +'</div>';
   var up=ITEMS.filter(function(i){return pv(i)&&i.d&&i.s!=="done"&&i.s!=="risk"&&dd(i.d)>=0&&(i.a==="sch"||i.a==="ms");}).sort(cmp).slice(0,6);
   var iss=ITEMS.filter(function(i){return pv(i)&&i.k&&i.s!=="done"&&(i.s==="risk"||i.a!=="sch");}).sort(function(a,b){
@@ -780,9 +780,9 @@ function tabLogi(){
   var rows=SH.filter(shHas).map(function(s){return [s.n,s.ship.slice(5),cols.map(function(k){return s.m[k]?s.m[k]:'<span class="mut">—</span>';}),shQ(s)].reduce(function(a,v){return a.concat(v);},[]);});
   var comp=panel("l","항차 구성 (프로젝트별 면수)","A9 Abilene 9 · A10 Abilene 10 · C1 Childress 1 · W1 Warrenton 1 · CF Coffee",
     rows.length?tbl(["항차","출고","A9","A10","C1","W1","CF","합계"],rows.concat(state.proj==="all"?[{cls:"tot",c:["합계","",170,170,113,101,7,561]}]:[]),{num:[2,3,4,5,6,7]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다. GoldenEye 116면은 릴리스 대기입니다.</div>',6);
-  var lead=panel("l","구간 리드타임","합계 30~33일 · 지연 제외 · 대외 공유 60일",
+  var lead=panel("l","구간 리드타임","운송 기준 출고 +60일 · 출항 +53일 · 아래는 구간별 실측 30~33일",
     '<div class="flow" style="--n:5"><div class="fl h"><div class="a">대홍전기 출고</div><div class="b">1일</div><div class="c">CFS까지</div></div><div class="fl h"><div class="a">CFS 혼재 · 적입</div><div class="b">1일</div><div class="c">부산</div></div><div class="fl h"><div class="a">부산신항 → 도착 항구</div><div class="b">25~27일</div><div class="c">해상</div></div><div class="fl h"><div class="a">양하 · 통관</div><div class="b">1일</div><div class="c">도착 항구</div></div><div class="fl h"><div class="a">CFS 디배닝 → MPS</div><div class="b">1~2일</div><div class="c">내륙</div></div></div>'
-    +note("차이 27~30일이 대외적으로 드러나지 않은 버퍼입니다. 해상 25~27일은 걸프 항로 값에 가까워 도착 항구 확인이 필요합니다.")
+    +note("기준 60일과 실측 30~33일의 차이 27~30일이 버퍼입니다. 해상 25~27일은 걸프 항로 값에 가까워 도착 항구 확인이 필요합니다.")
     +'<div class="stats" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="stat"><div class="l">긴급 항공 운송</div><div class="v c-bad">2<small>면</small></div><div class="s">11/11 FAT · 11/16 출고 · DDP라 운임은 ACE 부담</div></div><div class="stat"><div class="l">53′ dry van 상한</div><div class="v">5,500<small>lb/면</small></div><div class="s">44,000 lb ÷ 8unit</div></div></div>',6);
   var DEST=[["1항차",50,50,0,100,13,14],["2항차",40,57,7,104,13,14],["3항차",53,64,0,117,15,15],["4항차",64,40,0,104,13,13],["5항차",24,72,0,96,12,12],["6항차",40,0,0,40,5,5]];
   var dst=panel("l","인도지별 면수 · 컨테이너","혼적 71대 → 목적지 분리 73대",tbl(["항차","McKinney","Lewisville 2","Douglas GA","합계","혼적","분리"],DEST.map(function(r){return r.map(function(v,i){return i>0&&i<4&&v===0?'<span class="mut">—</span>':v;});}).concat([{cls:"tot",c:["합계",271,283,7,561,71,73]}]),{num:[1,2,3,4,5,6]}),7);
@@ -790,7 +790,7 @@ function tabLogi(){
     ["McKinney (Mars)","400 Harry McKillop Blvd, McKinney, TX 75069","Abilene 10 · Warrenton 1 · 271"],
     ["Lewisville 2","2555 S. Valley Pkwy, Lewisville, TX 75067","Abilene 9 · Childress 1 · 283"],
     ["Coffee (별건)","745 Brantley Blvd, Douglas, GA 31535","Coffee · 7"]],{})
-    +'<ol class="steps"><li><div><b>제품 손상 발견 시 대응 절차</b><span>통보 시한 · 검수 주체 · 사진 요건 — 1항차 도착(12/02) 전 확정</span></div></li><li><div><b>변경 주소 기준 견적 재산출</b><span>30~33일이 변경 전 주소 기준인지 확인</span></div></li><li><div><b>마진 관련 상세</b><span>재견적과 한 번에 낼지 나눠 낼지 결정</span></div></li></ol>',5);
+    +'<ol class="steps"><li><div><b>제품 손상 발견 시 대응 절차</b><span>통보 시한 · 검수 주체 · 사진 요건 — 1항차 도착(12/27~29) 전 확정</span></div></li><li><div><b>변경 주소 기준 견적 재산출</b><span>30~33일이 변경 전 주소 기준인지 확인</span></div></li><li><div><b>마진 관련 상세</b><span>재견적과 한 번에 낼지 나눠 낼지 결정</span></div></li></ol>',5);
   var po=panel("l","신규 PO 3건","접수 완료 · 확정 561면 + 173면 = 734면",tbl(["프로젝트","PO","수량","단계","납품 구간","인도지","FAT","결제 · 취소 조건"],[
     ["Coffee","PO-000319","7","2항차 편입 (생산 26-10~11)","2027-01-19 ~ 02-12","Douglas, GA","2026-11-18","표준 MSA · Deposit·SOP 청구 완료"],
     ["GoldenEye","PO-000327","116 (29×4)",stDot("mid","릴리스 대기 12/15"),"2027-06-09 ~ 2028-04-16","TBD-Texas","2027-03-26","SOP 30% · 릴리스 전 취소수수료 0%"],
@@ -809,7 +809,7 @@ function tabLogi(){
 }
 
 /* ---------- 대홍전기 출고 → 출항 → 도착 예상 ---------- */
-var WD=["일","월","화","수","목","금","토"], PRE=2;
+var WD=["일","월","화","수","목","금","토"], PRE=7; /* 운송 기준: 출고 +60일 = 출항 +53일 (출고→출항 7일) */
 function mdw(ms){var d=new Date(ms);return (d.getUTCMonth()+1)+"/"+d.getUTCDate()+"("+WD[d.getUTCDay()]+")";}
 /* 출항 = 대홍전기 출고일이 속한 주의 다음 주 수요일 */
 function sail(t){var dow=new Date(t).getUTCDay(), mon=t-((dow+6)%7)*864e5; return mon+9*864e5;}
@@ -825,9 +825,8 @@ function calcRes(){
   var v=state.cd; if(!v||!/^\d{4}-\d{2}-\d{2}$/.test(v)) return '<div class="stat" style="grid-column:1/-1"><div class="s">대홍전기 출고일을 선택하면 출항·도착 예상일이 계산됩니다.</div></div>';
   var s0=D(v), sl=sail(s0);
   return '<div class="stat"><div class="l">출항 (다음 주 수)</div><div class="v">'+mdw(sl)+'</div><div class="s">'+fmt(sl)+'</div></div>'
-   +[[30,"실측 30일"],[33,"실측 33일"],[60,"대외 60일"]].map(function(x){
-    var e=sl+(x[0]-PRE)*864e5;
-    return '<div class="stat"><div class="l">도착 · '+x[1]+'</div><div class="v">'+mdw(e)+'</div><div class="s">'+fmt(e)+'</div></div>';
+   +[["출항 +53일",sl+53*864e5],["출고 +60일",s0+60*864e5]].map(function(x){
+    return '<div class="stat"><div class="l">도착 · '+x[0]+'</div><div class="v">'+mdw(x[1])+'</div><div class="s">'+fmt(x[1])+'</div></div>';
   }).join("");
 }
 function etaPanel(){
@@ -857,7 +856,7 @@ function etaPanel(){
       var t=D(r[1])+slipFor(shipSpan(cur)[0])*864e5, f=sail(t);
       return [r[0]||'&nbsp;',mdw(t),r[2],r[4],mdw(f),'<b>'+mdw(eta(f))+'</b>'];
     }).filter(Boolean),{num:[3]})+'</div></details>':"";
-  return panel("l","대홍전기 출고 · 출항 · 도착 예상","출항 = 출고 다음 주 수요일 · 도착 = 출항 + (운송일 − 2일)",ctl+tb+calc+dl+note("운송 기준일(30·33·60일)은 대홍전기 출고부터 MPS 도착까지입니다. 이 중 출고→CFS→부산 적입 2일은 출항 대기 안에 포함된 것으로 보고, 출항일에 (운송일 − 2일)을 더했습니다. 1항차는 이미 전량 출고돼 지연 시뮬레이션이 적용되지 않습니다. 여유는 항차 마지막 출고분 도착 기준으로 가장 이른 인도 기한과 비교합니다."),12);
+  return panel("l","대홍전기 출고 · 출항 · 도착 예상","출항 = 출고 다음 주 수요일 · 도착 = 출항 + 53일 (출고 기준 60일)",ctl+tb+calc+dl+note("운송 기준은 대홍전기 출고일 기준 60일, 출항일 기준 53일입니다(출고→출항 7일). 이 표의 도착 예상은 출항일 + 53일이고, 항차 요약·간트·여유 KPI는 출고일 + 60일로 계산합니다. 참고 33·30일을 고르면 출항일 + (운송일 − 7일)로 바뀝니다. 1항차는 이미 전량 출고돼 지연 시뮬레이션이 적용되지 않습니다. 여유는 항차 마지막 출고분 도착 기준으로 가장 이른 인도 기한과 비교합니다."),12);
 }
 
 /* ---------- TAB: 이슈 ---------- */
