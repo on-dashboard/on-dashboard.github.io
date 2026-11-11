@@ -326,7 +326,7 @@ function $(id){return document.getElementById(id);}
 var PN={A9:"Abilene 9",A10:"Abilene 10",C1:"Childress 1",W1:"Warrenton 1",CF:"Coffee",GE:"GoldenEye",EG:"Eagle"};
 var PJ=[["all","전체"],["A9","Abilene 9"],["A10","Abilene 10"],["C1","Childress 1"],["W1","Warrenton 1"],["CF","Coffee"],["GE","GoldenEye"],["EG","Eagle"]];
 var ABBR={"Abilene #9":"A9","Abilene #10":"A10","Childress #1":"C1","Warrenton #1":"W1","Coffee":"CF"};
-var TABS=[["rev","매출"],["ov","개요"],["sch","일정"],["ms","마일스톤"],["cost","비용"],["prod","생산·품질"],["logi","물류·PO"],["risk","이슈"]];
+var TABS=[["rev","매출"],["ov","개요"],["pj","프로젝트"],["sch","일정"],["ms","마일스톤"],["cost","비용"],["prod","생산·품질"],["logi","물류·PO"],["risk","이슈"]];
 var REVV=[["ship","대홍전기 출고 기준"],["arr","도착 시점 기준"]];
 var VIEWS=[["area","영역별"],["own","담당별"],["date","일정별"]];
 var OWN=["ACE","대홍","On Energy"], OK={"ACE":"a","대홍":"d","On Energy":"c"};
@@ -999,16 +999,132 @@ function tabRev(){
   return kp+'<div class="grid">'+main+chart+ys+sch+chk+'</div>';
 }
 
-var BODY={rev:tabRev,ov:tabOv,sch:tabSch,ms:tabMs,cost:tabCost,prod:tabProd,logi:tabLogi,risk:tabRisk};
+/* ---------- TAB: 프로젝트별 생산 · 출고 계획 (Master Plan Rev.06 · 출고일정 · Panel No.) ---------- */
+/* 배치별 대홍전기 출고 계획: [첫 출고일, 마지막 출고일, S/N 시작, S/N 끝, 실적(1)] — Rev.06 Daily Factory Release Schedule */
+var PJREL={
+ "A9 B1":["2026-10-26","2026-10-27",1,10,1],"A9 B2":["2026-10-26","2026-10-28",11,50,1],
+ "A10 B1":["2026-10-28","2026-10-29",51,60,1],"A10 B2":["2026-10-29","2026-10-30",61,100,1],
+ "A9 B3":["2026-11-23","2026-11-24",101,140,0],"A10 B3":["2026-11-25","2026-11-26",141,180,0],
+ "C1 B1":["2026-11-27","2026-11-27",181,197,0],"CF B1":["2026-11-27","2026-11-27",198,204,0],
+ "W1 B1":["2026-12-17","2026-12-17",205,217,0],"A9 B4":["2026-12-17","2026-12-21",218,257,0],
+ "A10 B4":["2026-12-21","2026-12-23",258,297,0],"C1 B2":["2026-12-23","2026-12-24",298,321,0],
+ "W1 B2":["2027-01-18","2027-01-19",322,345,0],"A9 B5":["2027-01-19","2027-01-21",346,385,0],
+ "A10 B5":["2027-01-21","2027-01-22",386,425,0],"W1 B3":["2027-02-15","2027-02-16",426,449,0],
+ "C1 B3":["2027-02-16","2027-02-17",450,473,0],"C1 B4":["2027-02-17","2027-02-18",474,497,0],
+ "C1 B5":["2027-02-18","2027-02-19",498,521,0],"W1 B4":["2027-03-18","2027-03-19",522,545,0],
+ "W1 B5":["2027-03-19","2027-03-19",546,561,0]
+};
+/* GoldenEye · Eagle: [프로젝트, 배치, 수량, 대홍전기 출고(Delivery Date − 6주), 납품 개시, Delivery Date] — 마스터플랜 미반영 */
+var PJX=[
+ ["GE","B1",29,"2027-06-05","2027-06-09","2027-07-17"],["GE","B2",29,"2027-09-04","2027-08-31","2027-10-16"],
+ ["GE","B3",29,"2027-12-05","2027-12-09","2028-01-16"],["GE","B4",29,"2028-03-05","2028-03-08","2028-04-16"],
+ ["EG","B1",11,"2027-11-06","2027-11-12","2027-12-18"],["EG","B2",23,"2027-12-13","2027-12-19","2028-01-24"],
+ ["EG","B3",23,"2028-01-19","2028-01-25","2028-03-01"]
+];
+var PJORD=["A9","A10","C1","W1","CF","GE","EG"];
+var PJPO={A9:"PO-000159",A10:"PO-000167",C1:"PO-000175",W1:"PO-000184",CF:"PO-000319",GE:"PO-000327",EG:"PO-000213"};
+var PJTO={A9:"Lewisville 2, TX",A10:"McKinney, TX",C1:"Lewisville 2, TX",W1:"McKinney, TX",CF:"Douglas, GA",GE:"TBD-Texas",EG:"Lewisville 2, TX"};
+function pjBatches(){
+  var L=[];
+  SH.forEach(function(s){
+    s.b.forEach(function(x){
+      var k=ABBR[x[0]]||x[0], r=PJREL[k+" "+x[1]]||[s.ship,s.ship,0,0,0];
+      L.push({k:k,b:x[1],q:+x[2]||0,sh:s.n,p0:D(s.prod[0]),p1:D(s.prod[1]),fat:s.fat,r0:D(r[0]),r1:D(r[1]),sn:r[2]?[r[2],r[3]]:null,act:!!r[4],st:D(x[3]),dl:D(x[4]),plan:1});
+    });
+  });
+  PJX.forEach(function(x){L.push({k:x[0],b:x[1],q:x[2],sh:"미배정",p0:null,p1:null,fat:"",r0:D(x[3]),r1:D(x[3]),sn:null,act:false,st:D(x[4]),dl:D(x[5]),plan:0});});
+  L.forEach(function(o){o.ar=arrOf(o.r1,state.tr); o.mg=days(o.ar,o.dl);});
+  return L.sort(function(a,b){return PJORD.indexOf(a.k)-PJORD.indexOf(b.k)||a.r0-b.r0;});
+}
+function pjSt(o){
+  if(o.act||o.r1<T) return o.ar<=T?stDot("good","도착"):stDot("good","출고 완료");
+  if(!o.plan) return stDot("off","생산 계획 미수립");
+  if(o.p0<=T) return stDot("mid","생산 중");
+  return stDot("off","생산 전");
+}
+function snTx(sn){if(!sn) return '<span class="mut">—</span>'; var p=function(n){return ("00"+n).slice(-3);}; return 'A-'+p(sn[0])+(sn[1]!==sn[0]?'~'+p(sn[1]):"");}
+function tabPj(){
+  var all=pjBatches(), L=all.filter(function(o){return state.proj==="all"||o.k===state.proj;});
+  var ks=PJORD.filter(function(k){return L.some(function(o){return o.k===k;});});
+  /* 요약 */
+  var tq=0,td=0;
+  var sum=ks.map(function(k){
+    var a=L.filter(function(o){return o.k===k;}), q=a.reduce(function(t,o){return t+o.q;},0), dn=a.filter(function(o){return o.act||o.r1<T;}).reduce(function(t,o){return t+o.q;},0);
+    var pl=a.filter(function(o){return o.plan;}), nx=a.filter(function(o){return !(o.act||o.r1<T);})[0];
+    var mg=Math.min.apply(null,a.map(function(o){return o.mg;}));
+    tq+=q; td+=dn;
+    return [PN[k]+'<span class="sub">'+PJPO[k]+'</span>', a.length, fm(q), dn?stDot("good",dn+"면"):'<span class="mut">0</span>', fm(q-dn),
+      pl.length?md(fmt(Math.min.apply(null,pl.map(function(o){return o.p0;}))))+" ~ "+md(fmt(Math.max.apply(null,pl.map(function(o){return o.p1;})))):'<span class="mut">미수립</span>',
+      nx?mdw(nx.r0)+'<span class="sub">'+ddTxt(fmt(nx.r0))+' · '+nx.b+' '+nx.q+'면</span>':stDot("good","전량 출고"),
+      mdw(Math.max.apply(null,a.map(function(o){return o.r1;}))), mdw(Math.max.apply(null,a.map(function(o){return o.dl;}))), marg(mg), PJTO[k]];
+  });
+  if(ks.length>1) sum.push({cls:"tot",c:["합계",L.length,fm(tq),td+"면",fm(tq-td),"","","","","",""]});
+  var sumP=panel("l","프로젝트별 요약","Master Plan Rev.06 (11/09) · 여유 = "+trTxt(state.tr)+" 도착 vs Delivery Date",
+    tbl(["프로젝트 · PO","배치","총 면수","출고 완료","남은 면수","생산 (완성품조립)","다음 출고","마지막 출고","최종 Delivery","최소 여유","인도지"],sum,{num:[1,2,4]}),12);
+  /* 배치별 상세 */
+  var rows=[], prev="";
+  L.forEach(function(o){
+    var first=o.k!==prev; prev=o.k;
+    rows.push({cls:first?"":"",c:[(first?'<b>'+PN[o.k]+'</b>':''),o.b,o.q,snTx(o.sn),o.sh,
+      o.plan?md(fmt(o.p0))+" ~ "+md(fmt(o.p1)):'<span class="mut">미수립</span>',
+      o.fat||'<span class="mut">—</span>',
+      (o.r0===o.r1?mdw(o.r0):mdw(o.r0)+" ~ "+mdw(o.r1))+(o.act?'<span class="sub">실적</span>':(o.plan?"":'<span class="sub">Delivery − 6주</span>')),
+      mdw(sail(o.r1)),'<b>'+mdw(o.ar)+'</b>',mdw(o.st),mdw(o.dl),marg(o.mg),pjSt(o)]});
+  });
+  var det=panel("l","배치별 생산 · 출고 계획","S/N = ACE-DCC-A-### · 생산 = 해당 항차 완성품조립 계획 · 출고 = 대홍전기 일자별 출고 계획",
+    tbl(["프로젝트","배치","면수","S/N","항차","생산","FAT","대홍전기 출고","출항","도착 예상","납품 개시","Delivery","여유","상태"],rows,{num:[2,12],ctr:[13]})
+    +note("Warrenton 1은 3·4·5항차에서 항차 마감보다 2~4일 먼저 출고합니다(12/17 · 1/18~19 · 2/15~16). GoldenEye · Eagle은 대홍 마스터플랜에 없어 생산 계획이 없고, 출고일은 Delivery Date − 6주 가정입니다. 이 가정으로는 "+trTxt(state.tr)+" 운송 시 Delivery를 맞출 수 없어 여유가 음수로 나옵니다."),12);
+  /* 간트: 확정 5개 프로젝트 */
+  var G=L.filter(function(o){return o.plan;}), gk=ks.filter(function(k){return G.some(function(o){return o.k===k;});}), gantt2="";
+  if(gk.length){
+    var A=D("2026-09-01"), B=D("2027-06-01"), W=B-A;
+    var x=function(ms){return Math.max(0,Math.min(100,(ms-A)/W*100));};
+    var ticks="", head="";
+    for(var i=0;i<9;i++){var y=2026+Math.floor((8+i)/12), m=(8+i)%12, t=Date.UTC(y,m,1);
+      ticks+='<i class="gt-tk" style="left:'+x(t).toFixed(2)+'%"></i>';
+      head+='<i class="gt-tk" style="left:'+x(t).toFixed(2)+'%"><span>'+(m===8||m===0?String(y).slice(2)+".":"")+(m+1)+'월</span></i>';}
+    var tdy=(T>=A&&T<=B)?'<i class="gt-today" style="left:'+x(T).toFixed(2)+'%"></i>':"";
+    var h='<div class="gt-row hd"><div></div><div class="gt-t">'+head+tdy+'</div><div class="gt-m mut" style="font-weight:500;font-size:11px">최소 여유</div></div>';
+    gk.forEach(function(k){
+      var a=G.filter(function(o){return o.k===k;}), q=a.reduce(function(t,o){return t+o.q;},0);
+      var bars="", seen={};
+      a.forEach(function(o){
+        if(!seen[o.sh]){seen[o.sh]=1; bars+='<i class="gt-b p" style="left:'+x(o.p0).toFixed(2)+'%;width:'+(x(o.p1+864e5)-x(o.p0)).toFixed(2)+'%;opacity:.55" title="'+o.sh+' 생산 '+fmt(o.p0)+' ~ '+fmt(o.p1)+'"></i>';}
+        bars+='<i class="gt-b tr" style="left:'+x(o.r1).toFixed(2)+'%;width:'+(x(o.ar)-x(o.r1)).toFixed(2)+'%" title="'+o.b+' '+o.q+'면 출고 '+fmt(o.r1)+' → 도착 '+fmt(o.ar)+'"></i>'
+          +'<i class="gt-b ar" style="left:'+x(o.ar).toFixed(2)+'%" title="'+o.b+' 도착 '+fmt(o.ar)+'"></i>'
+          +'<i class="gt-b dl" style="left:'+x(o.dl).toFixed(2)+'%" title="'+o.b+' Delivery '+fmt(o.dl)+'"></i>';
+      });
+      h+='<div class="gt-row"><div class="gt-l">'+PN[k]+'<small>'+q+'면 · '+a.map(function(o){return o.b;}).join(" ")+'</small></div><div class="gt-t">'+ticks+tdy+bars+'</div><div class="gt-m">'+marg(Math.min.apply(null,a.map(function(o){return o.mg;})))+'</div></div>';
+    });
+    gantt2='<div class="scroll"><div class="gt">'+h+'</div></div><div class="leg" style="margin-top:8px"><span><em style="background:var(--bar-dark);opacity:.55"></em>생산 (항차 완성품조립)</span><span><em style="background:var(--teal)"></em>출고 → 도착</span><span><em style="background:var(--teal-d)"></em>도착일</span><span><em style="background:var(--bad)"></em>Delivery Date</span></div>';
+  }
+  var ganttP=gantt2?panel("l","프로젝트별 생산 · 출고 타임라인","확정 5개 프로젝트 · 배치별 · "+trTxt(state.tr)+" 기준",gantt2,12):"";
+  /* 월별 출고 매트릭스 */
+  var mk=function(ms){var d=new Date(ms);return d.getUTCFullYear()+"-"+("0"+(d.getUTCMonth()+1)).slice(-2);};
+  var cols=[]; L.forEach(function(o){var k=mk(o.r1); if(cols.indexOf(k)<0) cols.push(k);}); cols.sort();
+  var lab=function(k){return k.slice(2,4)+"."+(+k.slice(5));};
+  var tot={}, mrows=ks.map(function(k){
+    var r={}; L.filter(function(o){return o.k===k;}).forEach(function(o){var c=mk(o.r1); r[c]=(r[c]||0)+o.q; tot[c]=(tot[c]||0)+o.q;});
+    return [PN[k]].concat(cols.map(function(c){return r[c]?fm(r[c]):'<span class="mut">–</span>';})).concat([fm(L.filter(function(o){return o.k===k;}).reduce(function(t,o){return t+o.q;},0))]);
+  });
+  var cum=0;
+  if(ks.length>1) mrows.push({cls:"tot",c:["합계"].concat(cols.map(function(c){return tot[c]?fm(tot[c]):'<span class="mut">–</span>';})).concat([fm(tq)])});
+  mrows.push({cls:"emph",c:["누계"].concat(cols.map(function(c){cum+=(tot[c]||0); return fm(cum);})).concat([""])});
+  var mat=panel("l","월별 대홍전기 출고 계획 (면)","배치 마지막 출고일이 속한 달 · GoldenEye · Eagle은 가정",
+    tbl(["프로젝트"].concat(cols.map(lab)).concat(["합계"]),mrows,{num:cols.map(function(_,i){return i+1;}).concat([cols.length+1])}),12);
+  return '<div class="grid">'+sumP+det+ganttP+mat+'</div>';
+}
+
+var BODY={pj:tabPj,rev:tabRev,ov:tabOv,sch:tabSch,ms:tabMs,cost:tabCost,prod:tabProd,logi:tabLogi,risk:tabRisk};
 function chrome(){
   var cnt=ITEMS.filter(function(i){return pv(i)&&i.s==="risk";}).length;
   $("tabs").innerHTML=TABS.map(function(t){return '<button class="tab" role="tab" id="tab-'+t[0]+'" data-tab="'+t[0]+'" aria-selected="'+(state.tab===t[0])+'">'+t[1]+(t[0]==="risk"&&cnt?'<span class="cnt" title="위험 상태 항목">'+cnt+'</span>':"")+'</button>';}).join("");
-  $("views").innerHTML=state.tab==="rev"?REVV.map(function(v){return '<button data-rv="'+v[0]+'" aria-pressed="'+(state.rv===v[0])+'">'+v[1]+'</button>';}).join(""):VIEWS.map(function(v){return '<button data-view="'+v[0]+'" aria-pressed="'+(state.view===v[0])+'">'+v[1]+'</button>';}).join("");
+  $("views").innerHTML=state.tab==="pj"?trSeg():state.tab==="rev"?REVV.map(function(v){return '<button data-rv="'+v[0]+'" aria-pressed="'+(state.rv===v[0])+'">'+v[1]+'</button>';}).join(""):VIEWS.map(function(v){return '<button data-view="'+v[0]+'" aria-pressed="'+(state.view===v[0])+'">'+v[1]+'</button>';}).join("");
   $("pjs").innerHTML=PJ.map(function(p){return '<button class="pj" data-pj="'+p[0]+'" aria-pressed="'+(state.proj===p[0])+'">'+p[1]+'</button>';}).join("");
 }
 function render(){
   chrome();
-  var h=(state.tab==="rev"||state.view==="area")?BODY[state.tab]():(state.view==="own"?ownerView(state.tab):dateView(state.tab));
+  var h=(state.tab==="rev"||state.tab==="pj"||state.view==="area")?BODY[state.tab]():(state.view==="own"?ownerView(state.tab):dateView(state.tab));
   var m=$("main"); m.setAttribute("role","tabpanel"); m.setAttribute("aria-labelledby","tab-"+state.tab);
   m.innerHTML=h;
   $("today").textContent=fmt(T);
