@@ -21,6 +21,7 @@
   --emph-bg:#f3fbfb; --emph-ink:#319f9c;
   --good:#36b0ad; --mid:#a1e3e1; --bad:#c00000; --off:#9a9a9a;
   --bar-dark:#404040; --track:#e8e8e8;
+  --fc-po:#319f9c; --fc-hi:#e08a2e; --fc-fc:#f3c58f;
   --b1:#1f6f6d; --b2:#319f9c; --b3:#a1e3e1; --b4:#8c8c8c; --b5:#d9d9d9;
   --own-a:#319f9c; --own-a-ink:#fff; --own-d:#404040; --own-d-ink:#fff; --own-c:#d9d9d9; --own-c-ink:#262626;
   --font:"Spoqa Han Sans Neo","Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
@@ -197,6 +198,20 @@ tr.emph td .sub{color:var(--emph-ink); opacity:.8}
 .stack i{display:block; height:100%}
 .leg{display:flex; flex-wrap:wrap; gap:4px 16px; font-size:11.5px; color:var(--ink-2)}
 .leg span{display:inline-flex; gap:6px; align-items:center; font-variant-numeric:tabular-nums}
+.fc-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:0}
+.fc-tbl tr.fc-po td:not(:first-child) .fc-c{background:#dff2f1;color:#1f6f6d}
+.fc-tbl tr.fc-hi td:not(:first-child) .fc-c{background:#f8dcc0;color:#8a4a0c}
+.fc-tbl tr.fc-fc td:not(:first-child) .fc-c{background:#fcecd8;color:#8a5a20}
+.fc-c{display:inline-block;min-width:24px;padding:1px 4px;border-radius:2px;font-weight:700}
+.fc-tbl tr.fc-gh td{background:#fafafa!important;color:var(--ink)!important;font-size:12px}
+.fc-tbl tr.fc-hi:not(.fc-gh) td:first-child{background:var(--fc-hi)!important;color:#fff!important}
+.fc-tbl tr.fc-fc:not(.fc-gh) td:first-child{background:var(--fc-fc)!important;color:#5a3a10!important}
+.fc-tbl tr.fc-fc:not(.fc-gh) td:first-child .sub{color:#7a5320!important}
+.fc-tbl tr.fc-hi:not(.fc-gh) td:first-child .sub{color:#fff3e6!important}
+.fc-tbl tr.fc-gh.fc-po td:first-child{border-left:4px solid var(--fc-po)}
+.fc-tbl tr.fc-gh.fc-hi td:first-child{border-left:4px solid var(--fc-hi)}
+.fc-tbl tr.fc-gh.fc-fc td:first-child{border-left:4px solid var(--fc-fc)}
+.fc-tbl td,.fc-tbl th{padding-left:5px;padding-right:5px}
 .leg em{width:11px; height:11px; border-radius:2px; display:inline-block; font-style:normal}
 .flow{display:grid; grid-template-columns:repeat(var(--n,5),minmax(0,1fr)); gap:0}
 .fl{padding:9px 12px; background:var(--row-b); border-right:2px solid var(--panel); min-width:0}
@@ -326,7 +341,7 @@ function $(id){return document.getElementById(id);}
 var PN={A9:"Abilene 9",A10:"Abilene 10",C1:"Childress 1",W1:"Warrenton 1",CF:"Coffee",GE:"GoldenEye",EG:"Eagle"};
 var PJ=[["all","전체"],["A9","Abilene 9"],["A10","Abilene 10"],["C1","Childress 1"],["W1","Warrenton 1"],["CF","Coffee"],["GE","GoldenEye"],["EG","Eagle"]];
 var ABBR={"Abilene #9":"A9","Abilene #10":"A10","Childress #1":"C1","Warrenton #1":"W1","Coffee":"CF"};
-var TABS=[["rev","매출"],["ov","개요"],["pj","프로젝트"],["sch","일정"],["ms","마일스톤"],["cost","비용"],["prod","생산·품질"],["logi","물류·PO"],["risk","이슈"]];
+var TABS=[["rev","매출"],["ov","개요"],["pj","프로젝트"],["fc","포캐스트"],["sch","일정"],["ms","마일스톤"],["cost","비용"],["prod","생산·품질"],["logi","물류·PO"],["risk","이슈"]];
 var REVV=[["ship","대홍전기 출고 기준"],["arr","도착 시점 기준"]];
 var VIEWS=[["area","영역별"],["own","담당별"],["date","일정별"]];
 var OWN=["ACE","대홍","On Energy"], OK={"ACE":"a","대홍":"d","On Energy":"c"};
@@ -1148,16 +1163,95 @@ function tabPj(){
   return '<div class="grid">'+sumP+det+ganttP+mat+'</div>';
 }
 
-var BODY={pj:tabPj,rev:tabRev,ov:tabOv,sch:tabSch,ms:tabMs,cost:tabCost,prod:tabProd,logi:tabLogi,risk:tabRisk};
+/* ---------- TAB: 포캐스트 (On Energy 2026.10.12 ACE DC Cabinet Forecast) ---------- */
+/* [구분 po 발주 완료 | hi High confidence | fc Forecast, 이름, 대시보드 코드, 도착지, 납품 시작, 납품 종료, 수량, {YYMM: 현장 도착 수량}] */
+var FC=[
+ ["po","Coffee #1","CF","GA","2027-01-19","2027-02-12",7,{"2701":4,"2702":3}],
+ ["po","Abilene #10","A10","TX (MPS)","2026-12-28","2027-03-28",170,{"2612":6,"2701":59,"2702":53,"2703":52}],
+ ["po","Abilene #9","A9","TX (MPS)","2026-12-28","2027-03-28",170,{"2612":6,"2701":59,"2702":53,"2703":52}],
+ ["po","Childress #1","C1","TX (MPS)","2027-01-25","2027-04-25",113,{"2701":8,"2702":35,"2703":39,"2704":31}],
+ ["po","Warrenton #1","W1","TX (MPS)","2027-02-01","2027-05-23",101,{"2702":25,"2703":28,"2704":27,"2705":21}],
+ ["po","Eagle #1","EG","TX (MPS)","2027-11-12","2028-03-01",57,{"2711":9,"2712":16,"2801":16,"2802":15,"2803":1}],
+ ["po","Goldeneye #1","GE","TX (MPS)","2027-06-09","2028-04-16",116,{"2706":8,"2707":12,"2708":12,"2709":11,"2710":12,"2711":11,"2712":12,"2801":12,"2802":11,"2803":12,"2804":3}],
+ ["hi","Chi2","","TX (MPS)","2027-10-02","2028-03-26",108,{"2710":18,"2711":18,"2712":19,"2801":19,"2802":18,"2803":16}],
+ ["hi","Has1","","TX (MPS)","2027-10-18","2028-04-07",108,{"2710":8,"2711":19,"2712":19,"2801":19,"2802":18,"2803":19,"2804":6}],
+ ["hi","Spu1","","TX (MPS)","2027-10-18","2028-04-11",96,{"2710":7,"2711":16,"2712":17,"2801":17,"2802":16,"2803":17,"2804":6}],
+ ["hi","Chi3","","TX (MPS)","2027-12-31","2028-06-24",108,{"2801":19,"2802":18,"2803":19,"2804":18,"2805":19,"2806":15}],
+ ["hi","War2","","TX (MPS)","2028-01-15","2028-07-01",96,{"2801":9,"2802":17,"2803":18,"2804":17,"2805":18,"2806":17}],
+ ["fc","Mon1","","NE","2027-05-03","2027-05-31",11,{"2705":11}],
+ ["fc","Fai1","","MO","2027-05-03","2027-06-02",16,{"2705":15,"2706":1}],
+ ["fc","Cof2","","GA","2027-05-24","2027-06-21",11,{"2705":3,"2706":8}],
+ ["fc","Kin1","","TX (MPS)","2027-05-28","2027-07-26",41,{"2705":2,"2706":21,"2707":18}],
+ ["fc","Kin2","","TX (MPS)","2027-07-27","2027-09-03",33,{"2707":3,"2708":27,"2709":3}],
+ ["fc","Woo1","","TX (MPS)","2028-01-18","2028-04-02",55,{"2801":10,"2802":21,"2803":23,"2804":1}],
+ ["fc","Woo2","","TX (MPS)","2028-04-19","2028-07-03",55,{"2804":8,"2805":23,"2806":22,"2807":2}],
+ ["fc","Has2","","TX (MPS)","2028-01-10","2028-07-04",108,{"2801":13,"2802":18,"2803":19,"2804":18,"2805":19,"2806":18,"2807":3}]
+];
+var FCG={po:["발주 완료 (NTP)","var(--fc-po)","fc-po"],hi:["수주 예정 · High confidence","var(--fc-hi)","fc-hi"],fc:["수주 예정 · Forecast","var(--fc-fc)","fc-fc"]};
+var FCNM={"Chi2":"Childress 2","Has1":"Haskell 1","Spu1":"Spur 1","Chi3":"Childress 3","War2":"Warrenton 2","Mon1":"Mon 1","Fai1":"Fai 1","Cof2":"Coffee 2","Kin1":"Kin 1","Kin2":"Kin 2","Woo1":"Woo 1","Woo2":"Woo 2","Has2":"Haskell 2"};
+function fcShift(k,n){var y=2000+(+k.slice(0,2)), m=+k.slice(2)-1+n; y+=Math.floor(m/12); m=((m%12)+12)%12; return String(y).slice(2)+("0"+(m+1)).slice(-2);}
+function tabFc(){
+  var mode=state.fv||"arr", sh=mode==="ship"?-2:0;
+  var R=FC.filter(function(r){return state.proj==="all"||r[2]===state.proj;});
+  var ks=[]; R.forEach(function(r){Object.keys(r[7]).forEach(function(k){var kk=fcShift(k,sh); if(ks.indexOf(kk)<0) ks.push(kk);});}); ks.sort();
+  if(ks.length){var a=ks[0], b=ks[ks.length-1]; ks=[]; for(var k=a;;k=fcShift(k,1)){ks.push(k); if(k===b||ks.length>40) break;}}
+  var lab=function(k){return k.slice(0,2)+"."+(+k.slice(2));};
+  var tot={po:{},hi:{},fc:{}}, gq={po:0,hi:0,fc:0}, gn={po:0,hi:0,fc:0};
+  R.forEach(function(r){gq[r[0]]+=r[6]; gn[r[0]]++; Object.keys(r[7]).forEach(function(k){var kk=fcShift(k,sh); tot[r[0]][kk]=(tot[r[0]][kk]||0)+r[7][k];});});
+  var all=gq.po+gq.hi+gq.fc;
+  var yr=function(y){var s=0; ["po","hi","fc"].forEach(function(g){Object.keys(tot[g]).forEach(function(k){if(k.slice(0,2)===y) s+=tot[g][k];});}); return s;};
+  var yrG=function(y,g){var s=0; Object.keys(tot[g]).forEach(function(k){if(k.slice(0,2)===y) s+=tot[g][k];}); return s;};
+  var mx=0, pk=""; ks.forEach(function(k){var t=(tot.po[k]||0)+(tot.hi[k]||0)+(tot.fc[k]||0); if(t>mx){mx=t; pk=k;}});
+  var unit=mode==="ship"?"출고":"도착";
+  var kp='<div class="kpis">'
+   +'<div class="kpi"><span class="l">전체 수요 (포캐스트)</span><span class="v">'+fm(all)+'<small>면</small></span><span class="s">'+R.length+'개 프로젝트 · 26.12~28.7 현장 도착</span></div>'
+   +'<div class="kpi" style="border-top-color:var(--fc-po)"><span class="l">발주 완료 (NTP)</span><span class="v">'+fm(gq.po)+'<small>면</small></span><span class="s">'+gn.po+'개 · '+(all?Math.round(gq.po/all*100):0)+'%</span></div>'
+   +'<div class="kpi" style="border-top-color:var(--fc-hi)"><span class="l">수주 예정 · High confidence</span><span class="v">'+fm(gq.hi)+'<small>면</small></span><span class="s">'+gn.hi+'개 · 27.10~28.7 도착</span></div>'
+   +'<div class="kpi" style="border-top-color:var(--fc-fc)"><span class="l">수주 예정 · Forecast</span><span class="v">'+fm(gq.fc)+'<small>면</small></span><span class="s">'+gn.fc+'개 · 27.5~28.7 도착</span></div>'
+   +'<div class="kpi"><span class="l">2027년 '+unit+'</span><span class="v">'+fm(yr("27"))+'<small>면</small></span><span class="s">발주 '+yrG("27","po")+' · 예정 '+(yrG("27","hi")+yrG("27","fc"))+'</span></div>'
+   +'<div class="kpi"><span class="l">월 최대 ('+unit+')</span><span class="v">'+mx+'<small>면</small></span><span class="s">'+(pk?lab(pk):"")+' · 대홍 제작 캐파 150면/월</span></div>'
+   +'</div>';
+  var segF='<div class="seg" role="group" aria-label="기준">'+[["arr","현장 도착월 (고객 포캐스트)"],["ship","필요 출고월 (도착 − 2개월)"]].map(function(v){return '<button data-fv="'+v[0]+'" aria-pressed="'+(mode===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
+  var top=Math.max(mx,150)*1.15, H=190;
+  var bars='<div style="position:relative"><div class="cap" style="--n:'+ks.length+';height:'+H+'px;gap:4px">'+ks.map(function(k){
+    var p=tot.po[k]||0,h=tot.hi[k]||0,f=tot.fc[k]||0,t=p+h+f;
+    var seg=function(v,c){return v?'<i style="height:'+(v/top*100*0.86).toFixed(1)+'%;width:72%;background:'+c+';margin-top:0;border-radius:0"></i>':"";};
+    return '<div class="cb" title="'+lab(k)+' '+unit+' · 발주 '+p+' · High '+h+' · Forecast '+f+'">'+(t?'<span style="font-size:10.5px">'+t+'</span>':"")+seg(f,"var(--fc-fc)")+seg(h,"var(--fc-hi)")+seg(p,"var(--fc-po)")+'</div>';}).join("")+'</div>'
+    +'<div style="position:absolute;left:0;right:0;bottom:'+(150/top*100*0.86*H/100).toFixed(1)+'px;border-top:1.5px dashed var(--bad);pointer-events:none"><span style="position:absolute;right:0;top:-16px;font-size:10.5px;font-weight:700;color:var(--bad)">대홍 캐파 150</span></div></div>'
+    +'<div class="capx" style="--n:'+ks.length+';gap:4px;font-size:10px">'+ks.map(function(k){return '<div>'+lab(k)+'</div>';}).join("")+'</div>'
+    +'<div class="leg" style="margin-top:8px"><span><em style="background:var(--fc-po)"></em>발주 완료 (NTP)</span><span><em style="background:var(--fc-hi)"></em>수주 예정 · High confidence</span><span><em style="background:var(--fc-fc)"></em>수주 예정 · Forecast</span><span><em style="border-top:2px dashed var(--bad);height:0;border-radius:0"></em>대홍 월 제작 캐파 150면</span></div>';
+  var chart=panel("l","월별 수요 — 발주 완료 vs 수주 예정",segF,bars,12);
+  /* 표 */
+  var body=[];
+  ["po","hi","fc"].forEach(function(g){
+    var rs=R.filter(function(r){return r[0]===g;}); if(!rs.length) return;
+    body.push({cls:"fc-gh "+FCG[g][2],c:['<b>'+FCG[g][0]+'</b>',"","",'<b>'+fm(gq[g])+'</b>'].concat(ks.map(function(k){return tot[g][k]?'<b>'+tot[g][k]+'</b>':"";}))});
+    rs.forEach(function(r){
+      var nm=(r[2]?PN[r[2]]:(FCNM[r[1]]||r[1]))+'<span class="sub">'+r[1]+(r[2]==="GE"?" · 릴리스 대기 12/15":"")+'</span>';
+      var m={}; Object.keys(r[7]).forEach(function(k){m[fcShift(k,sh)]=r[7][k];});
+      var yd=function(d){return d.slice(2,4)+"/"+(+d.slice(5,7))+"/"+(+d.slice(8,10));}, dr=yd(r[4])+" ~ "+(r[4].slice(0,4)===r[5].slice(0,4)?md(r[5]):yd(r[5]));
+      body.push({cls:FCG[g][2],c:[nm,r[3],nw(dr),fm(r[6])].concat(ks.map(function(k){return m[k]?'<span class="fc-c">'+m[k]+'</span>':'<span class="mut">·</span>';}))});
+    });
+  });
+  var cum=0;
+  body.push({cls:"tot",c:["합계","","",fm(all)].concat(ks.map(function(k){var t=(tot.po[k]||0)+(tot.hi[k]||0)+(tot.fc[k]||0); return t?t:"";}))});
+  body.push({cls:"emph",c:["누계","","",""].concat(ks.map(function(k){cum+=(tot.po[k]||0)+(tot.hi[k]||0)+(tot.fc[k]||0); return fm(cum);}))});
+  var table=panel("l","프로젝트별 월 수요 ("+(mode==="ship"?"필요 출고월":"현장 도착월")+", 면)","On Energy 포캐스트 2026.10.12 · 색 = 발주 상태",
+    '<div class="fc-tbl">'+tbl(["프로젝트","도착지","납품 기간","수량"].concat(ks.map(lab)),body,{num:[3].concat(ks.map(function(_,i){return i+4;}))})+'</div>'
+    +note("포캐스트 수량은 고객 현장 도착(On-Site Delivery) 기준입니다. ‘필요 출고월’은 운송 60일을 감안해 2개월 앞당긴 값이며, 대홍 제작은 그보다 약 1개월 더 앞서야 합니다. 고객 시트의 ACE Capacity 700면/월은 대홍 실제 제작 캐파(150면/월)와 다릅니다. GoldenEye는 PO는 받았으나 릴리스(12/15) 전입니다."),12);
+  return kp+'<div class="grid">'+chart+table+'</div>';
+}
+
+var BODY={fc:tabFc,pj:tabPj,rev:tabRev,ov:tabOv,sch:tabSch,ms:tabMs,cost:tabCost,prod:tabProd,logi:tabLogi,risk:tabRisk};
 function chrome(){
   var cnt=ITEMS.filter(function(i){return pv(i)&&i.s==="risk";}).length;
   $("tabs").innerHTML=TABS.map(function(t){return '<button class="tab" role="tab" id="tab-'+t[0]+'" data-tab="'+t[0]+'" aria-selected="'+(state.tab===t[0])+'">'+t[1]+(t[0]==="risk"&&cnt?'<span class="cnt" title="위험 상태 항목">'+cnt+'</span>':"")+'</button>';}).join("");
-  $("views").innerHTML=state.tab==="pj"?trSeg():state.tab==="rev"?REVV.map(function(v){return '<button data-rv="'+v[0]+'" aria-pressed="'+(state.rv===v[0])+'">'+v[1]+'</button>';}).join(""):VIEWS.map(function(v){return '<button data-view="'+v[0]+'" aria-pressed="'+(state.view===v[0])+'">'+v[1]+'</button>';}).join("");
+  $("views").innerHTML=state.tab==="fc"?"":state.tab==="pj"?trSeg():state.tab==="rev"?REVV.map(function(v){return '<button data-rv="'+v[0]+'" aria-pressed="'+(state.rv===v[0])+'">'+v[1]+'</button>';}).join(""):VIEWS.map(function(v){return '<button data-view="'+v[0]+'" aria-pressed="'+(state.view===v[0])+'">'+v[1]+'</button>';}).join("");
   $("pjs").innerHTML=PJ.map(function(p){return '<button class="pj" data-pj="'+p[0]+'" aria-pressed="'+(state.proj===p[0])+'">'+p[1]+'</button>';}).join("");
 }
 function render(){
   chrome();
-  var h=(state.tab==="rev"||state.tab==="pj"||state.view==="area")?BODY[state.tab]():(state.view==="own"?ownerView(state.tab):dateView(state.tab));
+  var h=(state.tab==="rev"||state.tab==="pj"||state.tab==="fc"||state.view==="area")?BODY[state.tab]():(state.view==="own"?ownerView(state.tab):dateView(state.tab));
   var m=$("main"); m.setAttribute("role","tabpanel"); m.setAttribute("aria-labelledby","tab-"+state.tab);
   m.innerHTML=h;
   $("today").textContent=fmt(T);
@@ -1168,6 +1262,7 @@ document.addEventListener("click",function(e){
   var b=e.target.closest("button"); if(!b) return;
   if(b.dataset.tab){state.tab=b.dataset.tab; try{history.replaceState(null,"","#"+state.tab);}catch(_){} render(); window.scrollTo({top:0});}
   else if(b.dataset.view){state.view=b.dataset.view; render();}
+  else if(b.dataset.fv){state.fv=b.dataset.fv; render();}
   else if(b.dataset.ru){state.ru=b.dataset.ru; render();}
   else if(b.dataset.rv){state.rv=b.dataset.rv; render();}
   else if(b.dataset.rt){state.rt=b.dataset.rt; render();}
