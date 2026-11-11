@@ -616,6 +616,35 @@ function tabOv(){
 }
 
 /* ---------- TAB: 일정 ---------- */
+/* 일정 탭: 프로젝트 × 항차 제작 · 출고 (Master Plan Rev.06 · PJREL) */
+var PJNOTE={CF:"도착지 Douglas GA",GE:"고객의 생산 진행 확정(릴리스) 대기, 기한 12/15",EG:"PO 접수, 대홍 생산계획에 아직 없음"};
+function mdr(a,b){var A=new Date(a),B=new Date(b);if(a===b) return md(fmt(a));return md(fmt(a))+"~"+(A.getUTCMonth()===B.getUTCMonth()?B.getUTCDate():md(fmt(b)));}
+function pjSchTable(){
+  var L=pjBatches().filter(function(o){return state.proj==="all"||o.k===state.proj;});
+  var nextSh=null; SH.forEach(function(s){if(!nextSh&&D(s.ship)>=T) nextSh=s.n;});
+  var rows=[];
+  PJORD.forEach(function(k){
+    var a=L.filter(function(o){return o.k===k;}); if(!a.length) return;
+    var tot=a.reduce(function(t,o){return t+o.q;},0), first=true;
+    if(!a[0].plan){
+      var y=function(ms){var d=new Date(ms);return String(d.getUTCFullYear()).slice(2)+"/"+(d.getUTCMonth()+1)+"/"+("0"+d.getUTCDate()).slice(-2);};
+      var qs=a.map(function(o){return o.q;}), same=qs.every(function(q){return q===qs[0];});
+      rows.push(['<b>'+PN[k]+'</b> ('+tot+')',(same?a.length+"배치 × "+qs[0]:qs.join(" · ")),'<span class="mut">미정</span>',a.map(function(o,i){return i===0||new Date(o.r0).getUTCFullYear()!==new Date(a[i-1].r0).getUTCFullYear()?y(o.r0):md(fmt(o.r0));}).join(" · "),stDot("off",PJNOTE[k]||"대기")]);
+      return;
+    }
+    var shs=[]; a.forEach(function(o){if(shs.indexOf(o.sh)<0) shs.push(o.sh);});
+    shs.forEach(function(n){
+      var g=a.filter(function(o){return o.sh===n;}), q=g.reduce(function(t,o){return t+o.q;},0);
+      var r0=Math.min.apply(null,g.map(function(o){return o.r0;})), r1=Math.max.apply(null,g.map(function(o){return o.r1;}));
+      var shipped=g.every(function(o){return o.act||o.r1<T;}), s=SH.filter(function(x){return x.n===n;})[0];
+      var st=shipped?stDot("good","출고 완료"):(n===nextSh?stDot("mid","FAT "+s.fat.replace(/ \(.\)/,"")):(g[0].p0<=T?stDot("mid","제작 중"):stDot("off","대기")));
+      if(PJNOTE[k]) st+='<span class="sub">'+PJNOTE[k]+'</span>';
+      rows.push([first?'<b>'+PN[k]+'</b> ('+tot+')':"",n+" · "+q,mdr(g[0].p0,g[0].p1),mdr(r0,r1),st]);
+      first=false;
+    });
+  });
+  return rows.length?tbl(["프로젝트 (총 면수)","항차 · 면수","제작 기간","대홍전기 출고일","상태"],rows,{}):'<div class="empty">해당 프로젝트가 없습니다.</div>';
+}
 function tabSch(){
   var rows=SH.filter(shHas).map(function(s){
     return [s.n, shQ(s)+(state.proj!=="all"?'<span class="sub">항차 '+s.q+'</span>':""), s.win, s.fat+'<span class="sub">'+s.att+'</span>', '<b>'+ddTxt(s.fatD)+'</b>', md(fmt(arrive(s))), marg(marginOf(s))];
@@ -635,6 +664,7 @@ function tabSch(){
   var daily=tbl(["항차","출고일","프로젝트 · 수량","일계","항차 누계"],DAILY.map(function(r){return [r[0]||'&nbsp;',r[1],r[2],r[3],r[4]];}).concat([{cls:"tot",c:["합계","","",561,""]}]),{num:[3,4]});
   return '<div class="grid">'
    +panel("sch","항차 타임라인","운송 기준 "+trSeg(),gantt(),12)
+   +panel("sch","프로젝트별 제작 · 출고 일정","Master Plan Rev.06 (11/09) · 제작 기간 = 항차 완성품조립 계획 · 출고일 = 대홍전기 일자별 출고 계획",pjSchTable(),12)
    +panel("sch","항차별 출고 · FAT · 도착",(state.proj==="all"?"":PN[state.proj]+" 포함 항차만"),
       rows.length?tbl(["항차","면수","출고 창","FAT · 입회","FAT D-day","도착 ("+trTxt(state.tr)+")","여유"],rows,{num:[1,4,5,6]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다.</div>',7)
    +panel("sch","10월 말 주요 일정","7건이 2주 안에 몰려 있음",'<div class="rows">'+mj+'</div>',5)
@@ -800,7 +830,7 @@ function tabLogi(){
     ["GoldenEye","PO-000327","116 (29×4)",stDot("mid","릴리스 대기 12/15"),"2027-06-09 ~ 2028-04-16","TBD-Texas","2027-03-26","SOP 30% · 릴리스 전 취소수수료 0%"],
     ["Eagle","PO-000213","57 (11·23·23)","PO 접수","2027-11-12 ~ 2028-03-01","Lewisville 2","2027-03-26 (오기 가능성)","Deposit 청구 · SOP 25% 2027-06-05"],
     {cls:"tot",c:["합계","","180","","","","",""]}],{num:[2]}),12);
-  var SEQ=[["2027-06-05","GoldenEye B1",29,"2027-06-09","2027-07-17"],["2027-09-04","GoldenEye B2",29,"2027-08-31","2027-10-16"],["2027-11-06","Eagle B1",11,"2027-11-12","2027-12-18"],["2027-12-05","GoldenEye B3",29,"2027-12-09","2028-01-16"],["2027-12-13","Eagle B2",23,"2027-12-19","2028-01-24"],["2028-01-19","Eagle B3",23,"2028-01-25","2028-03-01"],["2028-03-05","GoldenEye B4",29,"2028-03-08","2028-04-16"]];
+  var SEQ=[["2027-06-04","GoldenEye B1",29,"2027-06-09","2027-07-17"],["2027-09-04","GoldenEye B2",29,"2027-08-31","2027-10-16"],["2027-11-05","Eagle B1",11,"2027-11-12","2027-12-18"],["2027-12-05","GoldenEye B3",29,"2027-12-09","2028-01-16"],["2027-12-13","Eagle B2",23,"2027-12-19","2028-01-24"],["2028-01-19","Eagle B3",23,"2028-01-25","2028-03-01"],["2028-03-05","GoldenEye B4",29,"2028-03-08","2028-04-16"]];
   var seq=panel("l","GoldenEye · Eagle 대홍전기 출고 순서","출고 = Delivery Date − 6주 · 주말이면 직전 금요일 · 출항 = 출고 다음 주 수요일",tbl(["대홍전기 출고","배치","수량","납품 개시","Delivery Date","출항","도착 예상","여유"],SEQ.map(function(r){var t0=D(r[0])+state.slip*864e5,f=sail(t0),ea=arrOf(t0,state.tr);return r.concat([mdw(f),mdw(ea),marg(days(ea,D(r[4])))]);}).filter(function(r){return state.proj==="all"||(state.proj==="GE"&&r[1].indexOf("Golden")===0)||(state.proj==="EG"&&r[1].indexOf("Eagle")===0);}).concat(state.proj==="all"?[{cls:"tot",c:["합계","",173,"","","","",""]}]:[]),{num:[2]}),7);
   /* monthly load */
   var load={};
@@ -902,7 +932,7 @@ var REVROWS=[
  ["W1","Warrenton 1","PO-000184",101,"확정"],["CF","Coffee","PO-000319",7,"확정"],
  ["EG","Eagle","PO-000213",57,"PO 접수 · 마스터플랜 미반영"],["GE","Golden Eye","PO-000327",116,"릴리스 대기 12/15"]
 ];
-var GESEQ=[["2027-06-05","GE","GoldenEye B1",29],["2027-09-04","GE","GoldenEye B2",29],["2027-12-05","GE","GoldenEye B3",29],["2028-03-05","GE","GoldenEye B4",29],["2027-11-06","EG","Eagle B1",11],["2027-12-13","EG","Eagle B2",23],["2028-01-19","EG","Eagle B3",23]];
+var GESEQ=[["2027-06-04","GE","GoldenEye B1",29],["2027-09-04","GE","GoldenEye B2",29],["2027-12-05","GE","GoldenEye B3",29],["2028-03-05","GE","GoldenEye B4",29],["2027-11-05","EG","Eagle B1",11],["2027-12-13","EG","Eagle B2",23],["2028-01-19","EG","Eagle B3",23]];
 function mkOf(ms){var d=new Date(ms),y=d.getUTCFullYear(),m=d.getUTCMonth()+1; if(y<=2026) return m>=12?"2612":"2611"; if(y===2027) return "27"+(m<10?"0":"")+m; return (y===2028&&m<=3)?"281Q":"282Q";}
 /* 인식월(도착 시점) = 항차(배치)의 마지막 대홍전기 출고일 + 운송일 / 출고월 = 마지막 대홍전기 출고일이 속한 달 */
 function skOf(ms){var d=new Date(ms),m=d.getUTCMonth()+1; return String(d.getUTCFullYear()).slice(2)+(m<10?"0":"")+m;}
@@ -1016,9 +1046,9 @@ var PJREL={
 };
 /* GoldenEye · Eagle: [프로젝트, 배치, 수량, 대홍전기 출고(Delivery Date − 6주), 납품 개시, Delivery Date] — 마스터플랜 미반영 */
 var PJX=[
- ["GE","B1",29,"2027-06-05","2027-06-09","2027-07-17"],["GE","B2",29,"2027-09-04","2027-08-31","2027-10-16"],
+ ["GE","B1",29,"2027-06-04","2027-06-09","2027-07-17"],["GE","B2",29,"2027-09-04","2027-08-31","2027-10-16"],
  ["GE","B3",29,"2027-12-05","2027-12-09","2028-01-16"],["GE","B4",29,"2028-03-05","2028-03-08","2028-04-16"],
- ["EG","B1",11,"2027-11-06","2027-11-12","2027-12-18"],["EG","B2",23,"2027-12-13","2027-12-19","2028-01-24"],
+ ["EG","B1",11,"2027-11-05","2027-11-12","2027-12-18"],["EG","B2",23,"2027-12-13","2027-12-19","2028-01-24"],
  ["EG","B3",23,"2028-01-19","2028-01-25","2028-03-01"]
 ];
 var PJORD=["A9","A10","C1","W1","CF","GE","EG"];
