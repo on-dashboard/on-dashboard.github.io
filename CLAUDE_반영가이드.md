@@ -6,8 +6,11 @@ https://on-dashboard.github.io/ 는 이 저장소(`on-dashboard/on-dashboard.git
 
 | 파일 | 역할 | Claude가 수정? |
 |---|---|---|
-| `dashboard.html` | **대시보드 본체.** Claude가 만드는 단일 HTML 그대로입니다. | **예 — 이 파일만** |
-| `index.html` | 웹 편집 껍데기. `dashboard.html`을 불러와 보여 주고, 편집 버튼·편집자 관리·저장을 담당합니다. | 아니요 |
+| `index.html` | **첫 화면** (https://on-dashboard.github.io/). 납기·PO 보드 · INVOICE TRACKER · CASH FLOW 카드. 카드 숫자는 직접 적은 값이라 각 페이지를 갱신할 때 함께 맞춥니다. 예전 `#edit=` 편집자 링크는 `board.html`로 넘깁니다. | 예 (카드 숫자) |
+| `board.html` | 웹 편집 껍데기 (2026-11-12에 `index.html`에서 이름 변경). `dashboard.html`을 불러와 보여 주고, 편집 버튼·편집자 관리·저장을 담당합니다. | 아니요 |
+| `dashboard.html` | **납기·PO 보드 본체.** Claude가 만드는 단일 HTML 그대로입니다. | **예** |
+| `invoice.html` | **INVOICE TRACKER.** `<script>` 맨 위 `INVPO` · `INVMS` · `INVLOG` · `INVCO` · `INVCOMM` 배열이 데이터입니다. 새 Invoice Tracker 엑셀을 받으면 이 배열만 갱신합니다. | 예 (데이터 배열) |
+| `cashflow.html` | **CASH FLOW.** `<script>` 맨 위 `CFSET`(기준일·환율)과 `CF`(원장: 수금·지급 이벤트) 배열이 데이터입니다. 새 Cash Flow Tracker를 받으면 원장 시트로 `CF`를 다시 만듭니다. 월별 합계·KPI는 자동 계산. | 예 (데이터 배열) |
 | `editors.json`, `fonts/` | 편집 권한, 글꼴 | 아니요 |
 
 사용자의 PC에는 자동 업로드가 설치돼 있어, Claude가 만든 대시보드 HTML을 **다운로드하면 그대로 `dashboard.html`로 올라갑니다.** 따라서 평소처럼 완성된 단일 HTML 파일을 만들어 주면 됩니다.
@@ -19,7 +22,7 @@ https://on-dashboard.github.io/ 는 이 저장소(`on-dashboard/on-dashboard.git
    (가져올 수 없으면 사용자에게 이 파일을 달라고 하세요. 예전 대화의 버전을 그대로 고치면 웹 수정이 사라집니다.)
 2. 결과물은 **완성된 단일 HTML 파일 하나**입니다 (`fonts/` 상대 경로 유지, 외부 라이브러리 없이).
 3. 아래 "웹 편집 호환 규칙"을 지켜야 웹에서 계속 고칠 수 있습니다. 규칙을 벗어난 부분은 웹 편집 패널에서 "찾지 못함"으로 빠질 뿐 화면은 정상입니다.
-4. GitHub 도구(커넥터, Claude Code)로 직접 올릴 수 있으면 `dashboard.html`에 커밋하고, 커밋 메시지는 `클로드 버전 · <반영 자료> · Claude`로 하세요. `index.html`은 절대 덮어쓰지 마세요.
+4. GitHub 도구(커넥터, Claude Code)로 직접 올릴 수 있으면 `dashboard.html`에 커밋하고, 커밋 메시지는 `클로드 버전 · <반영 자료> · Claude`로 하세요. `board.html`은 절대 덮어쓰지 마세요.
 5. 끝나면 바뀐 내용을 한국어로 짧게 정리해 주세요 (항목별 이전 → 새 값).
 
 ## 웹 편집 호환 규칙 (형식만 유지, 내용은 자유)

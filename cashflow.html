@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>CASH FLOW · ON DASHBOARD</title>
+<style>
+@font-face{font-family:"Spoqa Han Sans Neo";src:url("fonts/SpoqaHanSansNeo-Light.woff2") format("woff2");font-weight:300;font-display:swap}
+@font-face{font-family:"Spoqa Han Sans Neo";src:url("fonts/SpoqaHanSansNeo-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Spoqa Han Sans Neo";src:url("fonts/SpoqaHanSansNeo-Medium.woff2") format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Spoqa Han Sans Neo";src:url("fonts/SpoqaHanSansNeo-Bold.woff2") format("woff2");font-weight:700;font-display:swap}
+:root{
+  color-scheme:light;
+  --bg:#f1f4f4; --panel:#ffffff; --panel-line:#dfe5e5;
+  --ink:#262626; --ink-2:#595959; --ink-3:#7d8585;
+  --teal:#319f9c; --teal-d:#1f6f6d; --teal-text:#217d7a; --teal-soft:#a1e3e1; --teal-tint:#f3fbfb;
+  --blk:#404040; --blk-ink:#ffffff; --ban:#404040; --ban-ink:#ffffff;
+  --th:#319f9c; --th-ink:#ffffff;
+  --row-a:#ffffff; --row-b:#f3f3f3; --rule:#d9d9d9; --tot:#e8e8e8;
+  --emph-bg:#f3fbfb; --emph-ink:#319f9c;
+  --good:#36b0ad; --mid:#a1e3e1; --bad:#c00000; --off:#9a9a9a;
+  --bar-dark:#404040; --track:#e8e8e8;
+  --fc-po:#319f9c; --fc-hi:#e08a2e; --fc-fc:#f3c58f;
+  --b1:#1f6f6d; --b2:#319f9c; --b3:#a1e3e1; --b4:#8c8c8c; --b5:#d9d9d9;
+  --own-a:#319f9c; --own-a-ink:#fff; --own-d:#404040; --own-d-ink:#fff; --own-c:#d9d9d9; --own-c-ink:#262626;
+  --font:"Spoqa Han Sans Neo","Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0f1313; --panel:#171c1c; --panel-line:#2a3232;
+    --ink:#e6ebeb; --ink-2:#b3bdbd; --ink-3:#8a9696;
+    --teal:#3db2af; --teal-d:#5fd0cd; --teal-text:#5fd0cd; --teal-soft:#2c6563; --teal-tint:#1a2a2a;
+    --blk:#cfd6d6; --blk-ink:#161a1a; --ban:#263030; --ban-ink:#e6ebeb;
+    --th:#2b8b88; --th-ink:#ffffff;
+    --row-a:#171c1c; --row-b:#1e2424; --rule:#313939; --tot:#2a3232;
+    --emph-bg:#1a2a2a; --emph-ink:#5fd0cd;
+    --good:#36b0ad; --mid:#a1e3e1; --bad:#f26b6b; --off:#7d8888;
+    --bar-dark:#cfd6d6; --track:#2a3232;
+    --b1:#5fd0cd; --b2:#3db2af; --b3:#2c6563; --b4:#7d8888; --b5:#3a4343;
+    --own-a:#3db2af; --own-a-ink:#0f1313; --own-d:#cfd6d6; --own-d-ink:#161a1a; --own-c:#3a4343; --own-c-ink:#e6ebeb;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0f1313; --panel:#171c1c; --panel-line:#2a3232;
+  --ink:#e6ebeb; --ink-2:#b3bdbd; --ink-3:#8a9696;
+  --teal:#3db2af; --teal-d:#5fd0cd; --teal-text:#5fd0cd; --teal-soft:#2c6563; --teal-tint:#1a2a2a;
+  --blk:#cfd6d6; --blk-ink:#161a1a; --ban:#263030; --ban-ink:#e6ebeb;
+  --th:#2b8b88; --th-ink:#ffffff;
+  --row-a:#171c1c; --row-b:#1e2424; --rule:#313939; --tot:#2a3232;
+  --emph-bg:#1a2a2a; --emph-ink:#5fd0cd;
+  --good:#36b0ad; --mid:#a1e3e1; --bad:#f26b6b; --off:#7d8888;
+  --bar-dark:#cfd6d6; --track:#2a3232;
+  --b1:#5fd0cd; --b2:#3db2af; --b3:#2c6563; --b4:#7d8888; --b5:#3a4343;
+  --own-a:#3db2af; --own-a-ink:#0f1313; --own-d:#cfd6d6; --own-d-ink:#161a1a; --own-c:#3a4343; --own-c-ink:#e6ebeb;
+}
+
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:13.5px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1360px;margin:0 auto;padding:22px 24px 48px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{height:13px;width:auto;color:var(--ink)}
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:12px}
+.top .ttl{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.top .back{font-size:12.5px;color:var(--teal-text);text-decoration:none;font-weight:700;border:1px solid var(--rule);border-radius:2px;padding:3px 10px;background:var(--panel)}
+.top .back:hover{border-color:var(--teal)}
+.top .asof{margin-left:auto;font-size:12px;color:var(--ink-3)}
+.top .asof b{color:var(--ink)}
+.nav{display:flex;gap:2px;margin:12px 0 14px;border-bottom:1px solid var(--rule)}
+.nav a{font-size:13.5px;color:var(--ink-2);text-decoration:none;padding:8px 14px;border-bottom:3px solid transparent;font-weight:500}
+.nav a[aria-current="page"]{color:var(--ink);font-weight:700;border-bottom-color:var(--teal)}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:var(--panel);border:1px solid var(--panel-line);border-top:3px solid var(--teal);border-radius:3px;padding:10px 13px 11px;display:flex;flex-direction:column;gap:1px;min-width:0}
+.kpi.k-bad{border-top-color:var(--bad)} .kpi.k-off{border-top-color:var(--off)}
+.kpi .l{font-size:11.5px;color:var(--ink-3);font-weight:500}
+.kpi .v{font-size:23px;font-weight:700;letter-spacing:-.02em;line-height:1.25;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:12.5px;font-weight:500;margin-left:2px;color:var(--ink-2)}
+.kpi.k-bad .v{color:var(--bad)}
+.kpi .s{font-size:11.5px;color:var(--ink-2)}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+.panel{background:var(--panel);border:1px solid var(--panel-line);border-radius:3px;padding:13px 15px 15px;min-width:0}
+.s12{grid-column:span 12}.s8{grid-column:span 8}.s7{grid-column:span 7}.s6{grid-column:span 6}.s5{grid-column:span 5}.s4{grid-column:span 4}
+.ph{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.ph h3{font-size:14.5px;margin:0;font-weight:700}
+.ph .meta{margin-left:auto;font-size:11.5px;color:var(--ink-3)}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+th{background:var(--th);color:var(--th-ink);font-weight:700;padding:7px 8px;text-align:center;white-space:nowrap;font-size:12px}
+td{padding:7px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+tbody tr:nth-child(even) td{background:var(--row-b)}
+td.n,th.n{text-align:right} td.c{text-align:center}
+td.pj{font-weight:700;white-space:nowrap}
+.sub{display:block;font-size:11px;color:var(--ink-3);font-weight:400;margin-top:1px}
+tr.tot td{background:var(--tot)!important;font-weight:700}
+tr.grp td{background:var(--emph-bg)!important;color:var(--emph-ink);font-weight:700;font-size:12px}
+.st{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-size:11.5px;font-weight:500}
+.st i{font-style:normal;font-size:10px}
+.st-good i{color:var(--good)} .st-mid i{color:var(--teal-soft)} .st-bad i{color:var(--bad)} .st-off i{color:var(--off)}
+.st-bad{color:var(--bad);font-weight:700}
+.amt{font-weight:700;white-space:nowrap}
+.mut{color:var(--ink-3)}
+.c-bad{color:var(--bad)} .c-good{color:var(--teal-text)}
+.note{font-size:11.5px;color:var(--ink-3);margin:10px 0 0;line-height:1.55}
+.leg{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-2)}
+.leg span{display:inline-flex;align-items:center;gap:5px}
+.leg em{width:11px;height:11px;border-radius:2px;display:inline-block}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:2px;overflow:hidden}
+.seg button{font:inherit;font-size:12px;border:0;background:var(--panel);color:var(--ink-2);padding:4px 11px;cursor:pointer;border-left:1px solid var(--rule)}
+.seg button:first-child{border-left:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--panel);font-weight:700}
+.bar{height:6px;background:var(--track);border-radius:3px;overflow:hidden;min-width:60px}
+.bar i{display:block;height:100%;background:var(--teal)}
+.ft{margin-top:18px;font-size:11.5px;color:var(--ink-3)}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.s8,.s7,.s6,.s5,.s4{grid-column:span 12}}
+@media (max-width:600px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.cfc{width:100%;height:auto;display:block}
+.cfc text{font-family:var(--font);font-size:10.5px;fill:var(--ink-3)}
+.cfc .v{fill:var(--ink);font-weight:700;font-size:10px}
+.tg{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);cursor:pointer}
+.tg input{accent-color:var(--teal)}
+td.neg{color:var(--bad)}
+</style></head><body><main class="wrap"><div class="top"><div class="brand"><svg class="brand-mark" role="img" aria-label="ACE ENGINEERING" focusable="false" viewBox="0 0 128.32 8.93" xmlns="http://www.w3.org/2000/svg" overflow="hidden"><g><path d="M18.92 0.2 20.84 0.2 24.03 8.72 22.08 8.72 21.44 6.82 18.25 6.82 17.58 8.72 15.68 8.72 18.92 0.2ZM18.74 5.43 20.95 5.43 19.88 2.3 19.86 2.3 18.75 5.43Z" fill="currentColor"/><path d="M30.57 3.07C30.45 2.22 29.64 1.58 28.71 1.58 27.03 1.58 26.39 3.01 26.39 4.5 26.39 5.99 27.02 7.35 28.71 7.35 29.86 7.35 30.5 6.56 30.64 5.44L32.45 5.44C32.26 7.56 30.79 8.92 28.7 8.92 26.06 8.92 24.51 6.95 24.51 4.49 24.51 2.03 26.06-0.01 28.7-0.01 30.57-0.01 32.15 1.09 32.38 3.06L30.57 3.06Z" fill="currentColor"/><path d="M33.85 0.2 40.22 0.2 40.22 1.78 35.72 1.78 35.72 3.61 39.85 3.61 39.85 5.07 35.72 5.07 35.72 7.16 40.31 7.16 40.31 8.74 33.84 8.74 33.84 0.2Z" fill="currentColor"/><path d="M45.14 0.2 51.51 0.2 51.51 1.78 47.01 1.78 47.01 3.61 51.14 3.61 51.14 5.07 47.01 5.07 47.01 7.16 51.6 7.16 51.6 8.74 45.13 8.74 45.13 0.2Z" fill="currentColor"/><path d="M52.99 0.2 54.85 0.2 58.41 5.92 58.43 5.92 58.43 0.2 60.18 0.2 60.18 8.72 58.31 8.72 54.77 3.02 54.75 3.02 54.75 8.72 53 8.72 53 0.2Z" fill="currentColor"/><path d="M68.11 7.76C67.45 8.61 66.59 8.93 65.77 8.93 63.13 8.93 61.58 6.96 61.58 4.5 61.58 2.04 63.13 0 65.77 0 67.51 0 69.16 1.07 69.36 3.01L67.57 3.01C67.36 2.07 66.65 1.58 65.77 1.58 64.09 1.58 63.46 3.01 63.46 4.5 63.46 5.99 64.09 7.35 65.77 7.35 66.99 7.35 67.69 6.69 67.8 5.51L65.91 5.51 65.91 4.11 69.49 4.11 69.49 8.72 68.3 8.72 68.11 7.75Z" fill="currentColor"/><path d="M71.13 0.2 73 0.2 73 8.72 71.13 8.72 71.13 0.2Z" fill="currentColor"/><path d="M74.77 0.2 76.63 0.2 80.19 5.92 80.21 5.92 80.21 0.2 81.96 0.2 81.96 8.72 80.09 8.72 76.55 3.02 76.53 3.02 76.53 8.72 74.78 8.72 74.78 0.2Z" fill="currentColor"/><path d="M83.74 0.2 90.11 0.2 90.11 1.78 85.61 1.78 85.61 3.61 89.74 3.61 89.74 5.07 85.61 5.07 85.61 7.16 90.2 7.16 90.2 8.74 83.73 8.74 83.73 0.2Z" fill="currentColor"/><path d="M91.59 0.2 97.96 0.2 97.96 1.78 93.46 1.78 93.46 3.61 97.59 3.61 97.59 5.07 93.46 5.07 93.46 7.16 98.05 7.16 98.05 8.74 91.58 8.74 91.58 0.2Z" fill="currentColor"/><path d="M99.44 0.2 104.03 0.2C105.56 0.2 106.52 1.26 106.52 2.55 106.52 3.55 106.11 4.3 105.17 4.69L105.17 4.71C106.09 4.95 106.35 5.84 106.41 6.7 106.45 7.24 106.43 8.24 106.77 8.72L104.9 8.72C104.67 8.18 104.7 7.36 104.6 6.68 104.47 5.79 104.12 5.39 103.18 5.39L101.31 5.39 101.31 8.72 99.44 8.72 99.44 0.2ZM101.32 4.06 103.37 4.06C104.21 4.06 104.66 3.7 104.66 2.84 104.66 1.98 104.21 1.66 103.37 1.66L101.32 1.66 101.32 4.06Z" fill="currentColor"/><path d="M108.18 0.2 110.05 0.2 110.05 8.72 108.18 8.72 108.18 0.2Z" fill="currentColor"/><path d="M111.82 0.2 113.68 0.2 117.24 5.92 117.26 5.92 117.26 0.2 119.01 0.2 119.01 8.72 117.14 8.72 113.6 3.02 113.58 3.02 113.58 8.72 111.83 8.72 111.83 0.2Z" fill="currentColor"/><path d="M126.94 7.76C126.28 8.61 125.42 8.93 124.6 8.93 121.96 8.93 120.41 6.96 120.41 4.5 120.41 2.04 121.96 0 124.6 0 126.34 0 127.99 1.07 128.19 3.01L126.4 3.01C126.19 2.07 125.48 1.58 124.6 1.58 122.92 1.58 122.29 3.01 122.29 4.5 122.29 5.99 122.92 7.35 124.6 7.35 125.82 7.35 126.52 6.69 126.63 5.51L124.74 5.51 124.74 4.11 128.32 4.11 128.32 8.72 127.13 8.72 126.94 7.75Z" fill="currentColor"/></g><g><path d="M10.65 2.86 2.6 2.86C3.65 1.31 5 0.06 6.63 0.06 8.26 0.06 9.61 1.31 10.65 2.86Z" fill="#DC3832"/><path d="M12.15 5.66 1.1 5.66C1.14 5.58 1.17 5.49 1.21 5.4 1.44 4.88 1.71 4.33 2.01 3.8L2.12 3.62 11.11 3.62 11.22 3.8C11.52 4.33 11.79 4.88 12.02 5.4 12.06 5.49 12.1 5.57 12.13 5.66Z" fill="#009560"/><path d="M13.25 8.72 10.35 8.72C10.1 8.39 9.7 8.18 9.26 8.18L3.99 8.18C3.61 8.18 3.27 8.33 3.02 8.58 2.98 8.62 2.94 8.67 2.9 8.72L0 8.72C0 8.72 0.25 7.8 0.72 6.57L0.78 6.42 12.47 6.42 12.53 6.57C13.01 7.8 13.25 8.72 13.25 8.72Z" fill="#3F3F40"/></g></svg></div><span class="ttl">CASH FLOW</span><a class="back" href="./">← 첫 화면</a><span class="asof">기준 <b>2026-11-02</b> 원장 · 환율 1,340원/USD · 공급가액</span></div><nav class="nav"><a href="board.html">납기 · PO 보드</a><a href="invoice.html">INVOICE TRACKER</a><a href="cashflow.html" aria-current="page">CASH FLOW</a></nav><div id="app"></div><p class="ft">단위: 억원 (USD 표시 제외) · 실적/예정은 원장 상태 기준, 지연 표시는 오늘 날짜 기준</p></main><script>
+/* ===== CASH FLOW 데이터 (ON Energy DC Cabinet Cash Flow Tracker.xlsx · 원장) — 새 파일을 받으면 CF 배열과 설정만 갱신 ===== */
+var CFSET={asof:"2026-11-02",fx:1340};
+/* [구분 수금|지급, 상대방, 프로젝트·PO, 항목, 수량, 통화, 금액, 현금 일자, 상태 완료|예정|미정, 포함 1|0, 실적일, 비고] */
+var CF=[
+ ["수금", "On Energy", "Abilene 9", "Deposit 5%", 170, "USD", 396100, "2026-10-16", "완료", 1, "2026-10-16", ""],
+ ["수금", "On Energy", "Abilene 10", "Deposit 5%", 170, "USD", 396100, "2026-10-22", "완료", 1, "2026-10-22", ""],
+ ["수금", "On Energy", "Childress 1", "Deposit 5%", 113, "USD", 263290, "2026-10-16", "완료", 1, "2026-10-16", ""],
+ ["수금", "On Energy", "Warrenton 1", "Deposit 5%", 101, "USD", 235330, "2026-10-16", "완료", 1, "2026-10-16", ""],
+ ["수금", "On Energy", "Coffee", "Deposit 5%", 7, "USD", 16310, "2026-10-16", "완료", 1, "2026-10-16", ""],
+ ["수금", "On Energy", "Eagle", "Deposit 5%", 57, "USD", 132810, "2026-10-16", "완료", 1, "2026-10-16", ""],
+ ["수금", "On Energy", "Abilene 9", "SOP 25%", 170, "USD", 1980500, "2026-10-16", "완료", 1, "2026-10-16", ""],
+ ["수금", "On Energy", "Abilene 10", "SOP 25%", 170, "USD", 1980500, "2026-10-22", "완료", 1, "2026-10-22", ""],
+ ["수금", "On Energy", "Childress 1", "SOP 25%", 113, "USD", 1316450, "2026-10-16", "완료", 1, "2026-10-16", ""],
+ ["수금", "On Energy", "Warrenton 1", "SOP 25%", 101, "USD", 1176650, "2026-10-16", "완료", 1, "2026-10-16", ""],
+ ["수금", "On Energy", "Coffee", "SOP 25%", 7, "USD", 81550, "2026-10-16", "완료", 1, "2026-10-16", ""],
+ ["수금", "On Energy", "Eagle", "SOP 25%", 57, "USD", 664050, "2027-07-05", "예정", 0, "", "청구 일정은 가정 (Eagle 일정 미확정)"],
+ ["수금", "On Energy", "GoldenEye", "SOP 30%", 116, "USD", 1621680, "2027-02-01", "예정", 0, "", "GoldenEye 0/30/60/10 구조 · 일정 가정"],
+ ["수금", "On Energy", "Abilene 9", "FAT 60% · 1항차", 50, "USD", 1398000, "2026-12-13", "예정", 1, "", "11/12 청구 · 기한 12/13 (원장 기준 11/29에서 변경)"],
+ ["수금", "On Energy", "Abilene 10", "FAT 60% · 1항차", 50, "USD", 1398000, "2026-12-13", "예정", 1, "", "11/12 청구 · 기한 12/13 (원장 기준 11/29에서 변경)"],
+ ["수금", "On Energy", "Abilene 9", "FAT 60% · 2항차", 40, "USD", 1118400, "2026-12-20", "예정", 1, "", ""],
+ ["수금", "On Energy", "Abilene 10", "FAT 60% · 2항차", 40, "USD", 1118400, "2026-12-20", "예정", 1, "", ""],
+ ["수금", "On Energy", "Childress 1", "FAT 60% · 2항차", 17, "USD", 475320, "2026-12-20", "예정", 1, "", ""],
+ ["수금", "On Energy", "Coffee", "FAT 60% · 2항차", 7, "USD", 195720, "2026-12-20", "예정", 1, "", ""],
+ ["수금", "On Energy", "Abilene 9", "FAT 60% · 3항차", 40, "USD", 1118400, "2027-01-13", "예정", 1, "", ""],
+ ["수금", "On Energy", "Abilene 10", "FAT 60% · 3항차", 40, "USD", 1118400, "2027-01-13", "예정", 1, "", ""],
+ ["수금", "On Energy", "Childress 1", "FAT 60% · 3항차", 24, "USD", 671040, "2027-01-13", "예정", 1, "", ""],
+ ["수금", "On Energy", "Warrenton 1", "FAT 60% · 3항차", 13, "USD", 363480, "2027-01-13", "예정", 1, "", ""],
+ ["수금", "On Energy", "Abilene 9", "FAT 60% · 4항차", 40, "USD", 1118400, "2027-02-14", "예정", 1, "", ""],
+ ["수금", "On Energy", "Abilene 10", "FAT 60% · 4항차", 40, "USD", 1118400, "2027-02-14", "예정", 1, "", ""],
+ ["수금", "On Energy", "Warrenton 1", "FAT 60% · 4항차", 24, "USD", 671040, "2027-02-14", "예정", 1, "", ""],
+ ["수금", "On Energy", "Childress 1", "FAT 60% · 5항차", 72, "USD", 2013120, "2027-03-14", "예정", 1, "", ""],
+ ["수금", "On Energy", "Warrenton 1", "FAT 60% · 5항차", 24, "USD", 671040, "2027-03-14", "예정", 1, "", ""],
+ ["수금", "On Energy", "Warrenton 1", "FAT 60% · 6항차", 40, "USD", 1118400, "2027-04-14", "예정", 1, "", ""],
+ ["수금", "On Energy", "Eagle", "FAT 60%", 57, "USD", 1593720, "", "미정", 0, "", "FAT 일정 미확정 (PO상 2027-03-26은 오기 의심)"],
+ ["수금", "On Energy", "GoldenEye", "FAT 60%", 116, "USD", 3243360, "2027-04-25", "예정", 0, "", "GoldenEye FAT 2027-03-26"],
+ ["수금", "On Energy", "Abilene 9", "DDP 10% · 1항차", 50, "USD", 233000, "2027-04-01", "예정", 1, "", ""],
+ ["수금", "On Energy", "Abilene 10", "DDP 10% · 1항차", 50, "USD", 233000, "2027-04-01", "예정", 1, "", ""],
+ ["수금", "On Energy", "Abilene 9", "DDP 10% · 2항차", 40, "USD", 186400, "2027-04-29", "예정", 1, "", ""],
+ ["수금", "On Energy", "Abilene 10", "DDP 10% · 2항차", 40, "USD", 186400, "2027-04-29", "예정", 1, "", ""],
+ ["수금", "On Energy", "Childress 1", "DDP 10% · 2항차", 17, "USD", 79220, "2027-04-29", "예정", 1, "", ""],
+ ["수금", "On Energy", "Coffee", "DDP 10% · 2항차", 7, "USD", 32620, "2027-04-29", "예정", 1, "", ""],
+ ["수금", "On Energy", "Abilene 9", "DDP 10% · 3항차", 40, "USD", 186400, "2027-05-27", "예정", 1, "", ""],
+ ["수금", "On Energy", "Abilene 10", "DDP 10% · 3항차", 40, "USD", 186400, "2027-05-27", "예정", 1, "", ""],
+ ["수금", "On Energy", "Childress 1", "DDP 10% · 3항차", 24, "USD", 111840, "2027-05-27", "예정", 1, "", ""],
+ ["수금", "On Energy", "Warrenton 1", "DDP 10% · 3항차", 13, "USD", 60580, "2027-05-27", "예정", 1, "", ""],
+ ["수금", "On Energy", "Abilene 9", "DDP 10% · 4항차", 40, "USD", 186400, "2027-06-24", "예정", 1, "", ""],
+ ["수금", "On Energy", "Abilene 10", "DDP 10% · 4항차", 40, "USD", 186400, "2027-06-24", "예정", 1, "", ""],
+ ["수금", "On Energy", "Warrenton 1", "DDP 10% · 4항차", 24, "USD", 111840, "2027-06-24", "예정", 1, "", ""],
+ ["수금", "On Energy", "Childress 1", "DDP 10% · 5항차", 72, "USD", 335520, "2027-07-22", "예정", 1, "", ""],
+ ["수금", "On Energy", "Warrenton 1", "DDP 10% · 5항차", 24, "USD", 111840, "2027-07-22", "예정", 1, "", ""],
+ ["수금", "On Energy", "Warrenton 1", "DDP 10% · 6항차", 40, "USD", 186400, "2027-08-19", "예정", 1, "", ""],
+ ["수금", "On Energy", "Eagle", "DDP 10%", 57, "USD", 265620, "", "미정", 0, "", "인도 일정 미확정"],
+ ["수금", "On Energy", "GoldenEye", "DDP 10%", 116, "USD", 540560, "", "미정", 0, "", "인도 일정 미확정"],
+ ["지급", "대홍전기", "Abilene 9", "계약금 10%", 170, "KRW", 681020000, "2026-09-11", "완료", 1, "2026-09-11", ""],
+ ["지급", "대홍전기", "Abilene 10", "계약금 10%", 170, "KRW", 681020000, "2026-09-11", "완료", 1, "2026-09-11", ""],
+ ["지급", "대홍전기", "Childress 1", "계약금 10%", 113, "KRW", 452678000, "2026-09-11", "완료", 1, "2026-09-11", ""],
+ ["지급", "대홍전기", "Warrenton 1", "계약금 10%", 101, "KRW", 404606000, "2026-09-11", "완료", 1, "2026-09-11", ""],
+ ["지급", "대홍전기", "Coffee", "계약금 10%", 7, "KRW", 28042000, "2026-09-11", "완료", 1, "2026-09-11", ""],
+ ["지급", "대홍전기", "Abilene 9", "1st Batch 1 잔금 90%", 16, "KRW", 576864000, "2026-12-30", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 9", "1st Batch 2 잔금 90%", 24, "KRW", 865296000, "2026-12-30", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 9", "1st Batch 3 잔금 90%", 10, "KRW", 360540000, "2026-12-30", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 9", "2st Batch 1 잔금 90%", 16, "KRW", 576864000, "2027-01-29", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 9", "2st Batch 2 잔금 90%", 24, "KRW", 865296000, "2027-01-29", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 9", "3st Batch 1 잔금 90%", 3, "KRW", 108162000, "2027-03-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 9", "3st Batch 2 잔금 90%", 24, "KRW", 865296000, "2027-03-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 9", "3st Batch 3 잔금 90%", 13, "KRW", 468702000, "2027-03-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 9", "4st Batch 2 잔금 90%", 16, "KRW", 576864000, "2027-04-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 9", "4st Batch 3 잔금 90%", 16, "KRW", 576864000, "2027-04-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 9", "4st Batch 4 잔금 90%", 8, "KRW", 288432000, "2027-04-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 10", "1st Batch 3 잔금 90%", 6, "KRW", 216324000, "2026-12-30", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 10", "1st Batch 4 잔금 90%", 24, "KRW", 865296000, "2026-12-30", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 10", "1st Batch 5 잔금 90%", 20, "KRW", 721080000, "2026-12-30", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 10", "2st Batch 3 잔금 90%", 16, "KRW", 576864000, "2027-01-29", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 10", "2st Batch 4 잔금 90%", 24, "KRW", 865296000, "2027-01-29", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 10", "3st Batch 3 잔금 90%", 3, "KRW", 108162000, "2027-03-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 10", "3st Batch 4 잔금 90%", 24, "KRW", 865296000, "2027-03-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 10", "3st Batch 5 잔금 90%", 13, "KRW", 468702000, "2027-03-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 10", "4st Batch 4 잔금 90%", 16, "KRW", 576864000, "2027-04-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Abilene 10", "4st Batch 5 잔금 90%", 24, "KRW", 865296000, "2027-04-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Childress 1", "2st Batch 5 잔금 90%", 17, "KRW", 612918000, "2027-01-29", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Childress 1", "3st Batch 5 잔금 90%", 3, "KRW", 108162000, "2027-03-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Childress 1", "3st Batch 6 잔금 90%", 21, "KRW", 757134000, "2027-03-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Childress 1", "5st Batch 2 잔금 90%", 16, "KRW", 576864000, "2027-04-29", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Childress 1", "5st Batch 3 잔금 90%", 16, "KRW", 576864000, "2027-04-29", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Childress 1", "5st Batch 4 잔금 90%", 24, "KRW", 865296000, "2027-04-29", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Childress 1", "5st Batch 5 잔금 90%", 16, "KRW", 576864000, "2027-04-29", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Warrenton 1", "3st Batch 1 잔금 90%", 13, "KRW", 468702000, "2027-03-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Warrenton 1", "4st Batch 1 잔금 90%", 16, "KRW", 576864000, "2027-04-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Warrenton 1", "4st Batch 2 잔금 90%", 8, "KRW", 288432000, "2027-04-01", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Warrenton 1", "5st Batch 1 잔금 90%", 16, "KRW", 576864000, "2027-04-29", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Warrenton 1", "5st Batch 2 잔금 90%", 8, "KRW", 288432000, "2027-04-29", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Warrenton 1", "6st Batch 1 잔금 90%", 16, "KRW", 576864000, "2027-05-30", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Warrenton 1", "6st Batch 2 잔금 90%", 24, "KRW", 865296000, "2027-05-30", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "대홍전기", "Coffee", "2st Batch 5 잔금 90%", 7, "KRW", 252378000, "2027-01-29", "예정", 1, "", "출고일 입력 → 출고월 말일+60일"],
+ ["지급", "DS기술", "PO-127", "선급금 30%", 0, "KRW", 734400000, "2026-07-02", "완료", 1, "2026-07-02", "세금계산서 7/2 기준 (지급일은 완료로만 표기됨)"],
+ ["지급", "DS기술", "PO-127", "1차 지급분", 0, "KRW", 510720000, "2026-09-01", "완료", 1, "2026-09-01", "원본 지급일 9/1 (정산 시트는 8/27로 표기)"],
+ ["지급", "DS기술", "PO-127", "2차 지급분", 0, "KRW", 403200000, "2026-09-16", "완료", 1, "2026-09-16", ""],
+ ["지급", "DS기술", "PO-127", "3차 지급분", 0, "KRW", 403200000, "2026-10-16", "완료", 1, "2026-10-16", ""],
+ ["지급", "DS기술", "PO-127", "4차 지급분", 0, "KRW", 396480000, "2026-11-02", "완료", 1, "2026-11-02", "정산 시트는 11/1로 표기"],
+ ["지급", "DS기술", "PO-120", "선급금 30%", 0, "KRW", 198518400, "2026-09-16", "완료", 1, "2026-09-16", "단가 B"],
+ ["지급", "DS기술", "PO-120", "1차 지급분", 0, "KRW", 69686400, "2026-09-16", "완료", 1, "2026-09-16", ""],
+ ["지급", "DS기술", "PO-120", "2차 지급분", 0, "KRW", 98380800, "2026-10-16", "완료", 1, "2026-10-16", ""],
+ ["지급", "DS기술", "PO-120", "3차 지급분", 0, "KRW", 5465600, "2026-11-02", "완료", 1, "2026-11-02", ""],
+ ["지급", "DS기술", "PO-120", "5차 지급분 (잔액)", 0, "KRW", 289676800, "2026-12-01", "예정", 1, "", ""],
+ ["지급", "DS기술", "PO-140", "5차 지급분", 0, "KRW", 46848000, "2026-12-01", "예정", 1, "", "PO-140 96EA (보충 12 + Coffee 84)"],
+ ["지급", "DS기술", "PO-143", "선급금 30%", 0, "KRW", 177436800, "2026-12-01", "예정", 1, "", "Schneider 1,212EA · 대한ETS와 중복 여부 확인"],
+ ["지급", "DS기술", "PO-143", "5차 지급분", 0, "KRW", 165334400, "2026-12-01", "예정", 1, "", ""],
+ ["지급", "DS기술", "PO-143", "6차 지급분", 0, "KRW", 248684800, "2026-12-16", "예정", 1, "", ""],
+ ["지급", "대한ETS", "Schneider", "선급금 50%", 0, "KRW", 466620000, "2026-08-20", "완료", 1, "2026-08-20", ""],
+ ["지급", "대한ETS", "Schneider", "1차 지급분", 0, "KRW", 64680000, "2026-11-16", "예정", 1, "", "고객사 사양 변경으로 지급 홀딩중"],
+ ["지급", "대한ETS", "Schneider", "2차 지급분", 0, "KRW", 110880000, "2026-11-02", "예정", 1, "", ""],
+ ["지급", "대한ETS", "Schneider", "3차 지급분", 0, "KRW", 110880000, "2026-12-01", "예정", 1, "", "금액은 추정 (원본 공란) = 2차와 동일"],
+ ["지급", "대한ETS", "Schneider", "4차 지급분 (잔액)", 0, "KRW", 110880000, "2027-01-04", "예정", 1, "", "금액은 잔액 추정 (원본 공란): 933.24M − 748.44M"],
+ ["지급", "대한ETS", "Schneider", "4차 지급분 (잔액)", 0, "KRW", 69300000, "2027-01-04", "예정", 1, "", "금액은 잔액 추정 (원본 공란): 933.24M − 748.44M"]
+];
+var _n=new Date(), T=Date.UTC(_n.getFullYear(),_n.getMonth(),_n.getDate());
+function D(s){var p=s.split("-");return Date.UTC(+p[0],+p[1]-1,+p[2]);}
+function ok(s){return /^\d{4}-\d{2}-\d{2}$/.test(s||"");}
+function md(s){var p=s.split("-");return (+p[1])+"/"+(+p[2]);}
+function eok(n){return (n/1e8).toFixed(2);}
+function eok1(n){return (n/1e8).toFixed(1);}
+function st(k,t){return '<span class="st st-'+k+'"><i>'+(k==="off"?"○":"●")+'</i>'+t+'</span>';}
+function panel(t,meta,body,span){return '<section class="panel s'+span+'"><div class="ph"><h3>'+t+'</h3>'+(meta?'<div class="meta">'+meta+'</div>':"")+'</div>'+body+'</section>';}
+function tbl(h,rows,num){num=num||[];return '<div class="scroll"><table><thead><tr>'+h.map(function(x,i){return '<th'+(num.indexOf(i)>-1?' class="n"':"")+'>'+x+'</th>';}).join("")+'</tr></thead><tbody>'+rows.map(function(r){var c=r.c||r;return '<tr'+(r.cls?' class="'+r.cls+'"':"")+'>'+c.map(function(v,i){return '<td'+(num.indexOf(i)>-1?' class="n"':(i===0?' class="pj"':""))+'>'+v+'</td>';}).join("")+'</tr>';}).join("")+'</tbody></table></div>';}
+var S={inc:false};
+function krw(x){return x[6]*(x[5]==="USD"?CFSET.fx:1)*(x[0]==="수금"?1:-1);}
+function mon(s){return s.slice(0,7);}
+function render(){
+  var R=CF.filter(function(x){return x[9]||S.inc;});
+  var done=function(x){return x[8]==="완료";};
+  var inD=0,outD=0,inP=0,outP=0;
+  R.forEach(function(x){var v=krw(x); if(done(x)){if(v>0)inD+=v;else outD+=v;} else {if(v>0)inP+=v;else outP+=v;}});
+  var netNow=inD+outD, fin=netNow+inP+outP;
+  var late=R.filter(function(x){return !done(x)&&ok(x[7])&&D(x[7])<T;});
+  var kp='<div class="kpis">'
+   +'<div class="kpi"><span class="l">On Energy 수금 완료</span><span class="v">'+eok1(inD)+'<small>억원</small></span><span class="s">$'+(R.filter(function(x){return done(x)&&x[0]==="수금";}).reduce(function(t,x){return t+x[6];},0)/1e6).toFixed(2)+'M</span></div>'
+   +'<div class="kpi k-off"><span class="l">협력사 지급 완료</span><span class="v">'+eok1(-outD)+'<small>억원</small></span><span class="s">대홍 · DS기술 · 대한ETS</span></div>'
+   +'<div class="kpi"><span class="l">현재 순현금</span><span class="v">'+eok1(netNow)+'<small>억원</small></span><span class="s">수금 − 지급 (완료분)</span></div>'
+   +'<div class="kpi"><span class="l">향후 수금 예정</span><span class="v">'+eok1(inP)+'<small>억원</small></span><span class="s">FAT 60% · DDP 10%</span></div>'
+   +'<div class="kpi k-off"><span class="l">향후 지급 예정</span><span class="v">'+eok1(-outP)+'<small>억원</small></span><span class="s">대홍 잔금 90% 등</span></div>'
+   +'<div class="kpi'+(fin<0?" k-bad":"")+'"><span class="l">최종 순현금 (전부 정산 시)</span><span class="v">'+eok1(fin)+'<small>억원</small></span><span class="s">수금 대비 '+Math.round(fin/(inD+inP)*100)+'%'+(late.length?' · <b class="c-bad">지연 '+late.length+'건</b>':"")+'</span></div>'
+   +'</div>';
+  /* 월별 */
+  var ms=[]; R.forEach(function(x){if(ok(x[7])){var m=mon(x[7]); if(ms.indexOf(m)<0) ms.push(m);}}); ms.sort();
+  var full=[]; if(ms.length){var y=+ms[0].slice(0,4),m=+ms[0].slice(5); var last=ms[ms.length-1]; while(true){var k=y+"-"+("0"+m).slice(-2); full.push(k); if(k===last||full.length>40) break; m++; if(m>12){m=1;y++;}}}
+  var keys=["On Energy","대홍전기","DS기술","대한ETS"], M={};
+  full.concat(["미정"]).forEach(function(k){M[k]={"On Energy":0,"대홍전기":0,"DS기술":0,"대한ETS":0};});
+  R.forEach(function(x){var k=ok(x[7])?mon(x[7]):"미정"; M[k][x[1]]=(M[k][x[1]]||0)+krw(x);});
+  var cols=full.concat(M["미정"]["On Energy"]||M["미정"]["대홍전기"]?["미정"]:[]);
+  var cum=0, CUM={}; cols.forEach(function(k){cum+=keys.reduce(function(t,c){return t+M[k][c];},0); CUM[k]=cum;});
+  var curM=new Date(T).toISOString().slice(0,7);
+  /* SVG 차트 */
+  var W=1280,H=300,pl=44,pr=10,pt=18,pb=34, n=cols.length, bw=(W-pl-pr)/n;
+  var mx=1,mn=-1; cols.forEach(function(k){var i=M[k]["On Energy"],o=M[k]["대홍전기"]+M[k]["DS기술"]+M[k]["대한ETS"]; mx=Math.max(mx,i,CUM[k]); mn=Math.min(mn,o,CUM[k]);});
+  mx*=1.12; mn*=1.12;
+  var yy=function(v){return pt+(mx-v)/(mx-mn)*(H-pt-pb);};
+  var svg='<svg class="cfc" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="월별 현금흐름">';
+  [mx,mx/2,0,mn/2,mn].forEach(function(v){svg+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+yy(v).toFixed(1)+'" y2="'+yy(v).toFixed(1)+'" stroke="var(--rule)" stroke-width="'+(v===0?1.4:0.6)+'"/><text x="'+(pl-6)+'" y="'+(yy(v)+3).toFixed(1)+'" text-anchor="end">'+Math.round(v/1e8)+'</text>';});
+  var col={"대홍전기":"var(--bar-dark)","DS기술":"var(--b4)","대한ETS":"var(--b5)"};
+  cols.forEach(function(k,i){
+    var x0=pl+i*bw+bw*0.2, w=bw*0.6, iv=M[k]["On Energy"];
+    if(k===curM) svg+='<rect x="'+(pl+i*bw)+'" y="'+pt+'" width="'+bw+'" height="'+(H-pt-pb)+'" fill="var(--teal-tint)"/>';
+    if(iv>0) svg+='<rect x="'+x0+'" y="'+yy(iv).toFixed(1)+'" width="'+w+'" height="'+(yy(0)-yy(iv)).toFixed(1)+'" fill="var(--teal)"><title>'+k+' 수금 '+eok(iv)+'억</title></rect><text class="v" x="'+(x0+w/2)+'" y="'+(yy(iv)-4).toFixed(1)+'" text-anchor="middle">'+eok1(iv)+'</text>';
+    var base=0;
+    ["대홍전기","DS기술","대한ETS"].forEach(function(c){var v=M[k][c]; if(v<0){svg+='<rect x="'+x0+'" y="'+yy(base).toFixed(1)+'" width="'+w+'" height="'+(yy(base+v)-yy(base)).toFixed(1)+'" fill="'+col[c]+'"><title>'+k+' '+c+' '+eok(v)+'억</title></rect>'; base+=v;}});
+    if(base<0) svg+='<text class="v" x="'+(x0+w/2)+'" y="'+(yy(base)+12).toFixed(1)+'" text-anchor="middle" style="fill:var(--bad)">'+eok1(base)+'</text>';
+    svg+='<text x="'+(pl+i*bw+bw/2)+'" y="'+(H-pb+16)+'" text-anchor="middle"'+(k===curM?' style="font-weight:700;fill:var(--ink)"':"")+'>'+(k==="미정"?"미정":k.slice(2,4)+"."+(+k.slice(5)))+'</text>';
+  });
+  var pts=cols.map(function(k,i){return (pl+i*bw+bw/2).toFixed(1)+","+yy(CUM[k]).toFixed(1);}).join(" ");
+  svg+='<polyline points="'+pts+'" fill="none" stroke="var(--fc-hi,#e08a2e)" stroke-width="2.2"/>';
+  cols.forEach(function(k,i){svg+='<circle cx="'+(pl+i*bw+bw/2).toFixed(1)+'" cy="'+yy(CUM[k]).toFixed(1)+'" r="3" fill="var(--fc-hi,#e08a2e)"><title>'+k+' 누적 '+eok(CUM[k])+'억</title></circle>';});
+  svg+='</svg>';
+  var leg='<div class="leg" style="margin-top:6px"><span><em style="background:var(--teal)"></em>On Energy 수금</span><span><em style="background:var(--bar-dark)"></em>대홍전기 지급</span><span><em style="background:var(--b4)"></em>DS기술 지급</span><span><em style="background:var(--b5)"></em>대한ETS 지급</span><span><em style="background:#e08a2e;height:3px"></em>누적 순현금</span><span><em style="background:var(--teal-tint);border:1px solid var(--rule)"></em>이번 달</span></div>';
+  var tog='<label class="tg"><input type="checkbox" id="inc"'+(S.inc?" checked":"")+'> Eagle · GoldenEye 미래분 포함</label>';
+  var chart=panel("월별 현금흐름 (억원)",tog,svg+leg,12);
+  /* 월별 표 */
+  var trs=[["On Energy 수금","On Energy"],["대홍전기 지급","대홍전기"],["DS기술 지급","DS기술"],["대한ETS 지급","대한ETS"]].map(function(r){return {c:[r[0]].concat(cols.map(function(k){var v=M[k][r[1]];return v?'<span class="'+(v<0?"c-bad":"")+'">'+eok(v)+'</span>':'<span class="mut">·</span>';})).concat([eok(cols.reduce(function(t,k){return t+M[k][r[1]];},0))])};});
+  trs.push({cls:"tot",c:["순현금"].concat(cols.map(function(k){var v=keys.reduce(function(t,c){return t+M[k][c];},0);return '<span class="'+(v<0?"c-bad":"")+'">'+eok(v)+'</span>';})).concat([eok(cum)])});
+  trs.push({cls:"grp",c:["누적 순현금"].concat(cols.map(function(k){return eok(CUM[k]);})).concat([""])});
+  var mt=panel("월별 상세 (억원)","실적 = 현금 일자 경과분 · 환율 "+CFSET.fx.toLocaleString()+"원/USD",tbl(["구분"].concat(cols.map(function(k){return k==="미정"?"미정":k.slice(2,4)+"."+(+k.slice(5))+(k<curM?'<span class="sub" style="color:#fff;opacity:.8">실적</span>':"");})).concat(["합계"]),trs,cols.map(function(_,i){return i+1;}).concat([cols.length+1])),12);
+  /* On Energy 프로젝트별 */
+  var pjs=[]; CF.forEach(function(x){if(x[0]==="수금"&&pjs.indexOf(x[2])<0) pjs.push(x[2]);});
+  var pr=pjs.map(function(p){var a=CF.filter(function(x){return x[0]==="수금"&&x[2]===p;}), u=function(f){return a.filter(f).reduce(function(t,x){return t+x[6];},0);};
+    var d=u(function(x){return x[8]==="완료";}), i=u(function(x){return x[8]!=="완료"&&x[9];}), e=u(function(x){return x[8]!=="완료"&&!x[9];});
+    var nx=a.filter(function(x){return x[8]!=="완료"&&ok(x[7])&&(x[9]||S.inc);}).sort(function(a,b){return D(a[7])-D(b[7]);})[0];
+    return [p,"$"+(d+i+e).toLocaleString("en-US"),"$"+d.toLocaleString("en-US"),"$"+i.toLocaleString("en-US"),e?"$"+e.toLocaleString("en-US"):'<span class="mut">—</span>',nx?md(nx[7])+'<span class="sub">'+nx[3]+' $'+nx[6].toLocaleString("en-US")+'</span>':'<span class="mut">—</span>'];});
+  var pp=panel("On Energy 수금 (USD)","현행 단가 $46,600 · 재견적 미반영",tbl(["프로젝트","계약","수금 완료","수금 예정","제외분 (미래)","다음 수금"],pr,[1,2,3,4]),7);
+  /* 협력사 */
+  var vs=["대홍전기","DS기술","대한ETS"];
+  var vr=vs.map(function(v){var a=CF.filter(function(x){return x[0]==="지급"&&x[1]===v;}), u=function(f){return a.filter(f).reduce(function(t,x){return t+x[6];},0);};
+    var tot=u(function(){return 1;}), d=u(function(x){return x[8]==="완료";}), nx=a.filter(function(x){return x[8]!=="완료"&&ok(x[7]);}).sort(function(a,b){return D(a[7])-D(b[7]);})[0];
+    return [v,eok(tot),eok(d),eok(tot-d),'<div class="bar"><i style="width:'+(d/tot*100).toFixed(0)+'%"></i></div><span class="sub">'+Math.round(d/tot*100)+'%</span>',nx?(D(nx[7])<T?'<b class="c-bad">'+md(nx[7])+' 경과</b>':md(nx[7]))+'<span class="sub">'+eok(nx[6])+'억 · '+nx[3]+'</span>':"—"];});
+  var vp=panel("협력사 지급 (억원)","대홍전기 4,006만원/면 · 계약금 10% + 출고월 말일 +60일 잔금 90%",tbl(["상대방","총 발주","지급 완료","지급 예정","지급률","다음 지급"],vr,[1,2,3]),5);
+  /* 다가오는 · 지연 */
+  var up=R.filter(function(x){return x[8]!=="완료"&&ok(x[7])&&D(x[7])<=T+60*864e5;}).sort(function(a,b){return D(a[7])-D(b[7]);});
+  var ur=up.map(function(x){var lt=D(x[7])<T; return [ (lt?'<b class="c-bad">'+md(x[7])+'</b>':md(x[7])), x[0]==="수금"?st("good","수금"):st("off","지급"), x[1]+'<span class="sub">'+x[2]+'</span>', x[3], (x[5]==="USD"?"$"+x[6].toLocaleString("en-US")+'<span class="sub">'+eok(krw(x))+'억</span>':eok(krw(x))+"억"), (lt?'<span class="c-bad">예정일 경과 · 처리 확인</span> ':"")+(x[11]||"")];});
+  var uu=panel("다가오는 현금 이벤트","오늘부터 60일 · 지난 예정일은 빨강",ur.length?tbl(["일자","구분","상대방","항목","금액","비고"],ur,[4]):'<p class="note">해당 기간 이벤트가 없습니다.</p>',12);
+  var nt='<p class="note">원본: ON Energy DC Cabinet Cash Flow Tracker (원장 '+CF.length+'건 · 기준일 '+CFSET.asof+'). 공급가액(VAT 제외) 기준이며 DDP 운송·관세·보험, 항공 운송, UL, 인건비 등 ACE 자체 비용과 재견적 증액은 들어 있지 않습니다. 순현금은 최종 이익이 아닙니다. 1항차 FAT 60%는 11/12 청구(기한 12/13)로 원장 날짜를 옮겼습니다. 대한ETS 3·4차 금액은 원본 공란이라 잔액 기준 추정값이고, DS기술 PO-143과 대한ETS는 같은 Schneider 1,212EA일 수 있어 확인이 필요합니다.</p>';
+  document.getElementById("app").innerHTML=kp+'<div class="grid">'+chart+mt+pp+vp+uu+'</div>'+nt;
+  document.getElementById("inc").onchange=function(e){S.inc=e.target.checked; render();};
+}
+render();
+</script></body></html>
