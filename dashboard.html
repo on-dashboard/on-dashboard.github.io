@@ -368,7 +368,7 @@ var SHORT={A9:"A9",A10:"A10",C1:"C1",W1:"W1",CF:"CF"};
 
 var INV=[
  {k:"A9",n:"Abilene 09",inv:"503-1912-10",po:"PO-000159",d:"2026-05-15",q:170,amt:7922000,dep:396100,sop:1980500,sum:2376600,paid:"2026-10-16"},
- {k:"A10",n:"Abilene 10",inv:"503-2032-10",po:"PO-000167",d:"2026-05-15",q:170,amt:7922000,dep:396100,sop:1980500,sum:2376600,paid:"2026-10-22"},
+ {k:"A10",n:"Abilene 10",inv:"503-2032-10",po:"PO-000167",d:"2026-05-15",q:170,amt:7922000,dep:396100,sop:1980500,sum:2376600,paid:"2026-10-23"},
  {k:"C1",n:"Childress 1",inv:"503-2021-10",po:"PO-000175",d:"2026-05-15",q:113,amt:5265800,dep:263290,sop:1316450,sum:1579740,paid:"2026-10-16"},
  {k:"W1",n:"Warrenton 1",inv:"503-2033-10",po:"PO-000184",d:"2026-05-15",q:101,amt:4706600,dep:235330,sop:1176650,sum:1411980,paid:"2026-10-16"},
  {k:"CF",n:"Coffee",inv:"503-2113-10",po:"PO-000319",d:"2026-09-08",q:7,amt:326200,dep:16310,sop:81550,sum:97860,paid:"2026-10-16"},
@@ -416,7 +416,8 @@ var ITEMS=[
  {t:["prod"],a:"q",o:"대홍",d:"2026-11-05",x:"8D 재발방지 교육: 용접 작업지도서 작업자·검사원 교육 11/05 실시 · 명판 부착·이물 관리 교육 예정",s:"prog"},
  {t:["ms","cost"],a:"ms",o:"On Energy",d:"2026-10-16",x:"입금 5건 $5,598,990 (청구액의 70.2%)",s:"done",p:["A9","C1","W1","CF","EG"]},
  {t:["ms","cost"],a:"ms",o:"On Energy",d:"2026-10-22",x:"Abilene 10 입금 완료 $2,376,600 → 9/21 청구분 6건 $7,975,590 전액 입금",s:"done",p:["A10"]},
- {t:["ms","cost"],a:"ms",o:"ACE",d:"2026-10-26",x:"1항차 FAT 종료(10/30) · FAT 60% $2,796,000 청구 기준 합의 (PO별 vs 항차별)",s:"open",k:1},
+ {t:["ms","cost"],a:"ms",o:"On Energy",d:"2026-12-13",x:"1항차 FAT 60% 입금 기한 (Abilene 9 · 10 각 $1,398,000, 11/12 청구 Net 30)",s:"open",p:["A9","A10"],k:1},
+ {t:["ms","cost"],a:"ms",o:"ACE",d:"2026-11-12",x:"1항차 FAT 60% $2,796,000 청구 완료 (11/12) · Invoice 503-1912-11 (Abilene 9) · 503-2032-11 (Abilene 10) · 각 50면 × 현행 단가 $46,600",s:"done",k:1},
  {t:["ms"],a:"ms",o:"ACE",d:"2027-01-02",x:"GoldenEye SOP 30% $1,621,680 청구",s:"open",p:["GE"]},
  {t:["ms"],a:"ms",o:"ACE",d:"2027-06-05",x:"Eagle SOP 25% $664,050 청구",s:"open",p:["EG"]},
  {t:["ms"],a:"ms",o:"대홍",d:"2026-09-03",x:"1항차 생산 착수 (SOP 기준일)",s:"done",p:["A9","A10"]},
@@ -428,7 +429,7 @@ var ITEMS=[
  {t:["ms","logi","risk"],a:"ms",o:"ACE",d:"2026-12-10",x:"GoldenEye 릴리스를 A-2 마일스톤에 편입 · deadline = 개시 −180일",s:"open",p:["GE"],k:1},
  {t:["sch","ms"],a:"sch",o:"On Energy",d:"2026-12-15",x:"GoldenEye 릴리스 기한 · 취소수수료 면제 종료",s:"open",p:["GE"],k:1},
  {t:["ms"],a:"ms",o:"On Energy",d:"2027-03-26",x:"GoldenEye FAT (Eagle PO 동일 날짜는 오기 가능성)",s:"open",p:["GE","EG"]},
- {t:["cost"],a:"cost",o:"ACE",d:"2026-11-04",x:"차액 정산 원칙 문서화 (FAT 60% 또는 Change Order)",s:"risk",k:1},
+ {t:["cost"],a:"cost",o:"ACE",d:"2026-11-04",x:"차액 정산 원칙: 3rd MS는 현행 PO 금액으로 청구, 변경 PO 수령 후 단가 차액의 90%(MS 1~3)를 별도 인보이스 — 11/12 Ibeth 합의 · 변경 PO 수령 대기",s:"prog",k:1},
  {t:["cost"],a:"cost",o:"ACE",d:"",x:"재견적: 변경 전후 차액 × 554면 구조로 제출",s:"open"},
  {t:["cost","risk"],a:"cost",o:"ACE",d:"",x:"Mike 후속 메일에 정산 원칙 한 줄 포함",s:"open"},
  {t:["cost"],a:"cost",o:"ACE",d:"2026-11-04",x:"SPD 428EA(4·5·6항차) 재견적 포함 여부 결정",s:"open"},
@@ -614,7 +615,7 @@ function trSeg(){
 function tabOv(){
   var kp='<div class="kpis">'
    +'<div class="kpi"><span class="l">1항차 FAT</span><span class="v">후속 대응</span><span class="s">10/26~30 · 4면 · Crusoe 10/28 화상 · Audit 10/29</span></div>'
-   +'<div class="kpi"><span class="l">입금 확인 (10/22)</span><span class="v">$7.98<small>M</small></span><span class="s">9/21 청구 6건 전액 · A10 10/22 입금</span></div>'
+   +'<div class="kpi"><span class="l">1항차 FAT 60% 청구 (11/12)</span><span class="v">$2.80<small>M</small></span><span class="s">A9 · A10 각 50면 · 기한 12/13 · 9/21 청구분 $7.98M 입금 완료</span></div>'
    +'<div class="kpi"><span class="l">1항차 출고 완료</span><span class="v">100<small>면</small></span><span class="s">전량 (10/26~30) · 10/30 20면 · 출하 레포트 제출</span></div>'
    +'<div class="kpi"><span class="l">2항차 외함조립</span><span class="v">104<small>면</small></span><span class="s">2항차 전체 완료 · 3항차 26면 · 누계 230/232 (99%)</span></div>'
    +'<div class="kpi"><span class="l">확정 생산</span><span class="v">561<small>면</small></span><span class="s">+ GoldenEye 116 · Eagle 57</span></div>'
