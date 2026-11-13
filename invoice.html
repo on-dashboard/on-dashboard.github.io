@@ -121,7 +121,7 @@ td.ms-cell{min-width:150px}
 tr.paid-today td{background:#fff3cf!important}
 tr.paid-today td:first-child{box-shadow:inset 4px 0 0 #e0a100}
 .today-pill{display:inline-block;font-size:10.5px;font-weight:700;color:#7a5200;background:#ffd666;border-radius:9px;padding:1px 7px;margin-left:4px;white-space:nowrap}
-/* 속보 띠: 오늘 입금이 있으면 화면 맨 위에 고정 */
+/* 금일 업데이트 띠: 오늘 입금이 있으면 화면 맨 위에 고정 */
 .ticker{position:sticky;top:0;z-index:20;display:flex;align-items:stretch;height:38px;background:#1c1c1c;color:#fff;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.18)}
 .ticker .tk-lb{flex:none;display:flex;align-items:center;gap:7px;background:#d0021b;color:#fff;font-weight:700;font-size:13.5px;padding:0 16px;letter-spacing:.02em}
 .ticker .tk-lb i{width:8px;height:8px;border-radius:50%;background:#fff;animation:tkblink 1s steps(2,start) infinite}
@@ -321,7 +321,7 @@ function render(){
     var msgs=Object.keys(g).map(function(n){return '<span><em>입금</em>'+n+' <b>'+usd(g[n])+'</b> 오늘 입금 확인</span>';});
     msgs.push('<span><em>합계</em>오늘 입금 <b>'+usd(sum(tp,function(m){return m[5];}))+'</b> · '+tp.length+'개 마일스톤</span>');
     var run=msgs.join("")+msgs.join("");
-    tbar='<div class="ticker" role="status" aria-label="오늘 입금 속보"><div class="tk-lb"><i></i>속보 · 오늘 입금</div><div class="tk-win"><div class="tk-run" style="--tkdur:'+Math.max(18,msgs.length*9)+'s">'+run+'</div></div></div>';}
+    tbar='<div class="ticker" role="status" aria-label="금일 업데이트 사항"><div class="tk-lb"><i></i>금일 업데이트 사항</div><div class="tk-win"><div class="tk-run" style="--tkdur:'+Math.max(18,msgs.length*9)+'s">'+run+'</div></div></div>';}
   document.getElementById("tk").innerHTML=tbar;
   document.getElementById("app").innerHTML=kp+'<div class="grid">'+mat+log+cop+cm+etp+'</div>'
    +'<p class="note">원본: Global BD INVOICE Tracker_On Energy (updated) · INVOICE Tracker · 청구이력_Log · DC Cabinet_금액 업데이트 시트. Coffee2(503-211X-10)는 PO 번호가 확정되지 않았고 금액·입금일이 Coffee 행을 복사한 것으로 보여 DC Cabinet 합계에서 뺐습니다.</p>'+chk;
