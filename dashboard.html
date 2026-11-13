@@ -282,6 +282,11 @@ details>.dbody{padding:2px 14px 14px; display:flex; flex-direction:column; gap:1
   .banner .dd{margin-left:0}
   .who{margin-left:0}
 }
+/* 입금 당일 하이라이트 */
+tr.paid-today td{background:#fff3cf!important}
+tr.paid-today td:first-child{box-shadow:inset 4px 0 0 #e0a100}
+.today-pill{display:inline-block;font-size:10.5px;font-weight:700;color:#7a5200;background:#ffd666;border-radius:9px;padding:1px 7px;margin-left:4px;white-space:nowrap}
+@media (prefers-color-scheme:dark){tr.paid-today td{background:#3a3115!important} .today-pill{background:#e0a100;color:#1a1400}}
 .home-link{font-size:12px;font-weight:700;color:var(--teal-text);text-decoration:none;border:1px solid var(--rule);border-radius:2px;padding:2px 9px;background:var(--panel);white-space:nowrap}
 .home-link:hover{border-color:var(--teal)}
 .ctl{display:flex; gap:8px 22px; flex-wrap:wrap; align-items:center}
@@ -713,6 +718,7 @@ function tabMs(){
     var dep=r.paid?stDot("good",usd(r.dep))+'<span class="sub">입금 '+md(r.paid)+'</span>':stDot("mid",usd(r.dep))+'<span class="sub">청구 · 10/22 입금 예정</span>';
     var sop=r.sopLater?stDot("off",usd(r.sopLater))+'<span class="sub">2027-06-05 예정</span>':(r.paid?stDot("good",usd(r.sop))+'<span class="sub">입금 '+md(r.paid)+'</span>':stDot("mid",usd(r.sop))+'<span class="sub">청구 · 10/22 입금 예정</span>');
     var c=[r.n+'<span class="sub">'+r.po+'</span>',usd(r.amt),dep,sop,stDot("off",usd(rem.fat))+'<span class="sub">항차별 FAT</span>',stDot("off",usd(rem.ddp))+'<span class="sub">DDP 인도 후</span>'];
+    if(r.paid&&D(r.paid)===T){c[c.length-1]+='<span class="today-pill">오늘 입금</span>'; return {cls:"paid-today",c:c};}
     return r.paid?c:{cls:"emph",c:c};
   });
   if(state.proj==="all") mrows.push({cls:"tot",c:["6개 PO 합계",usd(TOT),usd(1439940),usd(7199700),usd(fat),usd(ddp)]});
@@ -740,10 +746,11 @@ function tabCost(){
     +note("<b>레버리지는 상대에게 있습니다.</b> 자재가 554면 전량 발주돼 협상이 길어져도 ACE가 멈출 수 있는 것이 없습니다. 그래서 재견적은 단독으로 올리지 말고, 상대가 먼저 보내기로 한 리드타임·캐파 파라미터 메일에 묶어야 합니다."),5);
   var rows=INV.filter(function(r){return state.proj==="all"||state.proj===r.k;}).map(function(r){
     var c=[r.n+'<span class="sub">'+r.inv+'</span>',r.q,usd(r.amt),usd(r.dep),r.sop?usd(r.sop):"—",usd(r.sum),r.paid?stDot("good","입금 "+md(r.paid)):stDot("mid","입금 예정 10/22")];
+    if(r.paid&&D(r.paid)===T){c[c.length-1]+='<span class="today-pill">오늘 입금</span>'; return {cls:"paid-today",c:c};}
     return r.paid?c:{cls:"emph",c:c};
   });
   if(state.proj==="all") rows.push({cls:"tot",c:["합계",618,usd(28798800),usd(1439940),usd(6535650),usd(7975590),usd(7975590)+" 입금"]});
-  var inv=panel("cost","청구 · 입금 (2026-09-21 청구)","지급기한 10/21 · 6건 모두 입금 완료 (Abilene 10은 10/22) · 기존 단가 $46,600/면",rows.length?tbl(["프로젝트 · Invoice","면수","PO 금액","Deposit 5%","SOP 25%","청구 합계","입금"],rows,{num:[1,2,3,4,5]}):'<div class="empty">해당 프로젝트의 청구 내역이 없습니다.</div>',7);
+  var inv=panel("cost","청구 · 입금 (2026-09-21 청구)","지급기한 10/21 · 6건 모두 입금 완료 (Abilene 10은 10/23) · 기존 단가 $46,600/면",rows.length?tbl(["프로젝트 · Invoice","면수","PO 금액","Deposit 5%","SOP 25%","청구 합계","입금"],rows,{num:[1,2,3,4,5]}):'<div class="empty">해당 프로젝트의 청구 내역이 없습니다.</div>',7);
   var EXP=[
    ["사양변경 차액 (554면)",nw("ACE"),"재견적 제출 전","미산정"],
    ["설계 변경 3건 (561면)",nw("ACE"),"3항차 착수 전 11/04","범위·비용 미정"],
