@@ -406,7 +406,7 @@ var ITEMS=[
  {t:["sch"],a:"sch",o:"On Energy",d:"2027-03-15",x:"6항차 FAT (월) → 출고 3/18~19 · 40면",s:"open",p:["W1"]},
  {t:["sch","logi"],a:"l",o:"ACE",d:"2026-11-12",x:"1항차 출항 11/12 16:00 부산신항 (MAERSK SALTORO 643E, 11/11 선적) · 계획(11/04)보다 8일 늦음 · HBL HDLCS0050023 (503-1912) / HDLCS0050025 (503-2032) · Surrender B/L · CLP 고객 송부",s:"done",p:["A9","A10"],k:1},
  {t:["sch","logi"],a:"l",o:"ACE",d:"2026-12-06",x:"1항차 Houston Bay Port 입항 예정 12/06 07:00 (MAERSK SALTORO 643E) → 통관 · MPS 인도 (Abilene 9 Lewisville 2 · Abilene 10 McKinney)",s:"open",p:["A9","A10"],k:1},
- {t:["sch","logi"],a:"sch",o:"ACE",d:"2026-12-29",x:"1항차 도착 예정: 출고 10/30 + 60일 = 12/29 (여유 5일) · 실제 출항 11/12 + 53일 = 1/4 (기한 1/3 대비 −1일) · Houston 입항 12/06 → MPS 내륙 운송 일정 확인 필요",s:"risk",k:1,p:["A9","A10"]},
+ {t:["sch","logi"],a:"sch",o:"ACE",d:"2026-12-29",x:"1항차 도착 예정 12/28~29: 출고 10/26~30 + 60일 = 12/25~29 · 실제 출항(ATD) 11/12 + 46일 = 12/28 · 기한 1/3까지 5~6일 · 지연 없으면 약 7일 빨리 도착 (포워더 위인정 11/13 확인) · Houston 입항 12/06",s:"open",k:1,p:["A9","A10"]},
  {t:["sch","ms"],a:"sch",o:"대홍",d:"2026-11-04",x:"3항차 생산 착수 · SPD 428EA 결론 필요",s:"open",p:["A9","A10","C1","W1"]},
  {t:["sch","prod"],a:"sch",o:"ACE",d:"2026-10-20",x:"출고 서류 미팅 완료 (Shipping Mark·출고증·인수증)",s:"done"},
  {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-11-06",x:"2항차 샘플 부품 합동 검사 실시(11/4) · BOM Sub assembly 정보 추가 기재 요청 · Indicating(Pilot) Light(Green) 미입고 → 11/13 입고·검사 예정 (11/10 일보) · 결과 Reporting ~11/06",s:"prog",p:["A9","A10","C1","CF"],k:1},
@@ -506,8 +506,10 @@ function pv(it){return state.proj==="all"||!it.p||!it.p.length||it.p.indexOf(sta
 function shHas(s){return state.proj==="all"||s.m[state.proj]>0;}
 function shQ(s){return state.proj==="all"?s.q:(s.m[state.proj]||0);}
 /* 운송 기준: ship = 대홍전기 출고일 +60일 · sail = 출항일(출고 다음 주 수요일) +53일 */
-function arrOf(t,m){return m==="sail"?sail(t)+53*864e5:t+60*864e5;}
-function trTxt(m){return m==="sail"?"출항 +53일":"출고 +60일";}
+/* 포워더 기준 (위인정 11/13): 출고 +60일 = Stuffing·CY 7 + 출항 전 지연 5~7 + 해상 30 + 도착·하역 지연 7 + Transloading·delivery 7~9
+   계획 출항일(ETD) +53일 = Stuffing 7일 제외 · 실제 출항일(ATD) +46일 = Stuffing 7일 + 출항 전 지연 5~7일 제외 · 지연이 없으면 약 7일 빨리 도착 */
+function arrOf(t,m){if(m!=="sail") return t+60*864e5; var a=actSail(t); return a?D(a[2])+46*864e5:sail(t)+53*864e5;}
+function trTxt(m){return m==="sail"?"출항 +53일 · 실제 출항 +46일":"출고 +60일";}
 function arrive(s){return arrOf(D(s.ship),state.tr);}
 /* 여유 = 배치별 (자기 마지막 출고일 → 도착) vs 배치 납기 중 최소 — Warrenton 1 선출하 반영 */
 function marginOf(s,sl){sl=sl||0; var m=null;
@@ -615,7 +617,7 @@ function gantt(){
   return '<div class="scroll"><div class="gt">'+h+'</div></div>'+leg;
 }
 function trSeg(){
-  return '<div class="seg" role="group" aria-label="운송 기준">'+[["ship","출고일 기준 +60일"],["sail","출항일 기준 +53일"]].map(function(v){return '<button data-tr="'+v[0]+'" aria-pressed="'+(state.tr===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
+  return '<div class="seg" role="group" aria-label="운송 기준">'+[["ship","출고일 기준 +60일"],["sail","출항일 기준 +53일 (실제 출항 +46일)"]].map(function(v){return '<button data-tr="'+v[0]+'" aria-pressed="'+(state.tr===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
 }
 
 /* ---------- TAB: 개요 ---------- */
@@ -847,9 +849,9 @@ function tabLogi(){
   var rows=SH.filter(shHas).map(function(s){return [s.n,s.ship.slice(5),cols.map(function(k){return s.m[k]?s.m[k]:'<span class="mut">—</span>';}),shQ(s)].reduce(function(a,v){return a.concat(v);},[]);});
   var comp=panel("l","항차 구성 (프로젝트별 면수)","A9 Abilene 9 · A10 Abilene 10 · C1 Childress 1 · W1 Warrenton 1 · CF Coffee",
     rows.length?tbl(["항차","출고","A9","A10","C1","W1","CF","합계"],rows.concat(state.proj==="all"?[{cls:"tot",c:["합계","",170,170,113,101,7,561]}]:[]),{num:[2,3,4,5,6,7]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다. GoldenEye 116면은 릴리스 대기입니다.</div>',6);
-  var lead=panel("l","구간 리드타임","운송 기준 출고 +60일 · 출항 +53일 · 아래는 구간별 실측 30~33일",
-    '<div class="flow" style="--n:5"><div class="fl h"><div class="a">대홍전기 출고</div><div class="b">1일</div><div class="c">CFS까지</div></div><div class="fl h"><div class="a">CFS 혼재 · 적입</div><div class="b">1일</div><div class="c">부산</div></div><div class="fl h"><div class="a">부산신항 → 도착 항구</div><div class="b">25~27일</div><div class="c">해상</div></div><div class="fl h"><div class="a">양하 · 통관</div><div class="b">1일</div><div class="c">도착 항구</div></div><div class="fl h"><div class="a">CFS 디배닝 → MPS</div><div class="b">1~2일</div><div class="c">내륙</div></div></div>'
-    +note("기준 60일과 실측 30~33일의 차이 27~30일이 버퍼입니다. 해상 25~27일은 걸프 항로 값에 가까워 도착 항구 확인이 필요합니다.")
+  var lead=panel("l","구간 리드타임","포워더 기준 (11/13) · 출고 +60일 · ETD +53일 · ATD +46일",
+    '<div class="flow" style="--n:5"><div class="fl h"><div class="a">Stuffing · CY 반입</div><div class="b">7일</div><div class="c">출고 → 부산</div></div><div class="fl h"><div class="a">출항 전 지연</div><div class="b">5~7일</div><div class="c">선박 일정</div></div><div class="fl h"><div class="a">해상 Transit</div><div class="b">30일</div><div class="c">부산 → Houston</div></div><div class="fl h"><div class="a">도착 · 하역 지연</div><div class="b">7일</div><div class="c">도착항</div></div><div class="fl h"><div class="a">Transloading · Delivery</div><div class="b">7~9일</div><div class="c">→ MPS</div></div></div>'
+    +note("최근 선박 일정 지연과 도착지 하역 지연(각 약 7일)이 잦아 포함한 값입니다. ETD 기준은 Stuffing 7일, ATD 기준은 Stuffing 7일 + 출항 전 지연을 뺍니다. 지연이 없으면 약 7일 빨리 도착합니다. 1항차: 출고 10/26~30 +60일 = 12/25~29, ATD 11/12 +46일 = 12/28.")
     +'<div class="stats" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="stat"><div class="l">긴급 항공 운송</div><div class="v c-bad">2<small>면</small></div><div class="s">11/11 FAT 실시 · 11/13 재검사 · 11/16 출고 · DDP라 운임은 ACE 부담</div></div><div class="stat"><div class="l">53′ dry van 상한</div><div class="v">5,500<small>lb/면</small></div><div class="s">44,000 lb ÷ 8unit</div></div></div>',6);
   var DEST=[["1항차",50,50,0,100,13,14],["2항차",40,57,7,104,13,14],["3항차",53,64,0,117,15,15],["4항차",64,40,0,104,13,13],["5항차",24,72,0,96,12,12],["6항차",40,0,0,40,5,5]];
   var dst=panel("l","인도지별 면수 · 컨테이너","혼적 71대 → 목적지 분리 73대",tbl(["항차","McKinney","Lewisville 2","Douglas GA","합계","혼적","분리"],DEST.map(function(r){return r.map(function(v,i){return i>0&&i<4&&v===0?'<span class="mut">—</span>':v;});}).concat([{cls:"tot",c:["합계",271,283,7,561,71,73]}]),{num:[1,2,3,4,5,6]}),7);
@@ -894,7 +896,7 @@ function calcRes(){
   var v=state.cd; if(!v||!/^\d{4}-\d{2}-\d{2}$/.test(v)) return '<div class="stat" style="grid-column:1/-1"><div class="s">대홍전기 출고일을 선택하면 출항·도착 예상일이 계산됩니다.</div></div>';
   var s0=D(v), sl=sail(s0);
   return '<div class="stat"><div class="l">출항 (다음 주 수)</div><div class="v">'+mdw(sl)+'</div><div class="s">'+fmt(sl)+'</div></div>'
-   +[["출항 +53일",sl+53*864e5],["출고 +60일",s0+60*864e5]].map(function(x){
+   +[[actSail(s0)?"실제 출항 +46일":"출항 +53일",arrOf(s0,"sail")],["출고 +60일",s0+60*864e5]].map(function(x){
     return '<div class="stat"><div class="l">도착 · '+x[0]+'</div><div class="v">'+mdw(x[1])+'</div><div class="s">'+fmt(x[1])+'</div></div>';
   }).join("");
 }
@@ -925,7 +927,7 @@ function etaPanel(){
       var t=D(r[1])+slipFor(shipSpan(cur)[0])*864e5, f=sail(t);
       return [r[0]||'&nbsp;',mdw(t),r[2],r[4],mdw(f),'<b>'+mdw(arrOf(t,state.tr))+'</b>'];
     }).filter(Boolean),{num:[3]})+'</div></details>':"";
-  return panel("l","대홍전기 출고 · 출항 · 도착 예상","출항 = 출고 다음 주 수요일 · 도착 = "+(state.tr==="sail"?"출항일 + 53일":"출고일 + 60일"),ctl+tb+calc+dl+note("운송 기준은 두 가지입니다. 출고일 기준은 대홍전기 출고일 + 60일, 출항일 기준은 출항일(출고 다음 주 수요일) + 53일입니다. 고른 기준이 이 표와 항차 현황·간트·여유 KPI·GoldenEye·Eagle 순서표에 함께 적용됩니다. 1항차는 이미 전량 출고돼 지연 시뮬레이션이 적용되지 않습니다. 여유는 항차 마지막 출고분 도착 기준으로 가장 이른 인도 기한과 비교합니다."),12);
+  return panel("l","대홍전기 출고 · 출항 · 도착 예상","출항 = 실제 출항일(ATD), 없으면 출고 다음 주 수요일(ETD) · 도착 = "+(state.tr==="sail"?"ATD + 46일 / ETD + 53일":"출고일 + 60일"),ctl+tb+calc+dl+note("포워더 기준(11/13): 출고일 +60일 = Stuffing·CY 반입 7 + 출항 전 지연 5~7 + 해상 30 + 도착·하역 지연 7 + Transloading·delivery 7~9일. 계획 출항일(ETD) 기준은 Stuffing 7일을 뺀 +53일, 실제 출항일(ATD)이 확인된 항차는 출항 전 지연까지 뺀 +46일입니다. 지연이 실제로 없으면 약 7일 빨리 도착합니다. 고른 기준이 이 표와 항차 현황·간트·여유 KPI·GoldenEye·Eagle 순서표에 함께 적용됩니다."),12);
 }
 
 /* ---------- TAB: 이슈 ---------- */
@@ -1023,7 +1025,7 @@ function tabRev(){
    +'<div class="kpi"><span class="l">현재 인식 완료</span><span class="v">0<small>면</small></span><span class="s">1항차 100면 출고 완료 · 도착 대기</span></div>'
    +'</div>';
   var segU='<div class="seg" role="group" aria-label="단위">'+[["qty","수량 (면)"],["usd","매출 USD (백만)"],["krw","매출 억원 @1,250"]].map(function(v){return '<button data-ru="'+v[0]+'" aria-pressed="'+(u===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
-  var segR='<div class="seg" role="group" aria-label="운송 기준">'+[["ship","출고일 기준 +60일"],["sail","출항일 기준 +53일"]].map(function(v){return '<button data-rt="'+v[0]+'" aria-pressed="'+(state.rt===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
+  var segR='<div class="seg" role="group" aria-label="운송 기준">'+[["ship","출고일 기준 +60일"],["sail","출항일 기준 +53일 (실제 출항 +46일)"]].map(function(v){return '<button data-rt="'+v[0]+'" aria-pressed="'+(state.rt===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
   var ctl='<div class="ctl"><div><span class="lb">단위</span>'+segU+'</div>'+(view==="ship"?"":'<div><span class="lb">운송 기준 (대홍전기 출고 → 도착)</span>'+segR+'</div>')+'</div>';
   var head=["PJT","PO","수량"].concat(cols.map(lab));
   var body=rows.map(function(r){
