@@ -404,7 +404,9 @@ var ITEMS=[
  {t:["sch"],a:"sch",o:"On Energy",d:"2027-01-15",x:"4항차 FAT (금) → 출고 1/18~22 · 104면",s:"open",p:["A9","A10","W1"]},
  {t:["sch"],a:"sch",o:"On Energy",d:"2027-02-12",x:"5항차 FAT (금) → 출고 2/15~19 · 96면",s:"open",p:["C1","W1"]},
  {t:["sch"],a:"sch",o:"On Energy",d:"2027-03-15",x:"6항차 FAT (월) → 출고 3/18~19 · 40면",s:"open",p:["W1"]},
- {t:["sch","logi"],a:"sch",o:"ACE",d:"2026-12-29",x:"1항차 도착 예정 12/29 (출고 10/30 + 60일 · 출항 11/04 + 53일이면 12/27) · 기한 1/3까지 5일",s:"open",p:["A9","A10"]},
+ {t:["sch","logi"],a:"l",o:"ACE",d:"2026-11-12",x:"1항차 출항 11/12 16:00 부산신항 (MAERSK SALTORO 643E, 11/11 선적) · 계획(11/04)보다 8일 늦음 · HBL HDLCS0050023 (503-1912) / HDLCS0050025 (503-2032) · Surrender B/L · CLP 고객 송부",s:"done",p:["A9","A10"],k:1},
+ {t:["sch","logi"],a:"l",o:"ACE",d:"2026-12-06",x:"1항차 Houston Bay Port 입항 예정 12/06 07:00 (MAERSK SALTORO 643E) → 통관 · MPS 인도 (Abilene 9 Lewisville 2 · Abilene 10 McKinney)",s:"open",p:["A9","A10"],k:1},
+ {t:["sch","logi"],a:"sch",o:"ACE",d:"2026-12-29",x:"1항차 도착 예정: 출고 10/30 + 60일 = 12/29 (여유 5일) · 실제 출항 11/12 + 53일 = 1/4 (기한 1/3 대비 −1일) · Houston 입항 12/06 → MPS 내륙 운송 일정 확인 필요",s:"risk",k:1,p:["A9","A10"]},
  {t:["sch","ms"],a:"sch",o:"대홍",d:"2026-11-04",x:"3항차 생산 착수 · SPD 428EA 결론 필요",s:"open",p:["A9","A10","C1","W1"]},
  {t:["sch","prod"],a:"sch",o:"ACE",d:"2026-10-20",x:"출고 서류 미팅 완료 (Shipping Mark·출고증·인수증)",s:"done"},
  {t:["sch","prod"],a:"sch",o:"대홍",d:"2026-11-06",x:"2항차 샘플 부품 합동 검사 실시(11/4) · BOM Sub assembly 정보 추가 기재 요청 · Indicating(Pilot) Light(Green) 미입고 → 11/13 입고·검사 예정 (11/10 일보) · 결과 Reporting ~11/06",s:"prog",p:["A9","A10","C1","CF"],k:1},
@@ -877,7 +879,10 @@ function tabLogi(){
 var WD=["일","월","화","수","목","금","토"], PRE=7; /* 운송 기준: 출고 +60일 = 출항 +53일 (출고→출항 7일) */
 function mdw(ms){var d=new Date(ms);return (d.getUTCMonth()+1)+"/"+d.getUTCDate()+"("+WD[d.getUTCDay()]+")";}
 /* 출항 = 대홍전기 출고일이 속한 주의 다음 주 수요일 */
-function sail(t){var dow=new Date(t).getUTCDay(), mon=t-((dow+6)%7)*864e5; return mon+9*864e5;}
+/* 실제 출항 (선사 확인분) — [대홍전기 출고 시작, 출고 끝, 실제 출항일, 선명, 도착항, 도착항 입항 예정] */
+var ACTSAIL=[["2026-10-26","2026-10-30","2026-11-12","MAERSK SALTORO 643E","Houston Bay Port","2026-12-06"]];
+function actSail(t){for(var i=0;i<ACTSAIL.length;i++){var a=ACTSAIL[i]; if(t>=D(a[0])&&t<=D(a[1])) return a;} return null;}
+function sail(t){var a=actSail(t); if(a) return D(a[2]); var dow=new Date(t).getUTCDay(), mon=t-((dow+6)%7)*864e5; return mon+9*864e5;}
 function span2(a,b){return a===b?mdw(a):mdw(a)+" ~ "+mdw(b);}
 function shipSpan(n){
   var cur="",a=null,b=null;
@@ -902,7 +907,7 @@ function etaPanel(){
     var stt=eb<=T?stDot("good","도착 완료"):(fa<=T?stDot("mid","운송 중"):(as<=T?stDot("mid","출항 대기"):stDot("off","출고 전")));
     rows.push([s.n+'<span class="sub">'+codes(s)+'</span>',
       span2(as,bs)+(sl?'<span class="sub c-bad">+'+sl+'일 지연</span>':""),
-      span2(fa,fb),
+      span2(fa,fb)+(actSail(as)?'<span class="sub"><b>실제 출항</b> · '+actSail(as)[3]+' · '+actSail(as)[4].split(" ")[0]+' '+md(actSail(as)[5])+' 입항</span>':""),
       '<b>'+span2(ea,eb)+'</b>',
       mdw(s.deadline),
       marg(mg),
@@ -911,7 +916,7 @@ function etaPanel(){
   var seg1=trSeg();
   var seg2='<div class="seg" role="group" aria-label="출고 지연">'+[[0,"계획대로"],[3,"+3일"],[7,"+7일"],[14,"+14일"],[30,"+30일"]].map(function(v){return '<button data-slip="'+v[0]+'" aria-pressed="'+(state.slip===v[0])+'">'+v[1]+'</button>';}).join("")+'</div>';
   var ctl='<div class="ctl"><div><span class="lb">운송 기준</span>'+seg1+'</div><div><span class="lb">출고 지연 시뮬레이션</span>'+seg2+'</div></div>';
-  var tb=rows.length?tbl(["항차 · 프로젝트","대홍전기 출고","출항 (다음 주 수)","도착 예상","인도 기한","여유","상태"],rows,{ctr:[6]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다. GoldenEye · Eagle은 아래 순서표에서 확인하세요.</div>';
+  var tb=rows.length?tbl(["항차 · 프로젝트","대홍전기 출고","출항 (실제 · 계획은 다음 주 수)","도착 예상","인도 기한","여유","상태"],rows,{ctr:[6]}):'<div class="empty">이 프로젝트는 아직 항차에 배정되지 않았습니다. GoldenEye · Eagle은 아래 순서표에서 확인하세요.</div>';
   var calc='<div class="ctl" style="align-items:flex-start;margin-top:2px"><div><label class="lb" for="cdate">대홍전기 출고일을 직접 입력</label><br><input type="date" id="cdate" value="'+state.cd+'"></div><div class="calc" id="cres">'+calcRes()+'</div></div>';
   var dl=SH.filter(shHas).length?'<details style="margin-top:2px"><summary>일자별 대홍전기 출고 → 출항 → 도착 예상 <small>하루 단위 · 위에서 고른 운송 기준·지연 반영</small></summary><div class="dbody">'
     +tbl(["항차","대홍전기 출고","프로젝트 · 수량","항차 누계","출항","도착 예상"],DAILY.map(function(r,i){
